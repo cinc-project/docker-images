@@ -12,5 +12,6 @@ RUN yum -y upgrade && \
     for dep in windows mingw build-essential chef-sugar chef-ingredient git homebrew remote_install seven_zip wix; do \
         wget -qO- https://supermarket.chef.io/cookbooks/${dep}/download | tar xzC /var/chef/cookbooks; done && \
     chef-solo -o 'recipe[omnibus]' && \
+    sed -i -e 's/^env.*//' /home/omnibus/load-omnibus-toolchain.sh && \
     yum -y remove chef && rm -rf /var/chef/ /opt/chef/embedded/ /etc/chef && \
     yum clean all && rm -rf /var/cache/yum

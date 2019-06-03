@@ -13,6 +13,7 @@ RUN sed -i -e 's/archive.ubuntu.com/ubuntu.osuosl.org/g' /etc/apt/sources.list &
     for dep in windows mingw build-essential chef-sugar chef-ingredient git homebrew remote_install seven_zip wix; do \
         wget -qO- https://supermarket.chef.io/cookbooks/${dep}/download | tar xzC /var/chef/cookbooks; done && \
     chef-solo -o 'recipe[omnibus]' && \
+    sed -i -e 's/^env.*//' /home/omnibus/load-omnibus-toolchain.sh && \
     apt-get -y remove chef && rm -rf /var/chef/ /opt/chef/embedded/ /etc/chef && \
     # Workaround issue on Debian 9 with tar
     # rm -rf /opt/omnibus-toolchain/bin/tar /opt/omnibus-toolchain/bin/gtar /opt/omnibus-toolchain/embedded/bin/tar && \
