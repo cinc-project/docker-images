@@ -5,7 +5,7 @@ LABEL MAINTAINER="OSU Open Source Lab <dockerhub@osuosl.org>"
 RUN sed -i -e 's/archive.ubuntu.com/ubuntu.osuosl.org/g' /etc/apt/sources.list && \
     apt-get update && \
     apt-get upgrade --no-install-recommends -y && \
-    apt-get -y -m install --no-install-recommends curl wget ca-certificates iproute2 && \
+    apt-get -y -m install --no-install-recommends curl wget ca-certificates iproute2 rsync openssh-client && \
     # Eventually, we will install cinc
     curl -L https://www.chef.io/chef/install.sh | bash -s -- -v 14 && \
     mkdir -p /var/chef/cache /var/chef/cookbooks && \

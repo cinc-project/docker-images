@@ -4,7 +4,7 @@ LABEL MAINTAINER="OSU Open Source Lab <dockerhub@osuosl.org>"
 
 COPY CentOS-Base-x86_64.repo /etc/yum.repos.d/CentOS-Base.repo
 RUN yum -y upgrade && \
-    yum -y install curl wget ca-certificates iproute && \
+    yum -y install curl wget ca-certificates iproute rsync openssh-clients && \
     # Eventually, we will install cinc
     curl -L https://www.chef.io/chef/install.sh | bash -s -- -v 14 && \
     mkdir -p /var/chef/cache /var/chef/cookbooks && \
