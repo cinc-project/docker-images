@@ -1,4 +1,4 @@
-ARG VERSION="9"
+ARG VERSION="10"
 FROM debian:${VERSION}
 LABEL MAINTAINER="OSU Open Source Lab <dockerhub@osuosl.org>"
 
@@ -15,6 +15,4 @@ RUN sed -i -e 's/deb.debian.org/debian.osuosl.org/g' /etc/apt/sources.list && \
     chef-solo -o 'recipe[omnibus]' && \
     sed -i -e 's/^env.*//' /home/omnibus/load-omnibus-toolchain.sh && \
     apt-get -y remove chef && rm -rf /var/chef/ /opt/chef/embedded/ /etc/chef && \
-    # Workaround issue on Debian 9 with tar
-    rm -rf /opt/omnibus-toolchain/bin/tar /opt/omnibus-toolchain/bin/gtar /opt/omnibus-toolchain/embedded/bin/tar && \
     apt-get clean && rm -rf /var/lib/apt/lists/*

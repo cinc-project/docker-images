@@ -14,6 +14,5 @@ RUN sed -i -e 's/archive.ubuntu.com/ubuntu.osuosl.org/g' /etc/apt/sources.list &
         wget -qO- https://supermarket.chef.io/cookbooks/${dep}/download | tar xzC /var/chef/cookbooks; done && \
     chef-solo -o 'recipe[omnibus]' && \
     sed -i -e 's/^env.*//' /home/omnibus/load-omnibus-toolchain.sh && \
-    if grep -q 18.04 /etc/lsb-release ; then rm -rfv /opt/omnibus-toolchain/bin/tar /opt/omnibus-toolchain/bin/gtar /opt/omnibus-toolchain/embedded/bin/tar ; fi && \
     apt-get -y remove chef && rm -rf /var/chef/ /opt/chef/embedded/ /etc/chef && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
