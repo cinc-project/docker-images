@@ -1,9 +1,10 @@
-ARG VERSION="7"
+ARG VERSION="8"
 FROM centos:${VERSION}
 LABEL MAINTAINER="OSU Open Source Lab <dockerhub@osuosl.org>"
 
-COPY CentOS-Base-x86_64.repo /etc/yum.repos.d/CentOS-Base.repo
-RUN yum -y upgrade && \
+COPY fix-repos.sh /root/fix-repos.sh
+RUN bash /root/fix-repos.sh && rm -rf /root/fix-repos.sh && \
+    yum -y upgrade && \
     yum -y install curl wget ca-certificates iproute rsync openssh-clients && \
     # Eventually, we will install cinc
     curl -L https://www.chef.io/chef/install.sh | bash -s -- -v 14 && \
