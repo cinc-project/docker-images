@@ -3,7 +3,7 @@ FROM opensuse/leap:${VERSION}
 LABEL MAINTAINER="OSU Open Source Lab <dockerhub@osuosl.org>"
 
 RUN zypper up --skip-interactive && \
-    zypper install -y curl wget iproute2 rsync openssh tar gzip hostname && \
+    zypper install -y curl wget iproute2 rsync openssh tar gzip hostname rpm-build && \
     # Eventually, we will install cinc
     # TODO: this is currently broken https://github.com/chef/omnitruck/issues/410
     # curl -L https://www.chef.io/chef/install.sh | bash -s -- -v 14 && \
