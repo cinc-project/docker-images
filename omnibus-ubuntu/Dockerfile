@@ -1,4 +1,4 @@
-ARG VERSION="18.04"
+ARG VERSION="20.04"
 FROM ubuntu:${VERSION}
 LABEL MAINTAINER="OSU Open Source Lab <dockerhub@osuosl.org>"
 
