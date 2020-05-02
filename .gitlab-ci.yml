@@ -1,0 +1,170 @@
+image: docker:latest
+services:
+  - docker:dind
+
+stages:
+  - build
+  - test
+  - publish
+  - release
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+
+workflow:
+  rules:
+    # Run if we trigger a pipeline from the web
+    - if: $CI_PIPELINE_SOURCE == "web"
+    # Run if this is a merge request
+    - if: $CI_MERGE_REQUEST_ID
+
+tags:
+  - osuosl
+
+rules:
+  - changes:
+    - "${CINC_IMAGE}/*"
+    when: on_success
+  - if: $CINC_BUILD == $CINC_IMAGE
+    when: on_success
+  - if: $CINC_BUILD == "all"
+    when: on_success
+  - when: never
+
+before_script:
+  - apk add bash
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+.centos:
+  variables:
+    CINC_IMAGE: "omnibus-centos"
+    VERSIONS: "6 7 8"
+
+.debian:
+  variables:
+    CINC_IMAGE: "omnibus-debian"
+    VERSIONS: "8 9 10"
+
+.opensuse:
+  variables:
+    CINC_IMAGE: "omnibus-opensuse"
+    VERSIONS: "15"
+
+.ubuntu:
+  variables:
+    CINC_IMAGE: "omnibus-ubuntu"
+    VERSIONS: "16.04 18.04 20.04"
+
+.build:
+  stage: build
+  script:
+    - bash scripts/build.sh
+
+build:omnibus-centos:
+  extends:
+    - .build
+    - .centos
+
+build:omnibus-debian:
+  extends:
+    - .build
+    - .debian
+
+build:omnibus-opensuse:
+  extends:
+    - .build
+    - .opensuse
+
+build:omnibus-ubuntu:
+  extends:
+    - .build
+    - .ubuntu
+
+.test:
+  stage: test
+  image: cincproject/docker-auditor
+  script:
+    - bash scripts/test.sh
+
+test:omnibus-centos:
+  extends:
+    - .test
+    - .centos
+
+test:omnibus-debian:
+  extends:
+    - .test
+    - .debian
+
+test:omnibus-opensuse:
+  extends:
+    - .test
+    - .opensuse
+
+publish:omnibus-ubuntu:
+  extends:
+    - .publish
+    - .ubuntu
+
+.publish:
+  stage: publish
+  only:
+    - master
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: on_success
+    - when: never
+  script:
+    - bash scripts/publish.sh
+
+publish:omnibus-centos:
+  extends:
+    - .publish
+    - .centos
+
+publish:omnibus-debian:
+  extends:
+    - .publish
+    - .debian
+
+publish:omnibus-opensuse:
+  extends:
+    - .publish
+    - .opensuse
+
+publish:omnibus-ubuntu:
+  extends:
+    - .publish
+    - .ubuntu
+
+.release:
+  only:
+    - master
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: on_success
+    - when: never
+  before_script:
+    - apk add bc bash
+  script:
+    - bash scripts/publish.sh
+
+release:omnibus-centos:
+  extends:
+    - .release
+    - .centos
+
+release:omnibus-debian:
+  extends:
+    - .release
+    - .debian
+
+release:omnibus-opensuse:
+  extends:
+    - .release
+    - .opensuse
+
+release:omnibus-ubuntu:
+  extends:
+    - .release
+    - .ubuntu
