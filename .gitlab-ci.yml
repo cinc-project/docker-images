@@ -183,7 +183,8 @@ publish:omnibus-centos:
     - .centos
     - .publish
   rules:
-    - if: $CI_COMMIT_REF_NAME == "master"
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -197,7 +198,8 @@ publish:omnibus-debian:
     - .debian
     - .publish
   rules:
-    - if: $CI_COMMIT_REF_NAME == "master"
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -211,7 +213,8 @@ publish:omnibus-opensuse:
     - .opensuse
     - .publish
   rules:
-    - if: $CI_COMMIT_REF_NAME == "master"
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -225,7 +228,8 @@ publish:omnibus-ubuntu:
     - .ubuntu
     - .publish
   rules:
-    - if: $CI_COMMIT_REF_NAME == "master"
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -248,7 +252,8 @@ release:omnibus-centos:
     - .centos
     - .release
   rules:
-    - if: $CI_COMMIT_REF_NAME == "master"
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -262,7 +267,8 @@ release:omnibus-debian:
     - .debian
     - .release
   rules:
-    - if: $CI_COMMIT_REF_NAME == "master"
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -276,7 +282,8 @@ release:omnibus-opensuse:
     - .opensuse
     - .release
   rules:
-    - if: $CI_COMMIT_REF_NAME == "master"
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -290,7 +297,8 @@ release:omnibus-ubuntu:
     - .ubuntu
     - .release
   rules:
-    - if: $CI_COMMIT_REF_NAME == "master"
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
