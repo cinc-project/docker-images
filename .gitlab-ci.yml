@@ -18,7 +18,7 @@ workflow:
     # Run if this is a merge request
     - if: $CI_MERGE_REQUEST_ID
     # Run if on master branch
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_REF_NAME == "master"
 
 before_script:
   - apk add bash
@@ -183,7 +183,7 @@ publish:omnibus-centos:
     - .centos
     - .publish
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_REF_NAME == "master"
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -197,7 +197,7 @@ publish:omnibus-debian:
     - .debian
     - .publish
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_REF_NAME == "master"
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -211,7 +211,7 @@ publish:omnibus-opensuse:
     - .opensuse
     - .publish
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_REF_NAME == "master"
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -225,7 +225,7 @@ publish:omnibus-ubuntu:
     - .ubuntu
     - .publish
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_REF_NAME == "master"
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -248,7 +248,7 @@ release:omnibus-centos:
     - .centos
     - .release
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_REF_NAME == "master"
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -262,7 +262,7 @@ release:omnibus-debian:
     - .debian
     - .release
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_REF_NAME == "master"
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -276,7 +276,7 @@ release:omnibus-opensuse:
     - .opensuse
     - .release
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_REF_NAME == "master"
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
@@ -290,7 +290,7 @@ release:omnibus-ubuntu:
     - .ubuntu
     - .release
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_REF_NAME == "master"
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
     - if: $CINC_BUILD == "all"
