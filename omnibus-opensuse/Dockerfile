@@ -2,6 +2,8 @@ ARG VERSION="15"
 FROM opensuse/leap:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
+ARG TOOLCHAIN_VERSION="1.1.109"
+
 RUN zypper up --skip-interactive && \
     zypper install -y curl wget iproute2 rsync openssh tar gzip hostname rpm-build && \
     # Eventually, we will install cinc
@@ -19,7 +21,9 @@ RUN zypper up --skip-interactive && \
         wget -qO- https://supermarket.chef.io/cookbooks/${dep}/download | tar xzC /var/chef/cookbooks; done && \
     # Remove omnibus::_omnibus_toolchain recipe since we manually install this
     sed -i -e "s/^include_recipe 'omnibus::_omnibus_toolchain'//g" /var/chef/cookbooks/omnibus/recipes/default.rb /var/chef/cookbooks/omnibus/recipes/_user.rb && \
-    chef-solo -o 'recipe[omnibus]' && \
+    echo "{\"omnibus\":{\"toolchain_version\":\"${TOOLCHAIN_VERSION}\"}}" > /tmp/attr.json && \
+    chef-solo -o 'recipe[omnibus]' -j /tmp/attr.json && \
+    rm -rf /tmp/attr.json && \
     sed -i -e 's/^env.*//' /home/omnibus/load-omnibus-toolchain.sh && \
     zypper rm -y chef && rm -rf /var/chef/ /opt/chef/embedded/ /etc/chef /opt/chef && \
     zypper clean -a

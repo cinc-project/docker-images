@@ -2,6 +2,8 @@ ARG VERSION="8"
 FROM centos:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
+ARG TOOLCHAIN_VERSION="1.1.109"
+
 COPY fix-repos.sh /root/fix-repos.sh
 RUN bash /root/fix-repos.sh && rm -rf /root/fix-repos.sh && \
     yum -y upgrade && \
@@ -12,7 +14,9 @@ RUN bash /root/fix-repos.sh && rm -rf /root/fix-repos.sh && \
     wget -qO- https://supermarket.chef.io/cookbooks/omnibus/download | tar xzC /var/chef/cookbooks && \
     for dep in windows mingw build-essential chef-sugar chef-ingredient git homebrew remote_install seven_zip wix; do \
         wget -qO- https://supermarket.chef.io/cookbooks/${dep}/download | tar xzC /var/chef/cookbooks; done && \
-    chef-solo -o 'recipe[omnibus]' && \
+    echo "{\"omnibus\":{\"toolchain_version\":\"${TOOLCHAIN_VERSION}\"}}" > /tmp/attr.json && \
+    chef-solo -o 'recipe[omnibus]' -j /tmp/attr.json && \
+    rm -rf /tmp/attr.json && \
     sed -i -e 's/^env.*//' /home/omnibus/load-omnibus-toolchain.sh && \
     yum -y remove chef && rm -rf /var/chef/ /opt/chef/embedded/ /etc/chef && \
     yum clean all && rm -rf /var/cache/yum
