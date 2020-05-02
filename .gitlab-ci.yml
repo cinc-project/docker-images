@@ -17,6 +17,7 @@ workflow:
     - if: $CI_PIPELINE_SOURCE == "web"
     # Run if this is a merge request
     - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_COMMIT_BRANCH == "master"
 
 before_script:
   - apk add bash
@@ -48,7 +49,7 @@ before_script:
     - osuosl
   rules:
     - changes:
-      - "${CINC_IMAGE}/*"
+      - ${CINC_IMAGE}/*
       when: on_success
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
