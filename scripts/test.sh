@@ -18,7 +18,7 @@
 set -ex
 arch="$(uname -m)"
 for version in ${VERSIONS} ; do
-  image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_REF_SLUG}"
+  image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
   docker pull ${image}
   id="$(docker run -it -d --rm ${image})"
   cinc-auditor detect -t docker://${id}

@@ -24,7 +24,7 @@ rm -rf /tmp/docker-token
 set -ex
 
 for version in ${VERSIONS} ; do
-  test_image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_REF_SLUG}"
+  test_image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
   prod_image="cincproject/${CINC_IMAGE}:${version}-${arch}"
   docker pull ${test_image}
   docker tag ${test_image} ${prod_image}

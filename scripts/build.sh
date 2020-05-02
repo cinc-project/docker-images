@@ -18,7 +18,7 @@
 set -ex
 arch="$(uname -m)"
 for version in ${VERSIONS} ; do
-  image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_REF_SLUG}"
+  image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
   docker build --no-cache --build-arg VERSION="${version}" -t ${image} ${CINC_IMAGE}
   docker push ${image}
 done
