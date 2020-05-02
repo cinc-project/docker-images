@@ -157,10 +157,10 @@ test:omnibus-opensuse:
       when: on_success
     - when: never
 
-publish:omnibus-ubuntu:
+test:omnibus-ubuntu:
   extends:
     - .ubuntu
-    - .publish
+    - .test
   rules:
     - changes:
       - omnibus-ubuntu/*
@@ -235,6 +235,7 @@ publish:omnibus-ubuntu:
     - when: never
 
 .release:
+  stage: release
   tags:
     - osuosl
   before_script:
