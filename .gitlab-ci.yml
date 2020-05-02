@@ -60,23 +60,23 @@ before_script:
 
 build:omnibus-centos:
   extends:
-    - .build
     - .centos
+    - .build
 
 build:omnibus-debian:
   extends:
-    - .build
     - .debian
+    - .build
 
 build:omnibus-opensuse:
   extends:
-    - .build
     - .opensuse
+    - .build
 
 build:omnibus-ubuntu:
   extends:
-    - .build
     - .ubuntu
+    - .build
 
 .test:
   stage: test
@@ -97,23 +97,23 @@ build:omnibus-ubuntu:
 
 test:omnibus-centos:
   extends:
-    - .test
     - .centos
+    - .test
 
 test:omnibus-debian:
   extends:
-    - .test
     - .debian
+    - .test
 
 test:omnibus-opensuse:
   extends:
-    - .test
     - .opensuse
+    - .test
 
 publish:omnibus-ubuntu:
   extends:
-    - .publish
     - .ubuntu
+    - .publish
 
 .publish:
   stage: publish
@@ -133,23 +133,23 @@ publish:omnibus-ubuntu:
 
 publish:omnibus-centos:
   extends:
-    - .publish
     - .centos
+    - .publish
 
 publish:omnibus-debian:
   extends:
-    - .publish
     - .debian
+    - .publish
 
 publish:omnibus-opensuse:
   extends:
-    - .publish
     - .opensuse
+    - .publish
 
 publish:omnibus-ubuntu:
   extends:
-    - .publish
     - .ubuntu
+    - .publish
 
 .release:
   tags:
@@ -170,20 +170,20 @@ publish:omnibus-ubuntu:
 
 release:omnibus-centos:
   extends:
-    - .release
     - .centos
+    - .release
 
 release:omnibus-debian:
   extends:
-    - .release
     - .debian
+    - .release
 
 release:omnibus-opensuse:
   extends:
-    - .release
     - .opensuse
+    - .release
 
 release:omnibus-ubuntu:
   extends:
-    - .release
     - .ubuntu
+    - .release
