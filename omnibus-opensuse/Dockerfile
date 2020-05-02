@@ -1,6 +1,6 @@
 ARG VERSION="15"
 FROM opensuse/leap:${VERSION}
-LABEL MAINTAINER="OSU Open Source Lab <dockerhub@osuosl.org>"
+LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 RUN zypper up --skip-interactive && \
     zypper install -y curl wget iproute2 rsync openssh tar gzip hostname rpm-build && \

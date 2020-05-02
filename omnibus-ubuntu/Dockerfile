@@ -1,6 +1,6 @@
 ARG VERSION="20.04"
 FROM ubuntu:${VERSION}
-LABEL MAINTAINER="OSU Open Source Lab <dockerhub@osuosl.org>"
+LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 RUN sed -i -e 's/archive.ubuntu.com/ubuntu.osuosl.org/g' /etc/apt/sources.list && \
     apt-get update && \

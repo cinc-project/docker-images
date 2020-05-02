@@ -1,6 +1,6 @@
 ARG VERSION="10"
 FROM debian:${VERSION}
-LABEL MAINTAINER="OSU Open Source Lab <dockerhub@osuosl.org>"
+LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 RUN sed -i -e 's/deb.debian.org/debian.osuosl.org/g' /etc/apt/sources.list && \
     apt-get update && \
