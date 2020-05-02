@@ -1,6 +1,6 @@
 ARG VERSION="8"
 FROM centos:${VERSION}
-LABEL MAINTAINER="OSU Open Source Lab <dockerhub@osuosl.org>"
+LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 COPY fix-repos.sh /root/fix-repos.sh
 RUN bash /root/fix-repos.sh && rm -rf /root/fix-repos.sh && \
