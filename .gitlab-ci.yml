@@ -119,11 +119,14 @@ publish:omnibus-ubuntu:
   stage: publish
   tags:
     - osuosl
-  only:
-    - master
   rules:
-    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - changes:
+      - "${CINC_IMAGE}/*"
     - when: never
   script:
     - bash scripts/publish.sh
@@ -151,11 +154,14 @@ publish:omnibus-ubuntu:
 .release:
   tags:
     - osuosl
-  only:
-    - master
   rules:
-    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - changes:
+      - "${CINC_IMAGE}/*"
     - when: never
   before_script:
     - apk add bc bash
