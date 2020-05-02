@@ -17,8 +17,8 @@
 # limitations under the License.
 set -ex
 arch="$(uname -m)"
-for version in "${VERSIONS}" ; do
+for version in ${VERSIONS} ; do
   image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_REF_SLUG}"
-  docker build --no-cache --build-arg VERSION="${v}" -t ${image} ${CINC_IMAGE}
+  docker build --no-cache --build-arg VERSION="${version}" -t ${image} ${CINC_IMAGE}
   docker push ${image}
 done

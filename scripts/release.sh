@@ -38,7 +38,7 @@ fi
 
 set -ex
 
-for version in "${VERSIONS}" ; do
+for version in ${VERSIONS} ; do
   x86_64_image="cincproject/${CINC_IMAGE}:${version}-x86_64"
   # aarch64_image="cincproject/${CINC_IMAGE}:${version}-aarch64"
   # ppc64le_image="cincproject/${CINC_IMAGE}:${version}-ppc64le"
