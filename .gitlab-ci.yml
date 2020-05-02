@@ -18,19 +18,6 @@ workflow:
     # Run if this is a merge request
     - if: $CI_MERGE_REQUEST_ID
 
-tags:
-  - osuosl
-
-rules:
-  - changes:
-    - "${CINC_IMAGE}/*"
-    when: on_success
-  - if: $CINC_BUILD == $CINC_IMAGE
-    when: on_success
-  - if: $CINC_BUILD == "all"
-    when: on_success
-  - when: never
-
 before_script:
   - apk add bash
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -57,6 +44,17 @@ before_script:
 
 .build:
   stage: build
+  tags:
+    - osuosl
+  rules:
+    - changes:
+      - "${CINC_IMAGE}/*"
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
   script:
     - bash scripts/build.sh
 
@@ -83,6 +81,17 @@ build:omnibus-ubuntu:
 .test:
   stage: test
   image: cincproject/docker-auditor
+  tags:
+    - osuosl
+  rules:
+    - changes:
+      - "${CINC_IMAGE}/*"
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
   script:
     - bash scripts/test.sh
 
@@ -108,6 +117,8 @@ publish:omnibus-ubuntu:
 
 .publish:
   stage: publish
+  tags:
+    - osuosl
   only:
     - master
   rules:
@@ -138,6 +149,8 @@ publish:omnibus-ubuntu:
     - .ubuntu
 
 .release:
+  tags:
+    - osuosl
   only:
     - master
   rules:
