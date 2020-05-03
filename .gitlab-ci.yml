@@ -196,6 +196,7 @@ publish:omnibus-centos:
       when: on_success
     - changes:
       - omnibus-centos/*
+      when: on_success
     - when: never
 
 publish:omnibus-debian:
@@ -211,6 +212,7 @@ publish:omnibus-debian:
       when: on_success
     - changes:
       - omnibus-debian/*
+      when: on_success
     - when: never
 
 publish:omnibus-opensuse:
@@ -226,6 +228,7 @@ publish:omnibus-opensuse:
       when: on_success
     - changes:
       - omnibus-opensuse/*
+      when: on_success
     - when: never
 
 publish:omnibus-ubuntu:
@@ -241,6 +244,7 @@ publish:omnibus-ubuntu:
       when: on_success
     - changes:
       - omnibus-ubuntu/*
+      when: on_success
     - when: never
 
 .release:
@@ -265,6 +269,7 @@ release:omnibus-centos:
       when: on_success
     - changes:
       - omnibus-centos/*
+      when: on_success
     - when: never
 
 release:omnibus-debian:
@@ -280,6 +285,7 @@ release:omnibus-debian:
       when: on_success
     - changes:
       - omnibus-debian/*
+      when: on_success
     - when: never
 
 release:omnibus-opensuse:
@@ -295,6 +301,7 @@ release:omnibus-opensuse:
       when: on_success
     - changes:
       - omnibus-opensuse/*
+      when: on_success
     - when: never
 
 release:omnibus-ubuntu:
@@ -310,6 +317,7 @@ release:omnibus-ubuntu:
       when: on_success
     - changes:
       - omnibus-ubuntu/*
+      when: on_success
     - when: never
 
 .clean:
