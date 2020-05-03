@@ -7,6 +7,7 @@ stages:
   - test
   - publish
   - release
+  - clean
 
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
@@ -307,6 +308,60 @@ release:omnibus-ubuntu:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
+    - changes:
+      - omnibus-ubuntu/*
+    - when: never
+
+.clean:
+  stage: clean
+  dependencies: []
+  tags:
+    - osuosl
+  before_script:
+    - apk add bash curl jq
+  script:
+    - bash scripts/clean.sh
+
+clean:omnibus-centos:
+  extends:
+    - .centos
+    - .clean
+  rules:
+    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "all"
+    - changes:
+      - omnibus-centos/*
+    - when: never
+
+clean:omnibus-debian:
+  extends:
+    - .debian
+    - .clean
+  rules:
+    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "all"
+    - changes:
+      - omnibus-debian/*
+    - when: never
+
+clean:omnibus-opensuse:
+  extends:
+    - .opensuse
+    - .clean
+  rules:
+    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "all"
+    - changes:
+      - omnibus-opensuse/*
+    - when: never
+
+clean:omnibus-ubuntu:
+  extends:
+    - .ubuntu
+    - .clean
+  rules:
+    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-ubuntu/*
     - when: never
