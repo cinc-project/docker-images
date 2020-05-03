@@ -18,7 +18,7 @@
 set -e
 arch="$(uname -m)"
 
-REPO_ID="$(curl -s --header "PRIVATE-TOKEN: ${CI_REGISTRY_PASSWORD}" \
+REPO_ID="$(curl -s --header "PRIVATE-TOKEN: ${DEPLOY_TOKEN}" \
   "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/registry/repositories" | \
   jq -r --arg repo "${CINC_IMAGE}" '.[]? | select(.name == $repo) | .id')"
 
@@ -26,5 +26,5 @@ for version in ${VERSIONS} ; do
   tag="${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
   echo "Deleting ${CINC_IMAGE}:${tag}.."
   url="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/registry/repositories/${REPO_ID}/tags/${tag}"
-  curl --request DELETE --header "PRIVATE-TOKEN: ${CI_REGISTRY_PASSWORD}" ${url}
+  curl --request DELETE --header "PRIVATE-TOKEN: ${DEPLOY_TOKEN}" ${url}
 done
