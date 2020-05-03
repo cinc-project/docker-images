@@ -38,18 +38,19 @@ fi
 
 set -ex
 
+# Declare dynamic variable
+for arch in ${ARCHS} ; do
+  declare "${arch}_image=cincproject/${CINC_IMAGE}:${version}-${arch}"
+done
+
 for version in ${VERSIONS} ; do
-  x86_64_image="cincproject/${CINC_IMAGE}:${version}-x86_64"
-  # aarch64_image="cincproject/${CINC_IMAGE}:${version}-aarch64"
-  # ppc64le_image="cincproject/${CINC_IMAGE}:${version}-ppc64le"
   release_image="cincproject/${CINC_IMAGE}:${version}"
-  docker pull ${x86_64_image}
-  # docker pull ${aarch64_image}
-  # docker pull ${ppc64le_image}
-  # docker manifest create ${release_image} ${x86_64_image} ${aarch64_image} ${ppc64le_image}
-  docker manifest create ${release_image} ${x86_64_image}
-  # docker manifest annotate ${release_image} ${aarch64_image} --arch arm64
-  # docker manifest annotate ${release_image} ${ppc64le_image} --arch ppc64le
+  [ -n "${x86_64_image}" ] && docker pull ${x86_64_image}
+  [ -n "${aarch64_image}" ] && docker pull ${aarch64_image}
+  [ -n "${ppc64le_image}" ] && docker pull ${ppc64le_image}
+  docker manifest create ${release_image} ${x86_64_image} ${aarch64_image} ${ppc64le_image}
+  [ -n "${aarch64_image}" ] && docker manifest annotate ${release_image} ${aarch64_image} --arch arm64
+  [ -n "${ppc64le_image}" ] && docker manifest annotate ${release_image} ${ppc64le_image} --arch ppc64le
   docker manifest inspect ${release_image}
   docker manifest push ${release_image}
 done

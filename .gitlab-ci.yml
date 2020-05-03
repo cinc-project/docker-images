@@ -28,21 +28,25 @@ before_script:
   variables:
     CINC_IMAGE: "omnibus-centos"
     VERSIONS: "6 7 8"
+    ARCHS: "x86_64"
 
 .debian:
   variables:
     CINC_IMAGE: "omnibus-debian"
     VERSIONS: "8 9 10"
+    ARCHS: "x86_64"
 
 .opensuse:
   variables:
     CINC_IMAGE: "omnibus-opensuse"
     VERSIONS: "15"
+    ARCHS: "x86_64"
 
 .ubuntu:
   variables:
     CINC_IMAGE: "omnibus-ubuntu"
     VERSIONS: "16.04 18.04 20.04"
+    ARCHS: "x86_64"
 
 .build:
   stage: build
