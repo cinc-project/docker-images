@@ -254,7 +254,7 @@ publish:omnibus-ubuntu:
   before_script:
     - apk add bc bash
   script:
-    - bash scripts/publish.sh
+    - bash scripts/release.sh
 
 release:omnibus-centos:
   extends:
