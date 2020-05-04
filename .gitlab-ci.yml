@@ -1,0 +1,375 @@
+image: docker:latest
+services:
+  - docker:dind
+
+stages:
+  - build
+  - test
+  - publish
+  - release
+  - clean
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+
+workflow:
+  rules:
+    # Run if we trigger a pipeline from the web
+    - if: $CI_PIPELINE_SOURCE == "web"
+    # Run if this is a merge request
+    - if: $CI_MERGE_REQUEST_ID
+    # Run if on master branch
+    - if: $CI_COMMIT_REF_NAME == "master"
+
+before_script:
+  - apk add bash
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+.centos:
+  variables:
+    CINC_IMAGE: "omnibus-centos"
+    VERSIONS: "6 7 8"
+    ARCHS: "x86_64"
+
+.debian:
+  variables:
+    CINC_IMAGE: "omnibus-debian"
+    VERSIONS: "8 9 10"
+    ARCHS: "x86_64"
+
+.opensuse:
+  variables:
+    CINC_IMAGE: "omnibus-opensuse"
+    VERSIONS: "15"
+    ARCHS: "x86_64"
+
+.ubuntu:
+  variables:
+    CINC_IMAGE: "omnibus-ubuntu"
+    VERSIONS: "16.04 18.04 20.04"
+    ARCHS: "x86_64"
+
+.build:
+  stage: build
+  tags:
+    - osuosl
+  script:
+    - bash scripts/build.sh
+
+build:omnibus-centos:
+  extends:
+    - .centos
+    - .build
+  rules:
+    - changes:
+      - omnibus-centos/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
+
+build:omnibus-debian:
+  extends:
+    - .debian
+    - .build
+  rules:
+    - changes:
+      - omnibus-debian/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
+
+build:omnibus-opensuse:
+  extends:
+    - .opensuse
+    - .build
+  rules:
+    - changes:
+      - omnibus-opensuse/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
+
+build:omnibus-ubuntu:
+  extends:
+    - .ubuntu
+    - .build
+  rules:
+    - changes:
+      - omnibus-ubuntu/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
+
+.test:
+  stage: test
+  image: cincproject/docker-auditor
+  tags:
+    - osuosl
+  script:
+    - bash scripts/test.sh
+
+test:omnibus-centos:
+  extends:
+    - .centos
+    - .test
+  rules:
+    - changes:
+      - omnibus-centos/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
+
+test:omnibus-debian:
+  extends:
+    - .debian
+    - .test
+  rules:
+    - changes:
+      - omnibus-debian/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
+
+test:omnibus-opensuse:
+  extends:
+    - .opensuse
+    - .test
+  rules:
+    - changes:
+      - omnibus-opensuse/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
+
+test:omnibus-ubuntu:
+  extends:
+    - .ubuntu
+    - .test
+  rules:
+    - changes:
+      - omnibus-ubuntu/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
+
+.publish:
+  stage: publish
+  tags:
+    - osuosl
+  script:
+    - bash scripts/publish.sh
+
+publish:omnibus-centos:
+  extends:
+    - .centos
+    - .publish
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - changes:
+      - omnibus-centos/*
+      when: on_success
+    - when: never
+
+publish:omnibus-debian:
+  extends:
+    - .debian
+    - .publish
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - changes:
+      - omnibus-debian/*
+      when: on_success
+    - when: never
+
+publish:omnibus-opensuse:
+  extends:
+    - .opensuse
+    - .publish
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - changes:
+      - omnibus-opensuse/*
+      when: on_success
+    - when: never
+
+publish:omnibus-ubuntu:
+  extends:
+    - .ubuntu
+    - .publish
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - changes:
+      - omnibus-ubuntu/*
+      when: on_success
+    - when: never
+
+.release:
+  stage: release
+  tags:
+    - osuosl
+  before_script:
+    - apk add bc bash
+  script:
+    - bash scripts/publish.sh
+
+release:omnibus-centos:
+  extends:
+    - .centos
+    - .release
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - changes:
+      - omnibus-centos/*
+      when: on_success
+    - when: never
+
+release:omnibus-debian:
+  extends:
+    - .debian
+    - .release
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - changes:
+      - omnibus-debian/*
+      when: on_success
+    - when: never
+
+release:omnibus-opensuse:
+  extends:
+    - .opensuse
+    - .release
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - changes:
+      - omnibus-opensuse/*
+      when: on_success
+    - when: never
+
+release:omnibus-ubuntu:
+  extends:
+    - .ubuntu
+    - .release
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - changes:
+      - omnibus-ubuntu/*
+      when: on_success
+    - when: never
+
+.clean:
+  stage: clean
+  dependencies: []
+  tags:
+    - osuosl
+  before_script:
+    - apk add bash curl jq
+  script:
+    - bash scripts/clean.sh
+
+clean:omnibus-centos:
+  extends:
+    - .centos
+    - .clean
+  rules:
+    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "all"
+    - changes:
+      - omnibus-centos/*
+    - when: never
+
+clean:omnibus-debian:
+  extends:
+    - .debian
+    - .clean
+  rules:
+    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "all"
+    - changes:
+      - omnibus-debian/*
+    - when: never
+
+clean:omnibus-opensuse:
+  extends:
+    - .opensuse
+    - .clean
+  rules:
+    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "all"
+    - changes:
+      - omnibus-opensuse/*
+    - when: never
+
+clean:omnibus-ubuntu:
+  extends:
+    - .ubuntu
+    - .clean
+  rules:
+    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "all"
+    - changes:
+      - omnibus-ubuntu/*
+    - when: never
