@@ -15,13 +15,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+mkdir -p ~/.docker
+echo '{"experimental":"enabled"}' > ~/.docker/config.json
 cat << EOF > /tmp/docker-token
 $DOCKER_TOKEN
 EOF
 cat /tmp/docker-token | docker login --username $DOCKER_USERNAME --password-stdin
 rm -rf /tmp/docker-token
 # Enable experimental features to allow manifest command
-echo '{"experimental":"enabled"}' > ~/.docker/config.json
 
 LATEST=0
 # Find the newest version and use that to tag latest
@@ -38,12 +39,12 @@ fi
 
 set -ex
 
-# Declare dynamic variable
-for arch in ${ARCHS} ; do
-  declare "${arch}_image=cincproject/${CINC_IMAGE}:${version}-${arch}"
-done
-
 for version in ${VERSIONS} ; do
+  # Declare dynamic variable
+  for arch in ${ARCHS} ; do
+    declare "${arch}_image=cincproject/${CINC_IMAGE}:${version}-${arch}"
+  done
+
   release_image="cincproject/${CINC_IMAGE}:${version}"
   [ -n "${x86_64_image}" ] && docker pull ${x86_64_image}
   [ -n "${aarch64_image}" ] && docker pull ${aarch64_image}
@@ -55,5 +56,15 @@ for version in ${VERSIONS} ; do
   docker manifest push ${release_image}
 done
 
-docker tag cincproject/${CINC_IMAGE}:${LATEST} cincproject/${CINC_IMAGE}:latest
-docker push cincproject/${CINC_IMAGE}:latest
+# Declare dynamic variable
+for arch in ${ARCHS} ; do
+  declare "${arch}_image=cincproject/${CINC_IMAGE}:${LATEST}-${arch}"
+done
+
+# Create latest tag
+release_image="cincproject/${CINC_IMAGE}:latest"
+docker manifest create ${release_image} ${x86_64_image} ${aarch64_image} ${ppc64le_image}
+[ -n "${aarch64_image}" ] && docker manifest annotate ${release_image} ${aarch64_image} --arch arm64
+[ -n "${ppc64le_image}" ] && docker manifest annotate ${release_image} ${ppc64le_image} --arch ppc64le
+docker manifest inspect ${release_image}
+docker manifest push ${release_image}
