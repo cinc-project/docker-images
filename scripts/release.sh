@@ -27,12 +27,12 @@ rm -rf /tmp/docker-token
 LATEST=0
 # Find the newest version and use that to tag latest
 for i in $VERSIONS ; do
-  if (( $(echo "$i > $LATEST" | bc -l) )) ; then
+  if (( $(echo "${i%.*} > ${LATEST%.*}" | bc -l) )) ; then
     LATEST=$i
   fi
 done
 
-if [ "$LATEST" -eq "0" ] ; then
+if (( $(echo "${LATEST%.*} == 0" | bc -l) )) ; then
   echo "Could not find highest version available"
   exit 1
 fi
