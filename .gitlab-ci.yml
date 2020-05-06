@@ -49,6 +49,12 @@ before_script:
     VERSIONS: "16.04 18.04 20.04"
     ARCHS: "x86_64"
 
+.docker-auditor:
+  variables:
+    CINC_IMAGE: "docker-auditor"
+    VERSIONS: "4.18.108"
+    ARCHS: "x86_64"
+
 .build:
   stage: build
   tags:
@@ -105,6 +111,20 @@ build:omnibus-ubuntu:
   rules:
     - changes:
       - omnibus-ubuntu/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
+
+build:docker-auditor:
+  extends:
+    - .docker-auditor
+    - .build
+  rules:
+    - changes:
+      - docker-auditor/*
       when: on_success
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
@@ -169,6 +189,20 @@ test:omnibus-ubuntu:
   rules:
     - changes:
       - omnibus-ubuntu/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
+
+test:docker-auditor:
+  extends:
+    - .docker-auditor
+    - .test
+  rules:
+    - changes:
+      - docker-auditor/*
       when: on_success
     - if: $CINC_BUILD == $CINC_IMAGE
       when: on_success
@@ -247,6 +281,22 @@ publish:omnibus-ubuntu:
       when: on_success
     - when: never
 
+publish:docker-auditor:
+  extends:
+    - .docker-auditor
+    - .publish
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - changes:
+      - docker-auditor/*
+      when: on_success
+    - when: never
+
 .release:
   stage: release
   tags:
@@ -320,6 +370,22 @@ release:omnibus-ubuntu:
       when: on_success
     - when: never
 
+release:docker-auditor:
+  extends:
+    - .docker-auditor
+    - .release
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - changes:
+      - docker-auditor/*
+      when: on_success
+    - when: never
+
 .clean:
   stage: clean
   dependencies: []
@@ -372,4 +438,15 @@ clean:omnibus-ubuntu:
     - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-ubuntu/*
+    - when: never
+
+clean:omnibus-docker-auditor:
+  extends:
+    - .docker-auditor
+    - .clean
+  rules:
+    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "all"
+    - changes:
+      - docker-auditor/*
     - when: never
