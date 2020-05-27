@@ -29,25 +29,61 @@ before_script:
   variables:
     CINC_IMAGE: "omnibus-centos"
     VERSIONS: "6 7 8"
-    ARCHS: "x86_64"
+    ARCHS: "x86_64 aarch64"
+  rules:
+    - changes:
+      - omnibus-centos/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 .debian:
   variables:
     CINC_IMAGE: "omnibus-debian"
     VERSIONS: "8 9 10"
-    ARCHS: "x86_64"
+    ARCHS: "x86_64 aarch64"
+  rules:
+    - changes:
+      - omnibus-debian/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 .opensuse:
   variables:
     CINC_IMAGE: "omnibus-opensuse"
     VERSIONS: "15"
-    ARCHS: "x86_64"
+    ARCHS: "x86_64 aarch64"
+  rules:
+    - changes:
+      - omnibus-opensuse/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 .ubuntu:
   variables:
     CINC_IMAGE: "omnibus-ubuntu"
     VERSIONS: "16.04 18.04 20.04"
-    ARCHS: "x86_64"
+    ARCHS: "x86_64 aarch64"
+  rules:
+    - changes:
+      - omnibus-ubuntu/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 .docker-auditor:
   variables:
@@ -71,61 +107,53 @@ before_script:
   script:
     - bash scripts/build.sh
 
-build:omnibus-centos:
+build:omnibus-centos:x86_64:
   extends:
     - .centos
     - .build
-  rules:
-    - changes:
-      - omnibus-centos/*
-      when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - when: never
 
-build:omnibus-debian:
+build:omnibus-centos:aarch64:
+  extends:
+    - .centos
+    - .build
+  tags:
+    - docker-aarch64
+
+build:omnibus-debian:x86_64:
   extends:
     - .debian
     - .build
-  rules:
-    - changes:
-      - omnibus-debian/*
-      when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - when: never
 
-build:omnibus-opensuse:
+build:omnibus-debian:aarch64:
+  extends:
+    - .debian
+    - .build
+  tags:
+    - docker-aarch64
+
+build:omnibus-opensuse:x86_64:
   extends:
     - .opensuse
     - .build
-  rules:
-    - changes:
-      - omnibus-opensuse/*
-      when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - when: never
 
-build:omnibus-ubuntu:
+build:omnibus-opensuse:aarch64:
+  extends:
+    - .opensuse
+    - .build
+  tags:
+    - docker-aarch64
+
+build:omnibus-ubuntu:x86_64:
   extends:
     - .ubuntu
     - .build
-  rules:
-    - changes:
-      - omnibus-ubuntu/*
-      when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - when: never
+
+build:omnibus-ubuntu:aarch64:
+  extends:
+    - .ubuntu
+    - .build
+  tags:
+    - docker-aarch64
 
 build:docker-auditor:x86_64:
   extends:
@@ -147,61 +175,53 @@ build:docker-auditor:aarch64:
   script:
     - bash scripts/test.sh
 
-test:omnibus-centos:
+test:omnibus-centos:x86_64:
   extends:
     - .centos
     - .test
-  rules:
-    - changes:
-      - omnibus-centos/*
-      when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - when: never
 
-test:omnibus-debian:
+test:omnibus-centos:aarch64:
+  extends:
+    - .centos
+    - .test
+  tags:
+    - docker-aarch64
+
+test:omnibus-debian:x86_64:
   extends:
     - .debian
     - .test
-  rules:
-    - changes:
-      - omnibus-debian/*
-      when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - when: never
 
-test:omnibus-opensuse:
+test:omnibus-debian:aarch64:
+  extends:
+    - .debian
+    - .test
+  tags:
+    - docker-aarch64
+
+test:omnibus-opensuse:x86_64:
   extends:
     - .opensuse
     - .test
-  rules:
-    - changes:
-      - omnibus-opensuse/*
-      when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - when: never
 
-test:omnibus-ubuntu:
+test:omnibus-opensuse:aarch64:
+  extends:
+    - .opensuse
+    - .test
+  tags:
+    - docker-aarch64
+
+test:omnibus-ubuntu:x86_64:
   extends:
     - .ubuntu
     - .test
-  rules:
-    - changes:
-      - omnibus-ubuntu/*
-      when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - when: never
+
+test:omnibus-ubuntu:aarch64:
+  extends:
+    - .ubuntu
+    - .test
+  tags:
+    - docker-aarch64
 
 test:docker-auditor:x86_64:
   extends:
