@@ -26,7 +26,7 @@ for version in ${VERSIONS} ; do
     tag="${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
     echo -n "Deleting ${CINC_IMAGE}:${tag} ... "
     url="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/registry/repositories/${REPO_ID}/tags/${tag}"
-    curl -f --request DELETE --header "PRIVATE-TOKEN: ${DEPLOY_TOKEN}" ${url}
+    curl -f -s --request DELETE --header "PRIVATE-TOKEN: ${DEPLOY_TOKEN}" ${url}
     echo
   done
 done
