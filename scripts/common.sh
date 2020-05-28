@@ -15,12 +15,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-source scripts/common.sh
-set -ex
-arch="$(uname -m)"
-for version in ${VERSIONS} ; do
-  supported_platform $CINC_IMAGE $version $arch || continue
-  image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
-  docker build --no-cache --build-arg VERSION="${version}" -t ${image} ${CINC_IMAGE}
-  docker push ${image}
-done
+declare -A platforms
+
+platforms[docker-auditor:4.18.111:x86_64]=1
+platforms[docker-auditor:4.18.111:aarch64]=1
+
+supported_platform() {
+  local image=$1 version=$2 arch=$3
+  [[ -v platforms[${image}:${version}:${arch}] ]] && return 0
+}
