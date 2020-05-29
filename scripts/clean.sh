@@ -16,16 +16,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 set -e
-arch="$(uname -m)"
 
 REPO_ID="$(curl -f -s --header "PRIVATE-TOKEN: ${DEPLOY_TOKEN}" \
   "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/registry/repositories" | \
   jq -r --arg repo "${CINC_IMAGE}" '.[]? | select(.name == $repo) | .id')"
 
 for version in ${VERSIONS} ; do
-  tag="${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
-  echo -n "Deleting ${CINC_IMAGE}:${tag} ... "
-  url="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/registry/repositories/${REPO_ID}/tags/${tag}"
-  curl -f --request DELETE --header "PRIVATE-TOKEN: ${DEPLOY_TOKEN}" ${url}
-  echo
+  for arch in ${ARCHS} ; do
+    tag="${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
+    echo -n "Deleting ${CINC_IMAGE}:${tag} ... "
+    url="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/registry/repositories/${REPO_ID}/tags/${tag}"
+    curl -f -s --request DELETE --header "PRIVATE-TOKEN: ${DEPLOY_TOKEN}" ${url}
+    echo
+  done
 done

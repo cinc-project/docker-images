@@ -52,13 +52,22 @@ before_script:
 .docker-auditor:
   variables:
     CINC_IMAGE: "docker-auditor"
-    VERSIONS: "4.18.108"
-    ARCHS: "x86_64"
+    VERSIONS: "4.18.111"
+    ARCHS: "x86_64 aarch64"
+  rules:
+    - changes:
+      - docker-auditor/*
+      when: on_success
+    - if: $CINC_BUILD == $CINC_IMAGE
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 .build:
   stage: build
   tags:
-    - osuosl
+    - docker-x86_64
   script:
     - bash scripts/build.sh
 
@@ -118,25 +127,23 @@ build:omnibus-ubuntu:
       when: on_success
     - when: never
 
-build:docker-auditor:
+build:docker-auditor:x86_64:
   extends:
     - .docker-auditor
     - .build
-  rules:
-    - changes:
-      - docker-auditor/*
-      when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - when: never
+
+build:docker-auditor:aarch64:
+  extends:
+    - .docker-auditor
+    - .build
+  tags:
+    - docker-aarch64
 
 .test:
   stage: test
   image: cincproject/docker-auditor
   tags:
-    - osuosl
+    - docker-x86_64
   script:
     - bash scripts/test.sh
 
@@ -196,24 +203,22 @@ test:omnibus-ubuntu:
       when: on_success
     - when: never
 
-test:docker-auditor:
+test:docker-auditor:x86_64:
   extends:
     - .docker-auditor
     - .test
-  rules:
-    - changes:
-      - docker-auditor/*
-      when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - when: never
+
+test:docker-auditor:aarch64:
+  extends:
+    - .docker-auditor
+    - .test
+  tags:
+    - docker-aarch64
 
 .publish:
   stage: publish
   tags:
-    - osuosl
+    - docker-x86_64
   script:
     - bash scripts/publish.sh
 
@@ -300,7 +305,7 @@ publish:docker-auditor:
 .release:
   stage: release
   tags:
-    - osuosl
+    - docker-x86_64
   before_script:
     - apk add bc bash
   script:
@@ -390,7 +395,7 @@ release:docker-auditor:
   stage: clean
   dependencies: []
   tags:
-    - osuosl
+    - docker-x86_64
   before_script:
     - apk add bash curl jq
   script:

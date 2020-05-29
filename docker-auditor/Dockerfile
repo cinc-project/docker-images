@@ -1,10 +1,13 @@
 FROM docker:latest
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
-ARG VERSION="4.18.108"
+ARG VERSION="4.18.111"
 ARG GEM_SOURCE=https://packagecloud.io/cinc-project/stable
 
 RUN apk add --update build-base libxml2-dev libffi-dev git openssh-client ruby ruby-dev ruby-etc ruby-webrick && \
+    # Use patched version which fixes support for aarch64
+    # https://github.com/knu/ruby-unf_ext/commit/8a6a735b51ef903200fc541112e35b7cea781856
+    gem install --no-document --clear-sources --source ${GEM_SOURCE} --version 0.0.7.2 unf_ext && \
     gem install --no-document --source ${GEM_SOURCE} --version ${VERSION} inspec && \
     gem install --no-document --source ${GEM_SOURCE} --version ${VERSION} cinc-auditor-bin && \
     apk del build-base ruby-dev
