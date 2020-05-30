@@ -15,9 +15,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+source scripts/common.sh
 set -ex
 arch="$(uname -m)"
 for version in ${VERSIONS} ; do
+  supported_platform $CINC_IMAGE $version $arch || continue
   image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
   docker pull ${image}
   id="$(docker run -it -d --rm ${image})"
