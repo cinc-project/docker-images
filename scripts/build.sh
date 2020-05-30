@@ -18,9 +18,14 @@
 source scripts/common.sh
 set -ex
 arch="$(uname -m)"
+if [ -e ${CINC_IMAGE}/Dockerfile.${arch} ] ; then
+  docker_file="${CINC_IMAGE}/Dockerfile.${arch}"
+else
+  docker_file="${CINC_IMAGE}/Dockerfile"
+fi
 for version in ${VERSIONS} ; do
   supported_platform $CINC_IMAGE $version $arch || continue
   image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
-  docker build --no-cache --build-arg VERSION="${version}" -t ${image} ${CINC_IMAGE}
+  docker build --no-cache --build-arg VERSION="${version}" -t ${image} -f ${docker_file} ${CINC_IMAGE}
   docker push ${image}
 done
