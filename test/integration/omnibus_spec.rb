@@ -5,17 +5,17 @@ when 'redhat'
 when 'debian'
   pkgs = %w(curl wget ca-certificates iproute2 rsync openssh-client libssl-dev)
   case os.arch
-  when x86_64
+  when 'x86_64'
     toolchain_ver = /^1\.1\.109/
-  when aarch64
+  when 'aarch64'
     toolchain_ver = /^2\.0\.2/
   end
 when 'suse'
   pkgs = %w(curl wget iproute2 rsync openssh tar gzip hostname rpm-build)
   case os.arch
-  when x86_64
+  when 'x86_64'
     toolchain_ver = /^1\.1\.109/
-  when aarch64
+  when 'aarch64'
     toolchain_ver = /^2\.0\.2/
   end
 end
