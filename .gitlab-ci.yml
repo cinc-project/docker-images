@@ -430,6 +430,7 @@ clean:omnibus-centos:
     - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-centos/*
+      when: always
     - when: never
 
 clean:omnibus-debian:
@@ -441,6 +442,7 @@ clean:omnibus-debian:
     - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-debian/*
+      when: always
     - when: never
 
 clean:omnibus-opensuse:
@@ -452,6 +454,7 @@ clean:omnibus-opensuse:
     - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-opensuse/*
+      when: always
     - when: never
 
 clean:omnibus-ubuntu:
@@ -463,6 +466,7 @@ clean:omnibus-ubuntu:
     - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-ubuntu/*
+      when: always
     - when: never
 
 clean:omnibus-docker-auditor:
@@ -474,4 +478,5 @@ clean:omnibus-docker-auditor:
     - if: $CINC_BUILD == "all"
     - changes:
       - docker-auditor/*
+      when: always
     - when: never
