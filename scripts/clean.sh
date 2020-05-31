@@ -15,6 +15,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+source scripts/common.sh
 set -e
 
 REPO_ID="$(curl -f -s --header "PRIVATE-TOKEN: ${DEPLOY_TOKEN}" \
