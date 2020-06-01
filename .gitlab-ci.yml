@@ -34,7 +34,7 @@ before_script:
     - changes:
       - omnibus-centos/*
       when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "omnibus-centos"
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
@@ -49,7 +49,7 @@ before_script:
     - changes:
       - omnibus-debian/*
       when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "omnibus-debian"
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
@@ -64,7 +64,7 @@ before_script:
     - changes:
       - omnibus-opensuse/*
       when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "omnibus-opensuse"
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
@@ -79,7 +79,7 @@ before_script:
     - changes:
       - omnibus-ubuntu/*
       when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "omnibus-ubuntu"
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
@@ -94,7 +94,7 @@ before_script:
     - changes:
       - docker-auditor/*
       when: on_success
-    - if: $CINC_BUILD == $CINC_IMAGE
+    - if: $CINC_BUILD == "docker-auditor"
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
