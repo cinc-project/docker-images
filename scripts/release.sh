@@ -15,6 +15,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+source scripts/common.sh
 mkdir -p ~/.docker
 echo '{"experimental":"enabled"}' > ~/.docker/config.json
 cat << EOF > /tmp/docker-token
@@ -42,6 +43,7 @@ set -ex
 for version in ${VERSIONS} ; do
   # Declare dynamic variable
   for arch in ${ARCHS} ; do
+    supported_platform $CINC_IMAGE $version $arch || continue
     declare "${arch}_image=cincproject/${CINC_IMAGE}:${version}-${arch}"
   done
 
@@ -58,6 +60,7 @@ done
 
 # Declare dynamic variable
 for arch in ${ARCHS} ; do
+  supported_platform $CINC_IMAGE $version $arch || continue
   declare "${arch}_image=cincproject/${CINC_IMAGE}:${LATEST}-${arch}"
 done
 

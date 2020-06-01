@@ -15,6 +15,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+source scripts/common.sh
 arch="$(uname -m)"
 cat << EOF > /tmp/docker-token
 $DOCKER_TOKEN
@@ -25,6 +26,7 @@ set -ex
 
 for version in ${VERSIONS} ; do
   for arch in ${ARCHS} ; do
+    supported_platform $CINC_IMAGE $version $arch || continue
     test_image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
     prod_image="cincproject/${CINC_IMAGE}:${version}-${arch}"
     docker pull ${test_image}
