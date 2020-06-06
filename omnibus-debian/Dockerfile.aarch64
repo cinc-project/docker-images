@@ -19,5 +19,7 @@ RUN sed -i -e 's/deb.debian.org/debian.osuosl.org/g' /etc/apt/sources.list && \
     chef-solo --chef-license accept -o 'recipe[omnibus]' -j /tmp/attr.json && \
     rm -rf /tmp/attr.json && \
     sed -i -e 's/^env.*//' /home/omnibus/load-omnibus-toolchain.sh && \
+    # https://github.com/chef/omnibus-toolchain/issues/143
+    ln -s /bin/mkdir /usr/bin/mkdir && \
     apt-get -y remove chef && rm -rf /var/chef/ /opt/chef/embedded/ /etc/chef && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
