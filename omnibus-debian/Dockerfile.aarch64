@@ -3,12 +3,14 @@ FROM debian:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 ARG TOOLCHAIN_VERSION="2.0.2"
+ARG JDK_VER="11"
 
 RUN sed -i -e 's/deb.debian.org/debian.osuosl.org/g' /etc/apt/sources.list && \
     apt-get update && \
     apt-get upgrade --no-install-recommends -y && \
     apt-get -y -m install --no-install-recommends \
-        curl wget ca-certificates iproute2 rsync openssh-client libssl-dev && \
+        curl wget ca-certificates iproute2 rsync openssh-client libssl-dev \
+        openjdk-${JDK_VER}-jdk-headless && \
     # Eventually, we will install cinc
     curl -L https://www.chef.io/chef/install.sh | bash -s -- -v 16 && \
     mkdir -p /var/chef/cache /var/chef/cookbooks && \

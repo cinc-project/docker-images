@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 declare -A platforms
+declare -A jdk_ver
 
 platforms[docker-auditor:4.18.111:aarch64]=1
 platforms[docker-auditor:4.18.111:x86_64]=1
@@ -35,6 +36,22 @@ platforms[omnibus-ubuntu:18.04:aarch64]=1
 platforms[omnibus-ubuntu:18.04:x86_64]=1
 platforms[omnibus-ubuntu:20.04:aarch64]=1
 platforms[omnibus-ubuntu:20.04:x86_64]=1
+
+jdk_ver[omnibus-centos:6]="1.8.0"
+jdk_ver[omnibus-centos:7]="11"
+jdk_ver[omnibus-centos:8]="11"
+jdk_ver[omnibus-debian:8]="7"
+jdk_ver[omnibus-debian:9]="8"
+jdk_ver[omnibus-debian:10]="11"
+jdk_ver[omnibus-opensuse:15]="11"
+jdk_ver[omnibus-ubuntu:16.04]="9"
+jdk_ver[omnibus-ubuntu:18.04]="11"
+jdk_ver[omnibus-ubuntu:20.04]="14"
+
+get_jdk() {
+  local image=$1 version=$2
+  echo ${jdk_ver[${image}:${version}]}
+}
 
 supported_platform() {
   local image=$1 version=$2 arch=$3
