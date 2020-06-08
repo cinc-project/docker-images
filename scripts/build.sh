@@ -26,6 +26,10 @@ fi
 for version in ${VERSIONS} ; do
   supported_platform $CINC_IMAGE $version $arch || continue
   image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
-  docker build --no-cache --build-arg VERSION="${version}" -t ${image} -f ${docker_file} ${CINC_IMAGE}
+  opts=""
+  if [ -n "$(get_jdk $CINC_IMAGE $version)" ] ; then
+    opts="--build-arg JDK_VER=$(get_jdk $CINC_IMAGE $version)"
+  fi
+  docker build --no-cache --build-arg VERSION="${version}" -t ${image} -f ${docker_file} ${opts} ${CINC_IMAGE}
   docker push ${image}
 done

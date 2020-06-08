@@ -3,11 +3,13 @@ FROM centos:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 ARG TOOLCHAIN_VERSION="1.1.109"
+ARG JDK_VER="11"
 
 COPY fix-repos.sh /root/fix-repos.sh
 RUN bash /root/fix-repos.sh && rm -rf /root/fix-repos.sh && \
     yum -y upgrade && \
-    yum -y install curl wget ca-certificates iproute rsync openssh-clients && \
+    yum -y install curl wget ca-certificates iproute rsync openssh-clients \
+        java-${JDK_VER}-openjdk-headless && \
     # Eventually, we will install cinc
     curl -L https://www.chef.io/chef/install.sh | bash -s -- -v 14 && \
     mkdir -p /var/chef/cache /var/chef/cookbooks && \

@@ -3,9 +3,11 @@ FROM opensuse/leap:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 ARG TOOLCHAIN_VERSION="1.1.109"
+ARG JDK_VER="11"
 
 RUN zypper up -y --skip-interactive && \
-    zypper install -y curl wget iproute2 rsync openssh tar gzip hostname rpm-build && \
+    zypper install -y curl wget iproute2 rsync openssh tar gzip hostname rpm-build \
+        java-${JDK_VER}-openjdk-headless && \
     # Eventually, we will install cinc
     curl -L https://www.chef.io/chef/install.sh | bash -s -- -v 14 && \
     # Install mixlib-install so we can sanely install omnibus-toolchain
