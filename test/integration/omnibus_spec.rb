@@ -2,11 +2,16 @@ case os.family
 when 'redhat'
   pkgs = %w(curl wget ca-certificates iproute rsync openssh-clients)
   toolchain_ver = /^1\.1\.109/
-  case os.release.to_i
-  when 8, 7
-    pkgs << 'java-11-openjdk-headless'
-  when 6
-    pkgs << 'java-1.8.0-openjdk-headless'
+  case os.name
+  when 'centos'
+    case os.release.to_i
+    when 8, 7
+      pkgs << 'java-11-openjdk-headless'
+    when 6
+      pkgs << 'java-1.8.0-openjdk-headless'
+    end
+  when 'amazon'
+    pkgs << 'java-11-amazon-corretto-headless'
   end
 when 'debian'
   pkgs = %w(curl wget ca-certificates iproute2 rsync openssh-client libssl-dev)

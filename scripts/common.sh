@@ -20,15 +20,17 @@ declare -A jdk_ver
 
 platforms[docker-auditor:4.18.111:aarch64]=1
 platforms[docker-auditor:4.18.111:x86_64]=1
+platforms[omnibus-amazonlinux:2:aarch64]=1
+platforms[omnibus-amazonlinux:2:x86_64]=1
 platforms[omnibus-centos:6:x86_64]=1
 platforms[omnibus-centos:7:aarch64]=1
 platforms[omnibus-centos:7:x86_64]=1
 platforms[omnibus-centos:8:aarch64]=1
 platforms[omnibus-centos:8:x86_64]=1
-platforms[omnibus-debian:10:aarch64]=1
-platforms[omnibus-debian:10:x86_64]=1
 platforms[omnibus-debian:8:x86_64]=1
 platforms[omnibus-debian:9:x86_64]=1
+platforms[omnibus-debian:10:aarch64]=1
+platforms[omnibus-debian:10:x86_64]=1
 platforms[omnibus-opensuse:15:aarch64]=1
 platforms[omnibus-opensuse:15:x86_64]=1
 platforms[omnibus-ubuntu:16.04:x86_64]=1
@@ -37,6 +39,7 @@ platforms[omnibus-ubuntu:18.04:x86_64]=1
 platforms[omnibus-ubuntu:20.04:aarch64]=1
 platforms[omnibus-ubuntu:20.04:x86_64]=1
 
+jdk_ver[omnibus-amazonlinux:2]="11"
 jdk_ver[omnibus-centos:6]="1.8.0"
 jdk_ver[omnibus-centos:7]="11"
 jdk_ver[omnibus-centos:8]="11"
