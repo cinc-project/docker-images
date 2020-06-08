@@ -25,6 +25,21 @@ before_script:
   - apk add bash
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
+.amazonlinux:
+  variables:
+    CINC_IMAGE: "omnibus-amazonlinux"
+    VERSIONS: "2"
+    ARCHS: "x86_64 aarch64"
+  rules:
+    - changes:
+      - omnibus-amazonlinux/*
+      when: on_success
+    - if: '$CINC_BUILD == "omnibus-amazonlinux"'
+      when: on_success
+    - if: '$CINC_BUILD == "all"'
+      when: on_success
+    - when: never
+
 .centos:
   variables:
     CINC_IMAGE: "omnibus-centos"
@@ -107,6 +122,18 @@ before_script:
   script:
     - bash scripts/build.sh
 
+build:omnibus-amazonlinux:x86_64:
+  extends:
+    - .amazonlinux
+    - .build
+
+build:omnibus-amazonlinux:aarch64:
+  extends:
+    - .amazonlinux
+    - .build
+  tags:
+    - docker-aarch64
+
 build:omnibus-centos:x86_64:
   extends:
     - .centos
@@ -175,6 +202,18 @@ build:docker-auditor:aarch64:
   script:
     - bash scripts/test.sh
 
+test:omnibus-amazonlinux:x86_64:
+  extends:
+    - .amazonlinux
+    - .test
+
+test:omnibus-amazonlinux:aarch64:
+  extends:
+    - .amazonlinux
+    - .test
+  tags:
+    - docker-aarch64
+
 test:omnibus-centos:x86_64:
   extends:
     - .centos
@@ -241,6 +280,22 @@ test:docker-auditor:aarch64:
     - docker-x86_64
   script:
     - bash scripts/publish.sh
+
+publish:omnibus-amazonlinux:
+  extends:
+    - .amazonlinux
+    - .publish
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: '$CINC_BUILD == "omnibus-amazonlinux"'
+      when: on_success
+    - if: '$CINC_BUILD == "all"'
+      when: on_success
+    - changes:
+      - omnibus-amazonlinux/*
+      when: on_success
+    - when: never
 
 publish:omnibus-centos:
   extends:
@@ -331,6 +386,22 @@ publish:docker-auditor:
   script:
     - bash scripts/release.sh
 
+release:omnibus-amazonlinux:
+  extends:
+    - .amazonlinux
+    - .release
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: '$CINC_BUILD == "omnibus-amazonlinux"'
+      when: on_success
+    - if: '$CINC_BUILD == "all"'
+      when: on_success
+    - changes:
+      - omnibus-amazonlinux/*
+      when: on_success
+    - when: never
+
 release:omnibus-centos:
   extends:
     - .centos
@@ -420,6 +491,18 @@ release:docker-auditor:
     - apk add bash curl jq
   script:
     - bash scripts/clean.sh
+
+clean:omnibus-amazonlinux:
+  extends:
+    - .amazonlinux
+    - .clean
+  rules:
+    - if: '$CINC_BUILD == "omnibus-amazonlinux"'
+    - if: '$CINC_BUILD == "all"'
+    - changes:
+      - omnibus-amazonlinux/*
+      when: always
+    - when: never
 
 clean:omnibus-centos:
   extends:
