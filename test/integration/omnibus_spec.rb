@@ -6,9 +6,9 @@ when 'redhat'
   when 'centos'
     case os.release.to_i
     when 8, 7
-      pkgs << 'java-11-openjdk-headless'
+      pkgs << 'java-11-openjdk-devel'
     when 6
-      pkgs << 'java-1.8.0-openjdk-headless'
+      pkgs << 'java-1.8.0-openjdk-devel'
     end
   when 'amazon'
     pkgs << 'java-11-amazon-corretto-headless'
@@ -42,7 +42,7 @@ when 'debian'
     end
   end
 when 'suse'
-  pkgs = %w(curl wget iproute2 rsync openssh tar gzip hostname rpm-build java-11-openjdk-headless)
+  pkgs = %w(curl wget iproute2 rsync openssh tar gzip hostname rpm-build java-11-openjdk-devel)
   case os.arch
   when 'x86_64'
     toolchain_ver = /^1\.1\.109/
