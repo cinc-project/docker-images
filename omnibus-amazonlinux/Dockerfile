@@ -6,7 +6,7 @@ ARG TOOLCHAIN_VERSION="1.1.109"
 ARG JDK_VER="11"
 
 RUN yum -y upgrade && \
-    yum -y install curl wget ca-certificates tar hostname iproute rsync openssh-clients \
+    yum -y install curl wget ca-certificates tar hostname iproute rsync openssh-clients rpm-build \
         java-${JDK_VER}-amazon-corretto-headless && \
     # Eventually, we will install cinc
     curl -L https://www.chef.io/chef/install.sh | bash -s -- -v 14 && \
