@@ -1,4 +1,4 @@
-FROM docker:latest
+FROM osuosl/docker-ppc64le:latest
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 ARG VERSION="4.22.0"
