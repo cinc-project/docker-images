@@ -44,7 +44,7 @@ before_script:
   variables:
     CINC_IMAGE: "omnibus-centos"
     VERSIONS: "6 7 8"
-    ARCHS: "x86_64 aarch64"
+    ARCHS: "x86_64 aarch64 ppc64le"
   rules:
     - changes:
       - omnibus-centos/*
@@ -146,6 +146,16 @@ build:omnibus-centos:aarch64:
   tags:
     - docker-aarch64
 
+build:omnibus-centos:ppc64le:
+  extends:
+    - .centos
+    - .build
+  image: osuosl/docker-ppc64le:latest
+  services:
+    - osuosl/docker-ppc64le:dind
+  tags:
+    - docker-ppc64le
+
 build:omnibus-debian:x86_64:
   extends:
     - .debian
@@ -235,6 +245,15 @@ test:omnibus-centos:aarch64:
     - .test
   tags:
     - docker-aarch64
+
+test:omnibus-centos:ppc64le:
+  extends:
+    - .centos
+    - .test
+  services:
+    - osuosl/docker-ppc64le:dind
+  tags:
+    - docker-ppc64le
 
 test:omnibus-debian:x86_64:
   extends:

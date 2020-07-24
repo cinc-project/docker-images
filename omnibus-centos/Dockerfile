@@ -6,6 +6,7 @@ ARG TOOLCHAIN_VERSION="1.1.109"
 ARG JDK_VER="11"
 
 COPY fix-repos.sh /root/fix-repos.sh
+
 RUN bash /root/fix-repos.sh && rm -rf /root/fix-repos.sh && \
     yum -y upgrade && \
     yum -y install curl wget ca-certificates iproute rsync openssh-clients \
