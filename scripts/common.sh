@@ -19,14 +19,16 @@ declare -A platforms
 declare -A jdk_ver
 
 platforms[docker-auditor:4.22.0:aarch64]=1
-platforms[docker-auditor:4.22.0:x86_64]=1
 platforms[docker-auditor:4.22.0:ppc64le]=1
+platforms[docker-auditor:4.22.0:x86_64]=1
 platforms[omnibus-amazonlinux:2:aarch64]=1
 platforms[omnibus-amazonlinux:2:x86_64]=1
 platforms[omnibus-centos:6:x86_64]=1
 platforms[omnibus-centos:7:aarch64]=1
+platforms[omnibus-centos:7:ppc64le]=1
 platforms[omnibus-centos:7:x86_64]=1
 platforms[omnibus-centos:8:aarch64]=1
+platforms[omnibus-centos:8:ppc64le]=1
 platforms[omnibus-centos:8:x86_64]=1
 platforms[omnibus-debian:8:x86_64]=1
 platforms[omnibus-debian:9:x86_64]=1
