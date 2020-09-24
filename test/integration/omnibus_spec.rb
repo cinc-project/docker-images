@@ -72,6 +72,10 @@ describe command 'gcc --version' do
   its('exit_status') { should eq 0 }
 end
 
+describe command 'locale -a' do
+  its('stdout') { should match /en_US\.utf8/ }
+end
+
 pkgs.each do |pkg|
   describe package pkg do
     it { should be_installed }
