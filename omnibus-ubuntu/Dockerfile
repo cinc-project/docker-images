@@ -2,7 +2,7 @@ ARG VERSION="20.04"
 FROM ubuntu:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
-ARG TOOLCHAIN_VERSION="1.1.109"
+ARG TOOLCHAIN_VERSION="2.0.5"
 ARG JDK_VER="14"
 
 RUN sed -i -e 's/archive.ubuntu.com/ubuntu.osuosl.org/g' /etc/apt/sources.list && \
