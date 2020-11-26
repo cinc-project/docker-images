@@ -2,7 +2,7 @@ ARG VERSION="15"
 FROM opensuse/leap:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
-ARG TOOLCHAIN_VERSION="2.0.2"
+ARG TOOLCHAIN_VERSION="2.0.5"
 ARG JDK_VER="11"
 
 RUN zypper up -y --skip-interactive && \

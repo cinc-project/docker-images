@@ -2,7 +2,7 @@ ARG VERSION="2"
 FROM amazonlinux:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
-ARG TOOLCHAIN_VERSION="1.1.109"
+ARG TOOLCHAIN_VERSION="2.0.5"
 ARG JDK_VER="11"
 
 RUN yum -y upgrade && \

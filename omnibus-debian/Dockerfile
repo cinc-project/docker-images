@@ -2,7 +2,7 @@ ARG VERSION="10"
 FROM debian:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
-ARG TOOLCHAIN_VERSION="1.1.109"
+ARG TOOLCHAIN_VERSION="2.0.5"
 ARG JDK_VER="11"
 
 RUN sed -i -e 's/deb.debian.org/debian.osuosl.org/g' /etc/apt/sources.list && \
