@@ -1,7 +1,6 @@
 case os.family
 when 'redhat'
   pkgs = %w(curl wget ca-certificates iproute rsync openssh-clients)
-  toolchain_ver = /^2\.0\.5/
   case os.name
   when 'centos'
     case os.release.to_i
@@ -15,7 +14,6 @@ when 'redhat'
   end
 when 'debian'
   pkgs = %w(curl wget ca-certificates iproute2 rsync openssh-client libssl-dev)
-  toolchain_ver = /^2\.0\.5/
   case os.name
   when 'debian'
     case os.release.to_i
@@ -38,7 +36,6 @@ when 'debian'
   end
 when 'suse'
   pkgs = %w(curl wget iproute2 rsync openssh tar gzip hostname rpm-build java-11-openjdk-devel)
-  toolchain_ver = /^2\.0\.5/
 end
 
 describe file '/home/omnibus/load-omnibus-toolchain.sh' do
@@ -55,7 +52,7 @@ end
 
 describe package 'omnibus-toolchain' do
   it { should be_installed }
-  its('version') { should match toolchain_ver }
+  its('version') { should match /^2\.1\.11/ }
 end
 
 describe command 'gcc --version' do
