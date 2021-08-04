@@ -11,6 +11,7 @@ RUN bash /root/fix-repos.sh && rm -rf /root/fix-repos.sh && \
     yum -y upgrade && \
     yum -y install curl wget ca-certificates iproute rsync openssh-clients \
         java-${JDK_VER}-openjdk-devel glibc-langpack-en && \
+    localedef -i en_US -f UTF-8 en_US.UTF-8 && \
     curl -L https://omnitruck.cinc.sh/install.sh | bash && \
     mkdir -p /var/cinc/cache /var/cinc/cookbooks && \
     wget -qO- https://supermarket.chef.io/cookbooks/omnibus/download | tar xzC /var/cinc/cookbooks && \
