@@ -10,7 +10,7 @@ COPY fix-repos.sh /root/fix-repos.sh
 RUN bash /root/fix-repos.sh && rm -rf /root/fix-repos.sh && \
     yum -y upgrade && \
     yum -y install curl wget ca-certificates iproute rsync openssh-clients \
-        java-${JDK_VER}-openjdk-devel glibc-langpack-en && \
+        java-${JDK_VER}-openjdk-devel glibc-langpack-en glibc-locale-source && \
     localedef -i en_US -f UTF-8 en_US.UTF-8 && \
     curl -L https://omnitruck.cinc.sh/install.sh | bash && \
     mkdir -p /var/cinc/cache /var/cinc/cookbooks && \
