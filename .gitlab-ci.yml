@@ -43,7 +43,7 @@ before_script:
 .centos:
   variables:
     CINC_IMAGE: "omnibus-centos"
-    VERSIONS: "6 7 8"
+    VERSIONS: "7 8"
     ARCHS: "x86_64 aarch64 ppc64le"
   rules:
     - changes:
@@ -58,7 +58,7 @@ before_script:
 .debian:
   variables:
     CINC_IMAGE: "omnibus-debian"
-    VERSIONS: "8 9 10"
+    VERSIONS: "9 10"
     ARCHS: "x86_64 aarch64"
   rules:
     - changes:
@@ -88,7 +88,7 @@ before_script:
 .ubuntu:
   variables:
     CINC_IMAGE: "omnibus-ubuntu"
-    VERSIONS: "16.04 18.04 20.04"
+    VERSIONS: "18.04 20.04"
     ARCHS: "x86_64 aarch64"
   rules:
     - changes:
