@@ -21,5 +21,5 @@ RUN zypper up -y --skip-interactive && \
     sed -i -e "s/^include_recipe 'omnibus::_omnibus_toolchain'//g" /var/cinc/cookbooks/omnibus/recipes/default.rb /var/cinc/cookbooks/omnibus/recipes/_user.rb && \
     cinc-solo -o 'recipe[omnibus]' && \
     sed -i -e 's/^env.*//' /home/omnibus/load-omnibus-toolchain.sh && \
-    zypper rm -y cinc && rm -rf /var/cinc/ /opt/cinc/embedded/ /etc/cinc /opt/cinc && \
+    zypper rm -y cinc && rm -rf /var/cinc/ /opt/cinc /etc/cinc /opt/cinc && \
     zypper clean -a
