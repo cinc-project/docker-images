@@ -20,5 +20,5 @@ RUN sed -i -e 's/archive.ubuntu.com/ubuntu.osuosl.org/g' /etc/apt/sources.list &
     cinc-solo -o 'recipe[omnibus]' -j /tmp/attr.json && \
     rm -rf /tmp/attr.json && \
     sed -i -e 's/^env.*//' /home/omnibus/load-omnibus-toolchain.sh && \
-    apt-get -y remove cinc && rm -rf /var/cinc/ /opt/cinc/embedded/ /etc/cinc && \
+    apt-get -y remove cinc && rm -rf /var/cinc/ /opt/cinc /etc/cinc && \
     apt-get clean && rm -rf /var/lib/apt/lists/*

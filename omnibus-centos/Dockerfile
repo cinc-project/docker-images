@@ -21,5 +21,5 @@ RUN bash /root/fix-repos.sh && rm -rf /root/fix-repos.sh && \
     cinc-solo -o 'recipe[omnibus]' -j /tmp/attr.json && \
     rm -rf /tmp/attr.json && \
     sed -i -e 's/^env.*//' /home/omnibus/load-omnibus-toolchain.sh && \
-    yum -y remove cinc && rm -rf /var/cinc/ /opt/cinc/embedded/ /etc/cinc && \
+    yum -y remove cinc && rm -rf /var/cinc/ /opt/cinc/ /etc/cinc && \
     yum clean all && rm -rf /var/cache/yum
