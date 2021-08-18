@@ -5,6 +5,9 @@ LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 ARG TOOLCHAIN_VERSION="2.1.11"
 ARG JDK_VER="11"
 
+ENV RUBYOPT=-r/usr/local/share/ruby-docker-copy-patch.rb
+COPY ruby-docker-copy-patch.rb /usr/local/share/ruby-docker-copy-patch.rb
+
 COPY fix-repos.sh /root/fix-repos.sh
 
 RUN bash /root/fix-repos.sh && rm -rf /root/fix-repos.sh && \

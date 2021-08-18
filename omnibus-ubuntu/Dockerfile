@@ -5,6 +5,9 @@ LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 ARG TOOLCHAIN_VERSION="2.1.11"
 ARG JDK_VER="14"
 
+ENV RUBYOPT=-r/usr/local/share/ruby-docker-copy-patch.rb
+COPY ruby-docker-copy-patch.rb /usr/local/share/ruby-docker-copy-patch.rb
+
 RUN sed -i -e 's/archive.ubuntu.com/ubuntu.osuosl.org/g' /etc/apt/sources.list && \
     apt-get update && \
     apt-get upgrade --no-install-recommends -y && \
