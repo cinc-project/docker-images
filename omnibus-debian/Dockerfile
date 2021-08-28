@@ -1,4 +1,4 @@
-ARG VERSION="10"
+ARG VERSION="11"
 FROM debian:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
