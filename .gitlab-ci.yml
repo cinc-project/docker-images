@@ -73,7 +73,7 @@ before_script:
 .opensuse:
   variables:
     CINC_IMAGE: "omnibus-opensuse"
-    VERSIONS: "15"
+    VERSIONS: "15.2"
     ARCHS: "x86_64 aarch64"
   rules:
     - changes:
