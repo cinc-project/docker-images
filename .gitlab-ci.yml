@@ -43,13 +43,28 @@ before_script:
 .centos:
   variables:
     CINC_IMAGE: "omnibus-centos"
-    VERSIONS: "7 8"
+    VERSIONS: "7"
     ARCHS: "x86_64 aarch64 ppc64le"
   rules:
     - changes:
       - omnibus-centos/*
       when: on_success
     - if: '$CINC_BUILD == "omnibus-centos"'
+      when: on_success
+    - if: '$CINC_BUILD == "all"'
+      when: on_success
+    - when: never
+
+.centos-stream:
+  variables:
+    CINC_IMAGE: "omnibus-centos-stream"
+    VERSIONS: "8"
+    ARCHS: "x86_64 aarch64 ppc64le"
+  rules:
+    - changes:
+      - omnibus-centos-stream/*
+      when: on_success
+    - if: '$CINC_BUILD == "omnibus-centos-stream"'
       when: on_success
     - if: '$CINC_BUILD == "all"'
       when: on_success
@@ -149,6 +164,28 @@ build:omnibus-centos:aarch64:
 build:omnibus-centos:ppc64le:
   extends:
     - .centos
+    - .build
+  image: osuosl/docker-ppc64le:latest
+  services:
+    - osuosl/docker-ppc64le:dind
+  tags:
+    - docker-ppc64le
+
+build:omnibus-centos-stream:x86_64:
+  extends:
+    - .centos-stream
+    - .build
+
+build:omnibus-centos-stream:aarch64:
+  extends:
+    - .centos-stream
+    - .build
+  tags:
+    - docker-aarch64
+
+build:omnibus-centos-stream:ppc64le:
+  extends:
+    - .centos-stream
     - .build
   image: osuosl/docker-ppc64le:latest
   services:
@@ -262,6 +299,33 @@ test:omnibus-centos:ppc64le:
     - osuosl/docker-ppc64le:dind
   needs:
     - build:omnibus-centos:ppc64le
+  tags:
+    - docker-ppc64le
+
+test:omnibus-centos-stream:x86_64:
+  extends:
+    - .centos-stream
+    - .test
+  needs:
+    - build:omnibus-centos-stream:x86_64
+
+test:omnibus-centos-stream:aarch64:
+  extends:
+    - .centos-stream
+    - .test
+  needs:
+    - build:omnibus-centos-stream:aarch64
+  tags:
+    - docker-aarch64
+
+test:omnibus-centos-stream:ppc64le:
+  extends:
+    - .centos-stream
+    - .test
+  services:
+    - osuosl/docker-ppc64le:dind
+  needs:
+    - build:omnibus-centos-stream:ppc64le
   tags:
     - docker-ppc64le
 
@@ -379,6 +443,22 @@ publish:omnibus-centos:
       when: on_success
     - when: never
 
+publish:omnibus-centos-stream:
+  extends:
+    - .centos-stream
+    - .publish
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: '$CINC_BUILD == "omnibus-centos-stream"'
+      when: on_success
+    - if: '$CINC_BUILD == "all"'
+      when: on_success
+    - changes:
+      - omnibus-centos-stream/*
+      when: on_success
+    - when: never
+
 publish:omnibus-debian:
   extends:
     - .debian
@@ -484,6 +564,22 @@ release:omnibus-centos:
       when: on_success
     - when: never
 
+release:omnibus-centos-stream:
+  extends:
+    - .centos-stream
+    - .release
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: '$CINC_BUILD == "omnibus-centos-stream"'
+      when: on_success
+    - if: '$CINC_BUILD == "all"'
+      when: on_success
+    - changes:
+      - omnibus-centos-stream/*
+      when: on_success
+    - when: never
+
 release:omnibus-debian:
   extends:
     - .debian
@@ -579,6 +675,18 @@ clean:omnibus-centos:
     - if: '$CINC_BUILD == "all"'
     - changes:
       - omnibus-centos/*
+      when: always
+    - when: never
+
+clean:omnibus-centos-stream:
+  extends:
+    - .centos-stream
+    - .clean
+  rules:
+    - if: '$CINC_BUILD == "omnibus-centos-stream"'
+    - if: '$CINC_BUILD == "all"'
+    - changes:
+      - omnibus-centos-stream/*
       when: always
     - when: never
 
