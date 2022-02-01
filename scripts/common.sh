@@ -49,7 +49,7 @@ jdk_ver[omnibus-debian:10]="11"
 jdk_ver[omnibus-debian:11]="11"
 jdk_ver[omnibus-opensuse:15.2]="11"
 jdk_ver[omnibus-ubuntu:18.04]="11"
-jdk_ver[omnibus-ubuntu:20.04]="14"
+jdk_ver[omnibus-ubuntu:20.04]="17"
 
 get_jdk() {
   local image=$1 version=$2
