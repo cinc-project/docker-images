@@ -12,7 +12,7 @@ RUN sed -i -e 's/deb.debian.org/debian.osuosl.org/g' /etc/apt/sources.list && \
     apt-get update && \
     apt-get upgrade --no-install-recommends -y && \
     apt-get -y -m install --no-install-recommends \
-        curl wget ca-certificates iproute2 rsync openssh-client libssl-dev \
+        curl wget ca-certificates iproute2 rsync openssh-client libssl-dev tzdata \
         openjdk-${JDK_VER}-jdk-headless locales-all && \
     curl -L https://omnitruck.cinc.sh/install.sh | bash && \
     mkdir -p /var/cinc/cache /var/cinc/cookbooks && \

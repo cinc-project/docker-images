@@ -1,6 +1,6 @@
 case os.family
 when 'redhat'
-  pkgs = %w(curl wget ca-certificates iproute rsync openssh-clients)
+  pkgs = %w(curl wget ca-certificates iproute rsync openssh-clients tzdata)
   case os.name
   when 'centos'
     case os.release.to_i
@@ -13,7 +13,7 @@ when 'redhat'
     pkgs << 'java-11-amazon-corretto-headless'
   end
 when 'debian'
-  pkgs = %w(curl wget ca-certificates iproute2 rsync openssh-client libssl-dev)
+  pkgs = %w(curl wget ca-certificates iproute2 rsync openssh-client libssl-dev tzdata)
   case os.name
   when 'debian'
     case os.release.to_i
@@ -35,7 +35,7 @@ when 'debian'
     end
   end
 when 'suse'
-  pkgs = %w(curl wget iproute2 rsync openssh tar gzip hostname rpm-build java-11-openjdk-devel)
+  pkgs = %w(curl wget iproute2 rsync openssh tar gzip hostname rpm-build timezone java-11-openjdk-devel)
 end
 
 describe file '/home/omnibus/load-omnibus-toolchain.sh' do

@@ -10,7 +10,7 @@ ENV RUBYOPT=-r/usr/local/share/ruby-docker-copy-patch.rb
 COPY ruby-docker-copy-patch.rb /usr/local/share/ruby-docker-copy-patch.rb
 
 RUN zypper up -y --skip-interactive && \
-    zypper install -y curl wget iproute2 rsync openssh tar gzip hostname rpm-build \
+    zypper install -y curl wget iproute2 rsync openssh tar gzip hostname rpm-build timezone \
         java-${JDK_VER}-openjdk-devel && \
     curl -L https://omnitruck.cinc.sh/install.sh | bash && \
     # Install mixlib-install so we can sanely install omnibus-toolchain
