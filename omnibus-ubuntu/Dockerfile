@@ -2,7 +2,7 @@ ARG VERSION="20.04"
 FROM ubuntu:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
-ARG TOOLCHAIN_VERSION="2.1.11"
+ARG TOOLCHAIN_VERSION="2.1.20"
 ARG JDK_VER="14"
 
 ENV RUBYOPT=-r/usr/local/share/ruby-docker-copy-patch.rb

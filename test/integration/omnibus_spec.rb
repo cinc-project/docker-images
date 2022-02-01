@@ -52,7 +52,7 @@ end
 
 describe package 'omnibus-toolchain' do
   it { should be_installed }
-  its('version') { should match /^2\.1\.11/ }
+  its('version') { should match /^2\.1\.20/ }
 end
 
 describe command 'gcc --version' do

@@ -3,7 +3,7 @@ ARG VERSION="15.2"
 FROM opensuse/leap:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
-ARG TOOLCHAIN_VERSION="2.1.11"
+ARG TOOLCHAIN_VERSION="2.1.20"
 ARG JDK_VER="11"
 
 ENV RUBYOPT=-r/usr/local/share/ruby-docker-copy-patch.rb
