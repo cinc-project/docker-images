@@ -27,7 +27,7 @@ when 'debian'
   when 'ubuntu'
     case os.release.to_i
     when 20
-      pkgs << 'openjdk-14-jdk-headless'
+      pkgs << 'openjdk-17-jdk-headless'
     when 18
       pkgs << 'openjdk-11-jdk-headless'
     when 16
