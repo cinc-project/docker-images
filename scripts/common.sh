@@ -26,9 +26,9 @@ platforms[omnibus-amazonlinux:2:x86_64]=1
 platforms[omnibus-centos:7:aarch64]=1
 platforms[omnibus-centos:7:ppc64le]=1
 platforms[omnibus-centos:7:x86_64]=1
-platforms[omnibus-centos:8:aarch64]=1
-platforms[omnibus-centos:8:ppc64le]=1
-platforms[omnibus-centos:8:x86_64]=1
+platforms[omnibus-centos-stream:8:aarch64]=1
+platforms[omnibus-centos-stream:8:ppc64le]=1
+platforms[omnibus-centos-stream:8:x86_64]=1
 platforms[omnibus-debian:8:x86_64]=1
 platforms[omnibus-debian:9:x86_64]=1
 platforms[omnibus-debian:10:aarch64]=1
@@ -43,13 +43,13 @@ platforms[omnibus-ubuntu:20.04:x86_64]=1
 
 jdk_ver[omnibus-amazonlinux:2]="11"
 jdk_ver[omnibus-centos:7]="11"
-jdk_ver[omnibus-centos:8]="11"
+jdk_ver[omnibus-centos-stream:8]="11"
 jdk_ver[omnibus-debian:9]="8"
 jdk_ver[omnibus-debian:10]="11"
 jdk_ver[omnibus-debian:11]="11"
 jdk_ver[omnibus-opensuse:15.2]="11"
 jdk_ver[omnibus-ubuntu:18.04]="11"
-jdk_ver[omnibus-ubuntu:20.04]="14"
+jdk_ver[omnibus-ubuntu:20.04]="17"
 
 get_jdk() {
   local image=$1 version=$2
