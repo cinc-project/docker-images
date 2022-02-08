@@ -37,6 +37,7 @@ platforms[omnibus-debian:11:aarch64]=1
 platforms[omnibus-debian:11:x86_64]=1
 platforms[omnibus-opensuse:15.2:aarch64]=1
 platforms[omnibus-opensuse:15.2:x86_64]=1
+platforms[omnibus-ubuntu:18.04:aarch64]=1
 platforms[omnibus-ubuntu:18.04:x86_64]=1
 platforms[omnibus-ubuntu:20.04:aarch64]=1
 platforms[omnibus-ubuntu:20.04:x86_64]=1
