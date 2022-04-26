@@ -43,6 +43,8 @@ platforms[omnibus-ubuntu:18.04:aarch64]=1
 platforms[omnibus-ubuntu:18.04:x86_64]=1
 platforms[omnibus-ubuntu:20.04:aarch64]=1
 platforms[omnibus-ubuntu:20.04:x86_64]=1
+platforms[omnibus-ubuntu:22.04:aarch64]=1
+platforms[omnibus-ubuntu:22.04:x86_64]=1
 
 jdk_ver[omnibus-amazonlinux:2]="11"
 jdk_ver[omnibus-centos:7]="11"
@@ -55,6 +57,7 @@ jdk_ver[omnibus-rhel:7]="11"
 jdk_ver[omnibus-rhel:8]="11"
 jdk_ver[omnibus-ubuntu:18.04]="11"
 jdk_ver[omnibus-ubuntu:20.04]="17"
+jdk_ver[omnibus-ubuntu:22.04]="18"
 
 get_jdk() {
   local image=$1 version=$2

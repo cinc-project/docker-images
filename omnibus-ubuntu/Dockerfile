@@ -1,9 +1,9 @@
-ARG VERSION="20.04"
+ARG VERSION="22.04"
 FROM ubuntu:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 ARG TOOLCHAIN_VERSION="2.1.20"
-ARG JDK_VER="17"
+ARG JDK_VER="18"
 
 ENV RUBYOPT=-r/usr/local/share/ruby-docker-copy-patch.rb
 COPY ruby-docker-copy-patch.rb /usr/local/share/ruby-docker-copy-patch.rb
