@@ -37,6 +37,8 @@ platforms[omnibus-debian:11:aarch64]=1
 platforms[omnibus-debian:11:x86_64]=1
 platforms[omnibus-opensuse:15.2:aarch64]=1
 platforms[omnibus-opensuse:15.2:x86_64]=1
+platforms[omnibus-rhel:7:s390x]=1
+platforms[omnibus-rhel:8:s390x]=1
 platforms[omnibus-ubuntu:18.04:aarch64]=1
 platforms[omnibus-ubuntu:18.04:x86_64]=1
 platforms[omnibus-ubuntu:20.04:aarch64]=1
@@ -49,6 +51,8 @@ jdk_ver[omnibus-debian:9]="8"
 jdk_ver[omnibus-debian:10]="11"
 jdk_ver[omnibus-debian:11]="11"
 jdk_ver[omnibus-opensuse:15.2]="11"
+jdk_ver[omnibus-rhel:7]="11"
+jdk_ver[omnibus-rhel:8]="11"
 jdk_ver[omnibus-ubuntu:18.04]="11"
 jdk_ver[omnibus-ubuntu:20.04]="17"
 

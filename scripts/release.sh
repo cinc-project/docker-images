@@ -51,9 +51,11 @@ for version in ${VERSIONS} ; do
   [ -n "${x86_64_image}" ] && docker pull ${x86_64_image}
   [ -n "${aarch64_image}" ] && docker pull ${aarch64_image}
   [ -n "${ppc64le_image}" ] && docker pull ${ppc64le_image}
-  docker manifest create ${release_image} ${x86_64_image} ${aarch64_image} ${ppc64le_image}
+  [ -n "${s390x_image}" ] && docker pull ${s390x_image}
+  docker manifest create ${release_image} ${x86_64_image} ${aarch64_image} ${ppc64le_image} ${s390x_image}
   [ -n "${aarch64_image}" ] && docker manifest annotate ${release_image} ${aarch64_image} --arch arm64
   [ -n "${ppc64le_image}" ] && docker manifest annotate ${release_image} ${ppc64le_image} --arch ppc64le
+  [ -n "${s390x_image}" ] && docker manifest annotate ${release_image} ${s390x_image} --arch s390x
   docker manifest inspect ${release_image}
   docker manifest push ${release_image}
 done
@@ -66,8 +68,9 @@ done
 
 # Create latest tag
 release_image="cincproject/${CINC_IMAGE}:latest"
-docker manifest create ${release_image} ${x86_64_image} ${aarch64_image} ${ppc64le_image}
+docker manifest create ${release_image} ${x86_64_image} ${aarch64_image} ${ppc64le_image} ${s390x_image}
 [ -n "${aarch64_image}" ] && docker manifest annotate ${release_image} ${aarch64_image} --arch arm64
 [ -n "${ppc64le_image}" ] && docker manifest annotate ${release_image} ${ppc64le_image} --arch ppc64le
+[ -n "${s390x_image}" ] && docker manifest annotate ${release_image} ${s390x_image} --arch s390x
 docker manifest inspect ${release_image}
 docker manifest push ${release_image}
