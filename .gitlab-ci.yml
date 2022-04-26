@@ -100,6 +100,21 @@ before_script:
       when: on_success
     - when: never
 
+.rhel:
+  variables:
+    CINC_IMAGE: "omnibus-rhel"
+    VERSIONS: "7 8"
+    ARCHS: "s390x"
+  rules:
+    - changes:
+      - omnibus-rhel/*
+      when: on_success
+    - if: '$CINC_BUILD == "omnibus-rhel"'
+      when: on_success
+    - if: '$CINC_BUILD == "all"'
+      when: on_success
+    - when: never
+
 .ubuntu:
   variables:
     CINC_IMAGE: "omnibus-ubuntu"
@@ -216,6 +231,16 @@ build:omnibus-opensuse:aarch64:
     - .build
   tags:
     - docker-aarch64
+
+build:omnibus-rhel:s390x:
+  extends:
+    - .rhel
+    - .build
+  image: osuosl/docker-s390x
+  services:
+    - osuosl/docker-s390x:dind
+  tags:
+    - docker-s390x
 
 build:omnibus-ubuntu:x86_64:
   extends:
@@ -361,6 +386,17 @@ test:omnibus-opensuse:aarch64:
   tags:
     - docker-aarch64
 
+test:omnibus-rhel:s390x:
+  extends:
+    - .rhel
+    - .test
+  needs:
+    - build:omnibus-rhel:s390x
+  services:
+    - osuosl/docker-s390x:dind
+  tags:
+    - docker-s390x
+
 test:omnibus-ubuntu:x86_64:
   extends:
     - .ubuntu
@@ -491,6 +527,22 @@ publish:omnibus-opensuse:
       when: on_success
     - when: never
 
+publish:omnibus-rhel:
+  extends:
+    - .rhel
+    - .publish
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: '$CINC_BUILD == "omnibus-rhel"'
+      when: on_success
+    - if: '$CINC_BUILD == "all"'
+      when: on_success
+    - changes:
+      - omnibus-rhel/*
+      when: on_success
+    - when: never
+
 publish:omnibus-ubuntu:
   extends:
     - .ubuntu
@@ -612,6 +664,22 @@ release:omnibus-opensuse:
       when: on_success
     - when: never
 
+release:omnibus-rhel:
+  extends:
+    - .rhel
+    - .release
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: '$CINC_BUILD == "omnibus-rhel"'
+      when: on_success
+    - if: '$CINC_BUILD == "all"'
+      when: on_success
+    - changes:
+      - omnibus-rhel/*
+      when: on_success
+    - when: never
+
 release:omnibus-ubuntu:
   extends:
     - .ubuntu
@@ -711,6 +779,18 @@ clean:omnibus-opensuse:
     - if: '$CINC_BUILD == "all"'
     - changes:
       - omnibus-opensuse/*
+      when: always
+    - when: never
+
+clean:omnibus-rhel:
+  extends:
+    - .rhel
+    - .clean
+  rules:
+    - if: '$CINC_BUILD == "omnibus-rhel"'
+    - if: '$CINC_BUILD == "all"'
+    - changes:
+      - omnibus-rhel/*
       when: always
     - when: never
 
