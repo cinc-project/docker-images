@@ -1,16 +1,16 @@
-ARG VERSION="2"
+ARG VERSION="2022"
 FROM amazonlinux:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 ARG TOOLCHAIN_VERSION="2.1.20"
-ARG JDK_VER="11"
+ARG JDK_VER="11-openjdk"
 
 ENV RUBYOPT=-r/usr/local/share/ruby-docker-copy-patch.rb
 COPY ruby-docker-copy-patch.rb /usr/local/share/ruby-docker-copy-patch.rb
 
 RUN yum -y upgrade && \
     yum -y install curl wget ca-certificates tar hostname iproute rsync openssh-clients rpm-build tzdata \
-        java-${JDK_VER}-amazon-corretto-headless && \
+        java-${JDK_VER}-headless && \
     curl -L https://omnitruck.cinc.sh/install.sh | bash && \
     mkdir -p /var/cinc/cache /var/cinc/cookbooks && \
     wget -qO- https://supermarket.chef.io/cookbooks/omnibus/download | tar xzC /var/cinc/cookbooks && \

@@ -10,22 +10,29 @@ when 'redhat'
       pkgs << 'java-1.8.0-openjdk-devel'
     end
   when 'amazon'
-    pkgs << 'java-11-amazon-corretto-headless'
+    case os.release_to_i
+    when 2
+      pkgs << 'java-11-amazon-corretto-headless'
+    when 2022
+      pkgs << 'java-11-openjdk-headless'
+    end
   end
 when 'debian'
   pkgs = %w(curl wget ca-certificates iproute2 rsync openssh-client libssl-dev tzdata)
   case os.name
   when 'debian'
     case os.release.to_i
+    when 11
+      pkgs << 'openjdk-11-jdk-headless'
     when 10
       pkgs << 'openjdk-11-jdk-headless'
     when 9
       pkgs << 'openjdk-8-jdk-headless'
-    when 8
-      pkgs << 'openjdk-7-jre-headless'
     end
   when 'ubuntu'
     case os.release.to_i
+    when 22
+      pkgs << 'openjdk-18-jdk-headless'
     when 20
       pkgs << 'openjdk-17-jdk-headless'
     when 18
