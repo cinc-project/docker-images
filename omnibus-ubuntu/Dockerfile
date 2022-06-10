@@ -13,7 +13,7 @@ RUN sed -i -e 's/archive.ubuntu.com/ubuntu.osuosl.org/g' /etc/apt/sources.list &
     apt-get upgrade --no-install-recommends -y && \
     apt-get -y -m install --no-install-recommends \
         curl wget ca-certificates iproute2 rsync openssh-client libssl-dev tzdata \
-        openjdk-${JDK_VER}-jdk-headless locales-all && \
+        openjdk-${JDK_VER}-jdk-headless locales-all automake && \
     curl -L https://omnitruck.cinc.sh/install.sh | bash && \
     mkdir -p /var/cinc/cache /var/cinc/cookbooks && \
     wget -qO- https://supermarket.chef.io/cookbooks/omnibus/download | tar xzC /var/cinc/cookbooks && \
