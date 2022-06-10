@@ -6,6 +6,7 @@ ARG TOOLCHAIN_VERSION="2.1.20"
 ARG JDK_VER="18"
 
 ENV RUBYOPT=-r/usr/local/share/ruby-docker-copy-patch.rb
+ENV DEBIAN_FRONTEND=noninteractive
 COPY ruby-docker-copy-patch.rb /usr/local/share/ruby-docker-copy-patch.rb
 
 RUN sed -i -e 's/archive.ubuntu.com/ubuntu.osuosl.org/g' /etc/apt/sources.list && \
@@ -13,7 +14,10 @@ RUN sed -i -e 's/archive.ubuntu.com/ubuntu.osuosl.org/g' /etc/apt/sources.list &
     apt-get upgrade --no-install-recommends -y && \
     apt-get -y -m install --no-install-recommends \
         curl wget ca-certificates iproute2 rsync openssh-client libssl-dev tzdata \
-        openjdk-${JDK_VER}-jdk-headless locales-all automake && \
+        locales-all automake && \
+    # Work around issue when trying to install ca-certificates and openjdk at the same time with certain versions
+    mkdir -p /etc/ssl/certs/java && \
+    apt-get -y -m install --no-install-recommends openjdk-${JDK_VER}-jdk-headless && \
     curl -L https://omnitruck.cinc.sh/install.sh | bash && \
     mkdir -p /var/cinc/cache /var/cinc/cookbooks && \
     wget -qO- https://supermarket.chef.io/cookbooks/omnibus/download | tar xzC /var/cinc/cookbooks && \

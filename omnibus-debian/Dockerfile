@@ -6,6 +6,7 @@ ARG TOOLCHAIN_VERSION="2.1.20"
 ARG JDK_VER="11"
 
 ENV RUBYOPT=-r/usr/local/share/ruby-docker-copy-patch.rb
+ENV DEBIAN_FRONTEND=noninteractive
 COPY ruby-docker-copy-patch.rb /usr/local/share/ruby-docker-copy-patch.rb
 
 RUN sed -i -e 's/deb.debian.org/debian.osuosl.org/g' /etc/apt/sources.list && \
