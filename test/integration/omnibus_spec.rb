@@ -4,7 +4,7 @@ when 'redhat'
   case os.name
   when 'centos'
     case os.release.to_i
-    when 8, 7
+    when 9, 8, 7
       pkgs << 'java-11-openjdk-devel'
     when 6
       pkgs << 'java-1.8.0-openjdk-devel'
@@ -52,7 +52,7 @@ end
 
 describe package 'omnibus-toolchain' do
   it { should be_installed }
-  its('version') { should match /^2\.1\.20/ }
+  its('version') { should match /^3\.0\.0/ }
 end
 
 describe command 'gcc --version' do

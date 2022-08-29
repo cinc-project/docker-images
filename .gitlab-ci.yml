@@ -58,7 +58,7 @@ before_script:
 .centos-stream:
   variables:
     CINC_IMAGE: "omnibus-centos-stream"
-    VERSIONS: "8"
+    VERSIONS: "8 9"
     ARCHS: "x86_64 aarch64 ppc64le"
   rules:
     - changes:
