@@ -145,6 +145,21 @@ before_script:
       when: on_success
     - when: never
 
+.vagrant-virtualbox:
+  variables:
+    CINC_IMAGE: "vagrant-virtualbox"
+    VERSIONS: "20220830"
+    ARCHS: "x86_64"
+  rules:
+    - changes:
+      - vagrant-virtualbox/*
+      when: on_success
+    - if: '$CINC_BUILD == "vagrant-virtualbox"'
+      when: on_success
+    - if: '$CINC_BUILD == "all"'
+      when: on_success
+    - when: never
+
 .build:
   stage: build
   tags:
@@ -265,6 +280,13 @@ build:docker-auditor:aarch64:
     - .build
   tags:
     - docker-aarch64
+
+build:vagrant-virtualbox:x86_64:
+  extends:
+    - .vagrant-virtualbox
+    - .build
+  tags:
+    - docker-virtualbox
 
 build:docker-auditor:ppc64le:
   extends:
@@ -440,6 +462,15 @@ test:docker-auditor:ppc64le:
   tags:
     - docker-ppc64le
 
+test:vagrant-virtualbox:x86_64:
+  extends:
+    - .vagrant-virtualbox
+    - .test
+  needs:
+    - build:vagrant-virtualbox:x86_64
+  tags:
+    - docker-virtualbox
+
 .publish:
   stage: publish
   tags:
@@ -572,6 +603,22 @@ publish:docker-auditor:
       when: on_success
     - changes:
       - docker-auditor/*
+      when: on_success
+    - when: never
+
+publish:vagrant-virtualbox:
+  extends:
+    - .vagrant-virtualbox
+    - .publish
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: '$CINC_BUILD == "vagrant-virtualbox"'
+      when: on_success
+    - if: '$CINC_BUILD == "all"'
+      when: on_success
+    - changes:
+      - vagrant-virtualbox/*
       when: on_success
     - when: never
 
@@ -712,6 +759,22 @@ release:docker-auditor:
       when: on_success
     - when: never
 
+release:vagrant-virtualbox:
+  extends:
+    - .vagrant-virtualbox
+    - .release
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: '$CINC_BUILD == "vagrant-virtualbox"'
+      when: on_success
+    - if: '$CINC_BUILD == "all"'
+      when: on_success
+    - changes:
+      - vagrant-virtualbox/*
+      when: on_success
+    - when: never
+
 .clean:
   stage: clean
   dependencies: []
@@ -815,5 +878,17 @@ clean:docker-auditor:
     - if: '$CINC_BUILD == "all"'
     - changes:
       - docker-auditor/*
+      when: always
+    - when: never
+
+clean:vagrant-virtualbox:
+  extends:
+    - .vagrant-virtualbox
+    - .clean
+  rules:
+    - if: '$CINC_BUILD == "vagrant-virtualbox"'
+    - if: '$CINC_BUILD == "all"'
+    - changes:
+      - vagrant-virtualbox/*
       when: always
     - when: never

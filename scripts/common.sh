@@ -45,6 +45,7 @@ platforms[omnibus-ubuntu:20.04:aarch64]=1
 platforms[omnibus-ubuntu:20.04:x86_64]=1
 platforms[omnibus-ubuntu:22.04:aarch64]=1
 platforms[omnibus-ubuntu:22.04:x86_64]=1
+platforms[vagrant-virtualbox:20220830:x86_64]=1
 
 jdk_ver[omnibus-amazonlinux:2]="11"
 jdk_ver[omnibus-centos:7]="11"
