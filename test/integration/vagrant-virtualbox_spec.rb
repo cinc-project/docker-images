@@ -7,3 +7,7 @@ describe command 'vboxmanage -v' do
   its('exit_status') { should eq 0 }
   its('stderr') { should eq '' }
 end
+
+describe command 'ssh -V' do
+  its('exit_status') { should eq 0 }
+end
