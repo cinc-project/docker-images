@@ -206,7 +206,7 @@ build:omnibus-centos-stream:ppc64le:
   services:
     - osuosl/docker-ppc64le:dind
   tags:
-    - docker-ppc64le
+    - docker-ppc64le-p9
 
 build:omnibus-debian:x86_64:
   extends:
@@ -352,7 +352,7 @@ test:omnibus-centos-stream:ppc64le:
   needs:
     - build:omnibus-centos-stream:ppc64le
   tags:
-    - docker-ppc64le
+    - docker-ppc64le-p9
 
 test:omnibus-debian:x86_64:
   extends:
