@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Author:: Lance Albertson <lance@osuosl.org>
-# Copyright:: Copyright 2020, Cinc Project
+# Copyright:: Copyright 2020-2022, Cinc Project
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,20 +16,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 declare -A platforms
-declare -A jdk_ver
 
 platforms[docker-auditor:4.22.0:aarch64]=1
 platforms[docker-auditor:4.22.0:ppc64le]=1
 platforms[docker-auditor:4.22.0:x86_64]=1
 platforms[omnibus-amazonlinux:2:aarch64]=1
 platforms[omnibus-amazonlinux:2:x86_64]=1
+platforms[omnibus-amazonlinux:2022:x86_64]=1
 platforms[omnibus-centos:7:aarch64]=1
 platforms[omnibus-centos:7:ppc64le]=1
 platforms[omnibus-centos:7:x86_64]=1
 platforms[omnibus-centos-stream:8:aarch64]=1
 platforms[omnibus-centos-stream:8:ppc64le]=1
 platforms[omnibus-centos-stream:8:x86_64]=1
-platforms[omnibus-debian:8:x86_64]=1
+platforms[omnibus-centos-stream:9:aarch64]=1
+platforms[omnibus-centos-stream:9:ppc64le]=1
+platforms[omnibus-centos-stream:9:x86_64]=1
 platforms[omnibus-debian:9:x86_64]=1
 platforms[omnibus-debian:10:aarch64]=1
 platforms[omnibus-debian:10:x86_64]=1
@@ -46,24 +48,6 @@ platforms[omnibus-ubuntu:20.04:x86_64]=1
 platforms[omnibus-ubuntu:22.04:aarch64]=1
 platforms[omnibus-ubuntu:22.04:x86_64]=1
 platforms[vagrant-virtualbox:20220830:x86_64]=1
-
-jdk_ver[omnibus-amazonlinux:2]="11"
-jdk_ver[omnibus-centos:7]="11"
-jdk_ver[omnibus-centos-stream:8]="11"
-jdk_ver[omnibus-debian:9]="8"
-jdk_ver[omnibus-debian:10]="11"
-jdk_ver[omnibus-debian:11]="11"
-jdk_ver[omnibus-opensuse:15.2]="11"
-jdk_ver[omnibus-rhel:7]="11"
-jdk_ver[omnibus-rhel:8]="11"
-jdk_ver[omnibus-ubuntu:18.04]="11"
-jdk_ver[omnibus-ubuntu:20.04]="17"
-jdk_ver[omnibus-ubuntu:22.04]="18"
-
-get_jdk() {
-  local image=$1 version=$2
-  echo ${jdk_ver[${image}:${version}]}
-}
 
 supported_platform() {
   local image=$1 version=$2 arch=$3
