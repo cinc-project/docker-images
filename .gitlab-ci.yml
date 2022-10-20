@@ -1,3 +1,4 @@
+---
 image: docker:latest
 services:
   - docker:dind
@@ -31,144 +32,54 @@ before_script:
     CINC_IMAGE: "omnibus-amazonlinux"
     VERSIONS: "2 2022"
     ARCHS: "x86_64 aarch64"
-  rules:
-    - changes:
-      - omnibus-amazonlinux/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-amazonlinux"
-      when: manual
-    - if: $CINC_BUILD == "all"
-      when: manual
-    - if: $CINC_BUILD != "omnibus-amazonlinux"
-      when: never
 
 .centos:
   variables:
     CINC_IMAGE: "omnibus-centos"
     VERSIONS: "7"
     ARCHS: "x86_64 aarch64 ppc64le"
-  rules:
-    - changes:
-      - omnibus-centos/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-centos"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - if: $CINC_BUILD != "omnibus-centos"
-      when: never
 
 .centos-stream:
   variables:
     CINC_IMAGE: "omnibus-centos-stream"
     VERSIONS: "8 9"
     ARCHS: "x86_64 aarch64 ppc64le"
-  rules:
-    - changes:
-      - omnibus-centos-stream/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-centos-stream"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - if: $CINC_BUILD != "omnibus-centos-stream"
-      when: never
 
 .debian:
   variables:
     CINC_IMAGE: "omnibus-debian"
     VERSIONS: "9 10 11"
     ARCHS: "x86_64 aarch64"
-  rules:
-    - changes:
-      - omnibus-debian/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-debian"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - if: $CINC_BUILD != "omnibus-debian"
-      when: never
 
 .opensuse:
   variables:
     CINC_IMAGE: "omnibus-opensuse"
     VERSIONS: "15.2"
     ARCHS: "x86_64 aarch64"
-  rules:
-    - changes:
-      - omnibus-opensuse/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-opensuse"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - if: $CINC_BUILD != "omnibus-opensuse"
-      when: never
 
 .rhel:
   variables:
     CINC_IMAGE: "omnibus-rhel"
     VERSIONS: "7 8"
     ARCHS: "s390x"
-  rules:
-    - changes:
-      - omnibus-rhel/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-rhel"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - if: $CINC_BUILD != "omnibus-rhel"
-      when: never
 
 .ubuntu:
   variables:
     CINC_IMAGE: "omnibus-ubuntu"
     VERSIONS: "18.04 20.04 22.04"
     ARCHS: "x86_64 aarch64"
-  rules:
-    - changes:
-      - omnibus-ubuntu/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-ubuntu"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - if: $CINC_BUILD != "omnibus-ubuntu"
-      when: never
 
 .docker-auditor:
   variables:
     CINC_IMAGE: "docker-auditor"
     VERSIONS: "4.22.0"
     ARCHS: "x86_64 aarch64 ppc64le"
-  rules:
-    - changes:
-      - docker-auditor/*
-      when: on_success
-    - if: $CINC_BUILD == "docker-auditor"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - if: $CINC_BUILD != "docker-auditor"
-      when: never
 
 .vagrant-virtualbox:
   variables:
     CINC_IMAGE: "vagrant-virtualbox"
     VERSIONS: "20220830"
     ARCHS: "x86_64"
-  rules:
-    - changes:
-      - vagrant-virtualbox/*
-      when: on_success
-    - if: $CINC_BUILD == "vagrant-virtualbox"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - if: $CINC_BUILD != "vagrant-virtualbox"
-      when: never
 
 .build:
   stage: build
@@ -181,6 +92,15 @@ build:omnibus-amazonlinux:x86_64:
   extends:
     - .amazonlinux
     - .build
+  rules:
+    - changes:
+        - omnibus-amazonlinux/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-amazonlinux"
+      when: manual
+    - if: $CINC_BUILD == "all"
+      when: manual
+    - when: never
 
 build:omnibus-amazonlinux:aarch64:
   extends:
@@ -188,11 +108,29 @@ build:omnibus-amazonlinux:aarch64:
     - .build
   tags:
     - docker-aarch64
+  rules:
+    - changes:
+        - omnibus-amazonlinux/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-amazonlinux"
+      when: manual
+    - if: $CINC_BUILD == "all"
+      when: manual
+    - when: never
 
 build:omnibus-centos:x86_64:
   extends:
     - .centos
     - .build
+  rules:
+    - changes:
+        - omnibus-centos/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-centos"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:omnibus-centos:aarch64:
   extends:
@@ -200,6 +138,15 @@ build:omnibus-centos:aarch64:
     - .build
   tags:
     - docker-aarch64
+  rules:
+    - changes:
+        - omnibus-centos/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-centos"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:omnibus-centos:ppc64le:
   extends:
@@ -210,11 +157,29 @@ build:omnibus-centos:ppc64le:
     - osuosl/docker-ppc64le:dind
   tags:
     - docker-ppc64le
+  rules:
+    - changes:
+        - omnibus-centos/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-centos"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:omnibus-centos-stream:x86_64:
   extends:
     - .centos-stream
     - .build
+  rules:
+    - changes:
+        - omnibus-centos-stream/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-centos-stream"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:omnibus-centos-stream:aarch64:
   extends:
@@ -222,6 +187,15 @@ build:omnibus-centos-stream:aarch64:
     - .build
   tags:
     - docker-aarch64
+  rules:
+    - changes:
+        - omnibus-centos-stream/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-centos-stream"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:omnibus-centos-stream:ppc64le:
   extends:
@@ -232,11 +206,29 @@ build:omnibus-centos-stream:ppc64le:
     - osuosl/docker-ppc64le:dind
   tags:
     - docker-ppc64le-p9
+  rules:
+    - changes:
+        - omnibus-centos-stream/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-centos-stream"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:omnibus-debian:x86_64:
   extends:
     - .debian
     - .build
+  rules:
+    - changes:
+        - omnibus-debian/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-debian"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:omnibus-debian:aarch64:
   extends:
@@ -244,11 +236,29 @@ build:omnibus-debian:aarch64:
     - .build
   tags:
     - docker-aarch64
+  rules:
+    - changes:
+        - omnibus-debian/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-debian"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:omnibus-opensuse:x86_64:
   extends:
     - .opensuse
     - .build
+  rules:
+    - changes:
+        - omnibus-opensuse/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-opensuse"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:omnibus-opensuse:aarch64:
   extends:
@@ -256,6 +266,15 @@ build:omnibus-opensuse:aarch64:
     - .build
   tags:
     - docker-aarch64
+  rules:
+    - changes:
+        - omnibus-opensuse/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-opensuse"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:omnibus-rhel:s390x:
   extends:
@@ -266,11 +285,29 @@ build:omnibus-rhel:s390x:
     - osuosl/docker-s390x:dind
   tags:
     - docker-s390x
+  rules:
+    - changes:
+        - omnibus-rhel/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-rhel"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:omnibus-ubuntu:x86_64:
   extends:
     - .ubuntu
     - .build
+  rules:
+    - changes:
+        - omnibus-ubuntu/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-ubuntu"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:omnibus-ubuntu:aarch64:
   extends:
@@ -278,11 +315,29 @@ build:omnibus-ubuntu:aarch64:
     - .build
   tags:
     - docker-aarch64
+  rules:
+    - changes:
+        - omnibus-ubuntu/*
+      when: on_success
+    - if: $CINC_BUILD == "omnibus-ubuntu"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:docker-auditor:x86_64:
   extends:
     - .docker-auditor
     - .build
+  rules:
+    - changes:
+        - docker-auditor/*
+      when: on_success
+    - if: $CINC_BUILD == "docker-auditor"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:docker-auditor:aarch64:
   extends:
@@ -290,13 +345,15 @@ build:docker-auditor:aarch64:
     - .build
   tags:
     - docker-aarch64
-
-build:vagrant-virtualbox:x86_64:
-  extends:
-    - .vagrant-virtualbox
-    - .build
-  tags:
-    - docker-virtualbox
+  rules:
+    - changes:
+        - docker-auditor/*
+      when: on_success
+    - if: $CINC_BUILD == "docker-auditor"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 build:docker-auditor:ppc64le:
   extends:
@@ -307,6 +364,31 @@ build:docker-auditor:ppc64le:
     - osuosl/docker-ppc64le:dind
   tags:
     - docker-ppc64le
+  rules:
+    - changes:
+        - docker-auditor/*
+      when: on_success
+    - if: $CINC_BUILD == "docker-auditor"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
+
+build:vagrant-virtualbox:x86_64:
+  extends:
+    - .vagrant-virtualbox
+    - .build
+  tags:
+    - docker-virtualbox
+  rules:
+    - changes:
+        - vagrant-virtualbox/*
+      when: on_success
+    - if: $CINC_BUILD == "vagrant-virtualbox"
+      when: on_success
+    - if: $CINC_BUILD == "all"
+      when: on_success
+    - when: never
 
 .test:
   stage: test
@@ -500,7 +582,7 @@ publish:omnibus-amazonlinux:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-amazonlinux/*
+        - omnibus-amazonlinux/*
       when: on_success
     - when: never
 
@@ -516,7 +598,7 @@ publish:omnibus-centos:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-centos/*
+        - omnibus-centos/*
       when: on_success
     - when: never
 
@@ -532,7 +614,7 @@ publish:omnibus-centos-stream:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-centos-stream/*
+        - omnibus-centos-stream/*
       when: on_success
     - when: never
 
@@ -548,7 +630,7 @@ publish:omnibus-debian:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-debian/*
+        - omnibus-debian/*
       when: on_success
     - when: never
 
@@ -564,7 +646,7 @@ publish:omnibus-opensuse:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-opensuse/*
+        - omnibus-opensuse/*
       when: on_success
     - when: never
 
@@ -580,7 +662,7 @@ publish:omnibus-rhel:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-rhel/*
+        - omnibus-rhel/*
       when: on_success
     - when: never
 
@@ -596,7 +678,7 @@ publish:omnibus-ubuntu:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-ubuntu/*
+        - omnibus-ubuntu/*
       when: on_success
     - when: never
 
@@ -612,7 +694,7 @@ publish:docker-auditor:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - docker-auditor/*
+        - docker-auditor/*
       when: on_success
     - when: never
 
@@ -628,7 +710,7 @@ publish:vagrant-virtualbox:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - vagrant-virtualbox/*
+        - vagrant-virtualbox/*
       when: on_success
     - when: never
 
@@ -653,7 +735,7 @@ release:omnibus-amazonlinux:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-amazonlinux/*
+        - omnibus-amazonlinux/*
       when: on_success
     - when: never
 
@@ -669,7 +751,7 @@ release:omnibus-centos:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-centos/*
+        - omnibus-centos/*
       when: on_success
     - when: never
 
@@ -685,7 +767,7 @@ release:omnibus-centos-stream:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-centos-stream/*
+        - omnibus-centos-stream/*
       when: on_success
     - when: never
 
@@ -701,7 +783,7 @@ release:omnibus-debian:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-debian/*
+        - omnibus-debian/*
       when: on_success
     - when: never
 
@@ -717,7 +799,7 @@ release:omnibus-opensuse:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-opensuse/*
+        - omnibus-opensuse/*
       when: on_success
     - when: never
 
@@ -733,7 +815,7 @@ release:omnibus-rhel:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-rhel/*
+        - omnibus-rhel/*
       when: on_success
     - when: never
 
@@ -749,7 +831,7 @@ release:omnibus-ubuntu:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - omnibus-ubuntu/*
+        - omnibus-ubuntu/*
       when: on_success
     - when: never
 
@@ -765,7 +847,7 @@ release:docker-auditor:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - docker-auditor/*
+        - docker-auditor/*
       when: on_success
     - when: never
 
@@ -781,7 +863,7 @@ release:vagrant-virtualbox:
     - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
-      - vagrant-virtualbox/*
+        - vagrant-virtualbox/*
       when: on_success
     - when: never
 
@@ -803,7 +885,7 @@ clean:omnibus-amazonlinux:
     - if: $CINC_BUILD == "omnibus-amazonlinux"
     - if: $CINC_BUILD == "all"
     - changes:
-      - omnibus-amazonlinux/*
+        - omnibus-amazonlinux/*
       when: always
     - when: never
 
@@ -815,7 +897,7 @@ clean:omnibus-centos:
     - if: $CINC_BUILD == "omnibus-centos"
     - if: $CINC_BUILD == "all"
     - changes:
-      - omnibus-centos/*
+        - omnibus-centos/*
       when: always
     - when: never
 
@@ -827,7 +909,7 @@ clean:omnibus-centos-stream:
     - if: $CINC_BUILD == "omnibus-centos-stream"
     - if: $CINC_BUILD == "all"
     - changes:
-      - omnibus-centos-stream/*
+        - omnibus-centos-stream/*
       when: always
     - when: never
 
@@ -839,7 +921,7 @@ clean:omnibus-debian:
     - if: $CINC_BUILD == "omnibus-debian"
     - if: $CINC_BUILD == "all"
     - changes:
-      - omnibus-debian/*
+        - omnibus-debian/*
       when: always
     - when: never
 
@@ -851,7 +933,7 @@ clean:omnibus-opensuse:
     - if: $CINC_BUILD == "omnibus-opensuse"
     - if: $CINC_BUILD == "all"
     - changes:
-      - omnibus-opensuse/*
+        - omnibus-opensuse/*
       when: always
     - when: never
 
@@ -863,7 +945,7 @@ clean:omnibus-rhel:
     - if: $CINC_BUILD == "omnibus-rhel"
     - if: $CINC_BUILD == "all"
     - changes:
-      - omnibus-rhel/*
+        - omnibus-rhel/*
       when: always
     - when: never
 
@@ -875,7 +957,7 @@ clean:omnibus-ubuntu:
     - if: $CINC_BUILD == "omnibus-ubuntu"
     - if: $CINC_BUILD == "all"
     - changes:
-      - omnibus-ubuntu/*
+        - omnibus-ubuntu/*
       when: always
     - when: never
 
@@ -887,7 +969,7 @@ clean:docker-auditor:
     - if: $CINC_BUILD == "docker-auditor"
     - if: $CINC_BUILD == "all"
     - changes:
-      - docker-auditor/*
+        - docker-auditor/*
       when: always
     - when: never
 
@@ -899,6 +981,6 @@ clean:vagrant-virtualbox:
     - if: $CINC_BUILD == "vagrant-virtualbox"
     - if: $CINC_BUILD == "all"
     - changes:
-      - vagrant-virtualbox/*
+        - vagrant-virtualbox/*
       when: always
     - when: never
