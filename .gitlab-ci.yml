@@ -34,9 +34,9 @@ before_script:
     - changes:
       - omnibus-amazonlinux/*
       when: on_success
-    - if: '$CINC_BUILD == "omnibus-amazonlinux"'
+    - if: $CINC_BUILD == "omnibus-amazonlinux"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - when: never
 
@@ -49,9 +49,9 @@ before_script:
     - changes:
       - omnibus-centos/*
       when: on_success
-    - if: '$CINC_BUILD == "omnibus-centos"'
+    - if: $CINC_BUILD == "omnibus-centos"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - when: never
 
@@ -64,9 +64,9 @@ before_script:
     - changes:
       - omnibus-centos-stream/*
       when: on_success
-    - if: '$CINC_BUILD == "omnibus-centos-stream"'
+    - if: $CINC_BUILD == "omnibus-centos-stream"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - when: never
 
@@ -79,9 +79,9 @@ before_script:
     - changes:
       - omnibus-debian/*
       when: on_success
-    - if: '$CINC_BUILD == "omnibus-debian"'
+    - if: $CINC_BUILD == "omnibus-debian"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - when: never
 
@@ -94,9 +94,9 @@ before_script:
     - changes:
       - omnibus-opensuse/*
       when: on_success
-    - if: '$CINC_BUILD == "omnibus-opensuse"'
+    - if: $CINC_BUILD == "omnibus-opensuse"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - when: never
 
@@ -109,9 +109,9 @@ before_script:
     - changes:
       - omnibus-rhel/*
       when: on_success
-    - if: '$CINC_BUILD == "omnibus-rhel"'
+    - if: $CINC_BUILD == "omnibus-rhel"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - when: never
 
@@ -124,9 +124,9 @@ before_script:
     - changes:
       - omnibus-ubuntu/*
       when: on_success
-    - if: '$CINC_BUILD == "omnibus-ubuntu"'
+    - if: $CINC_BUILD == "omnibus-ubuntu"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - when: never
 
@@ -139,9 +139,9 @@ before_script:
     - changes:
       - docker-auditor/*
       when: on_success
-    - if: '$CINC_BUILD == "docker-auditor"'
+    - if: $CINC_BUILD == "docker-auditor"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - when: never
 
@@ -154,9 +154,9 @@ before_script:
     - changes:
       - vagrant-virtualbox/*
       when: on_success
-    - if: '$CINC_BUILD == "vagrant-virtualbox"'
+    - if: $CINC_BUILD == "vagrant-virtualbox"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - when: never
 
@@ -485,9 +485,9 @@ publish:omnibus-amazonlinux:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-amazonlinux"'
+    - if: $CINC_BUILD == "omnibus-amazonlinux"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-amazonlinux/*
@@ -501,9 +501,9 @@ publish:omnibus-centos:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-centos"'
+    - if: $CINC_BUILD == "omnibus-centos"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-centos/*
@@ -517,9 +517,9 @@ publish:omnibus-centos-stream:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-centos-stream"'
+    - if: $CINC_BUILD == "omnibus-centos-stream"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-centos-stream/*
@@ -533,9 +533,9 @@ publish:omnibus-debian:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-debian"'
+    - if: $CINC_BUILD == "omnibus-debian"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-debian/*
@@ -549,9 +549,9 @@ publish:omnibus-opensuse:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-opensuse"'
+    - if: $CINC_BUILD == "omnibus-opensuse"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-opensuse/*
@@ -565,9 +565,9 @@ publish:omnibus-rhel:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-rhel"'
+    - if: $CINC_BUILD == "omnibus-rhel"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-rhel/*
@@ -581,9 +581,9 @@ publish:omnibus-ubuntu:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-ubuntu"'
+    - if: $CINC_BUILD == "omnibus-ubuntu"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-ubuntu/*
@@ -597,9 +597,9 @@ publish:docker-auditor:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "docker-auditor"'
+    - if: $CINC_BUILD == "docker-auditor"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - docker-auditor/*
@@ -613,9 +613,9 @@ publish:vagrant-virtualbox:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "vagrant-virtualbox"'
+    - if: $CINC_BUILD == "vagrant-virtualbox"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - vagrant-virtualbox/*
@@ -638,9 +638,9 @@ release:omnibus-amazonlinux:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-amazonlinux"'
+    - if: $CINC_BUILD == "omnibus-amazonlinux"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-amazonlinux/*
@@ -654,9 +654,9 @@ release:omnibus-centos:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-centos"'
+    - if: $CINC_BUILD == "omnibus-centos"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-centos/*
@@ -670,9 +670,9 @@ release:omnibus-centos-stream:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-centos-stream"'
+    - if: $CINC_BUILD == "omnibus-centos-stream"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-centos-stream/*
@@ -686,9 +686,9 @@ release:omnibus-debian:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-debian"'
+    - if: $CINC_BUILD == "omnibus-debian"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-debian/*
@@ -702,9 +702,9 @@ release:omnibus-opensuse:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-opensuse"'
+    - if: $CINC_BUILD == "omnibus-opensuse"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-opensuse/*
@@ -718,9 +718,9 @@ release:omnibus-rhel:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-rhel"'
+    - if: $CINC_BUILD == "omnibus-rhel"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-rhel/*
@@ -734,9 +734,9 @@ release:omnibus-ubuntu:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "omnibus-ubuntu"'
+    - if: $CINC_BUILD == "omnibus-ubuntu"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - omnibus-ubuntu/*
@@ -750,9 +750,9 @@ release:docker-auditor:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "docker-auditor"'
+    - if: $CINC_BUILD == "docker-auditor"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - docker-auditor/*
@@ -766,9 +766,9 @@ release:vagrant-virtualbox:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: '$CINC_BUILD == "vagrant-virtualbox"'
+    - if: $CINC_BUILD == "vagrant-virtualbox"
       when: on_success
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "all"
       when: on_success
     - changes:
       - vagrant-virtualbox/*
@@ -790,8 +790,8 @@ clean:omnibus-amazonlinux:
     - .amazonlinux
     - .clean
   rules:
-    - if: '$CINC_BUILD == "omnibus-amazonlinux"'
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "omnibus-amazonlinux"
+    - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-amazonlinux/*
       when: always
@@ -802,8 +802,8 @@ clean:omnibus-centos:
     - .centos
     - .clean
   rules:
-    - if: '$CINC_BUILD == "omnibus-centos"'
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "omnibus-centos"
+    - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-centos/*
       when: always
@@ -814,8 +814,8 @@ clean:omnibus-centos-stream:
     - .centos-stream
     - .clean
   rules:
-    - if: '$CINC_BUILD == "omnibus-centos-stream"'
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "omnibus-centos-stream"
+    - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-centos-stream/*
       when: always
@@ -826,8 +826,8 @@ clean:omnibus-debian:
     - .debian
     - .clean
   rules:
-    - if: '$CINC_BUILD == "omnibus-debian"'
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "omnibus-debian"
+    - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-debian/*
       when: always
@@ -838,8 +838,8 @@ clean:omnibus-opensuse:
     - .opensuse
     - .clean
   rules:
-    - if: '$CINC_BUILD == "omnibus-opensuse"'
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "omnibus-opensuse"
+    - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-opensuse/*
       when: always
@@ -850,8 +850,8 @@ clean:omnibus-rhel:
     - .rhel
     - .clean
   rules:
-    - if: '$CINC_BUILD == "omnibus-rhel"'
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "omnibus-rhel"
+    - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-rhel/*
       when: always
@@ -862,8 +862,8 @@ clean:omnibus-ubuntu:
     - .ubuntu
     - .clean
   rules:
-    - if: '$CINC_BUILD == "omnibus-ubuntu"'
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "omnibus-ubuntu"
+    - if: $CINC_BUILD == "all"
     - changes:
       - omnibus-ubuntu/*
       when: always
@@ -874,8 +874,8 @@ clean:docker-auditor:
     - .docker-auditor
     - .clean
   rules:
-    - if: '$CINC_BUILD == "docker-auditor"'
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "docker-auditor"
+    - if: $CINC_BUILD == "all"
     - changes:
       - docker-auditor/*
       when: always
@@ -886,8 +886,8 @@ clean:vagrant-virtualbox:
     - .vagrant-virtualbox
     - .clean
   rules:
-    - if: '$CINC_BUILD == "vagrant-virtualbox"'
-    - if: '$CINC_BUILD == "all"'
+    - if: $CINC_BUILD == "vagrant-virtualbox"
+    - if: $CINC_BUILD == "all"
     - changes:
       - vagrant-virtualbox/*
       when: always
