@@ -93,13 +93,10 @@ build:omnibus-amazonlinux:x86_64:
     - .amazonlinux
     - .build
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-amazonlinux/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-amazonlinux"
-      when: manual
-    - if: $CINC_BUILD == "all"
-      when: manual
+    - if: $CINC_BUILD == "omnibus-amazonlinux" || "all"
     - when: never
 
 build:omnibus-amazonlinux:aarch64:
@@ -109,13 +106,10 @@ build:omnibus-amazonlinux:aarch64:
   tags:
     - docker-aarch64
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-amazonlinux/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-amazonlinux"
-      when: manual
-    - if: $CINC_BUILD == "all"
-      when: manual
+    - if: $CINC_BUILD == "omnibus-amazonlinux" || "all"
     - when: never
 
 build:omnibus-centos:x86_64:
@@ -123,13 +117,10 @@ build:omnibus-centos:x86_64:
     - .centos
     - .build
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-centos/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-centos"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-centos" || "all"
     - when: never
 
 build:omnibus-centos:aarch64:
@@ -139,13 +130,10 @@ build:omnibus-centos:aarch64:
   tags:
     - docker-aarch64
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-centos/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-centos"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-centos" || "all"
     - when: never
 
 build:omnibus-centos:ppc64le:
@@ -158,13 +146,10 @@ build:omnibus-centos:ppc64le:
   tags:
     - docker-ppc64le
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-centos/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-centos"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-centos" || "all"
     - when: never
 
 build:omnibus-centos-stream:x86_64:
@@ -172,13 +157,10 @@ build:omnibus-centos-stream:x86_64:
     - .centos-stream
     - .build
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-centos-stream/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-centos-stream"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-centos-stream" || "all"
     - when: never
 
 build:omnibus-centos-stream:aarch64:
@@ -207,13 +189,10 @@ build:omnibus-centos-stream:ppc64le:
   tags:
     - docker-ppc64le-p9
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-centos-stream/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-centos-stream"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-centos-stream" || "all"
     - when: never
 
 build:omnibus-debian:x86_64:
@@ -221,13 +200,10 @@ build:omnibus-debian:x86_64:
     - .debian
     - .build
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-debian/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-debian"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-debian" || "all"
     - when: never
 
 build:omnibus-debian:aarch64:
@@ -237,13 +213,10 @@ build:omnibus-debian:aarch64:
   tags:
     - docker-aarch64
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-debian/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-debian"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-debian" || "all"
     - when: never
 
 build:omnibus-opensuse:x86_64:
@@ -251,13 +224,10 @@ build:omnibus-opensuse:x86_64:
     - .opensuse
     - .build
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-opensuse/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-opensuse"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-opensuse" || "all"
     - when: never
 
 build:omnibus-opensuse:aarch64:
@@ -267,13 +237,10 @@ build:omnibus-opensuse:aarch64:
   tags:
     - docker-aarch64
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-opensuse/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-opensuse"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-opensuse" || "all"
     - when: never
 
 build:omnibus-rhel:s390x:
@@ -286,13 +253,10 @@ build:omnibus-rhel:s390x:
   tags:
     - docker-s390x
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-rhel/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-rhel"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-rhel" || "all"
     - when: never
 
 build:omnibus-ubuntu:x86_64:
@@ -300,13 +264,10 @@ build:omnibus-ubuntu:x86_64:
     - .ubuntu
     - .build
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-ubuntu/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-ubuntu"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-ubuntu" || "all"
     - when: never
 
 build:omnibus-ubuntu:aarch64:
@@ -316,13 +277,10 @@ build:omnibus-ubuntu:aarch64:
   tags:
     - docker-aarch64
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-ubuntu/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-ubuntu"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-ubuntu" || "all"
     - when: never
 
 build:docker-auditor:x86_64:
@@ -330,13 +288,10 @@ build:docker-auditor:x86_64:
     - .docker-auditor
     - .build
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - docker-auditor/*
-      when: on_success
-    - if: $CINC_BUILD == "docker-auditor"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "docker-auditor" || "all"
     - when: never
 
 build:docker-auditor:aarch64:
@@ -346,13 +301,10 @@ build:docker-auditor:aarch64:
   tags:
     - docker-aarch64
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - docker-auditor/*
-      when: on_success
-    - if: $CINC_BUILD == "docker-auditor"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "docker-auditor" || "all"
     - when: never
 
 build:docker-auditor:ppc64le:
@@ -365,13 +317,10 @@ build:docker-auditor:ppc64le:
   tags:
     - docker-ppc64le
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - docker-auditor/*
-      when: on_success
-    - if: $CINC_BUILD == "docker-auditor"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "docker-auditor" || "all"
     - when: never
 
 build:vagrant-virtualbox:x86_64:
@@ -381,13 +330,11 @@ build:vagrant-virtualbox:x86_64:
   tags:
     - docker-virtualbox
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - vagrant-virtualbox/*
       when: on_success
-    - if: $CINC_BUILD == "vagrant-virtualbox"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "vagrant-virtualbox" || "all"
     - when: never
 
 .test:
@@ -577,13 +524,10 @@ publish:omnibus-amazonlinux:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: $CINC_BUILD == "omnibus-amazonlinux"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
+    - if: $CINC_BUILD == "omnibus-amazonlinux" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-amazonlinux/*
-      when: on_success
     - when: never
 
 publish:omnibus-centos:
@@ -593,13 +537,10 @@ publish:omnibus-centos:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: $CINC_BUILD == "omnibus-centos"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
+    - if: $CINC_BUILD == "omnibus-centos" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-centos/*
-      when: on_success
     - when: never
 
 publish:omnibus-centos-stream:
@@ -609,13 +550,10 @@ publish:omnibus-centos-stream:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: $CINC_BUILD == "omnibus-centos-stream"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
+    - if: $CINC_BUILD == "omnibus-centos-stream" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-centos-stream/*
-      when: on_success
     - when: never
 
 publish:omnibus-debian:
@@ -625,13 +563,10 @@ publish:omnibus-debian:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: $CINC_BUILD == "omnibus-debian"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
+    - if: $CINC_BUILD == "omnibus-debian" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-debian/*
-      when: on_success
     - when: never
 
 publish:omnibus-opensuse:
@@ -641,13 +576,10 @@ publish:omnibus-opensuse:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: $CINC_BUILD == "omnibus-opensuse"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
+    - if: $CINC_BUILD == "omnibus-opensuse" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-opensuse/*
-      when: on_success
     - when: never
 
 publish:omnibus-rhel:
@@ -657,13 +589,10 @@ publish:omnibus-rhel:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: $CINC_BUILD == "omnibus-rhel"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
+    - if: $CINC_BUILD == "omnibus-rhel" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-rhel/*
-      when: on_success
     - when: never
 
 publish:omnibus-ubuntu:
@@ -673,13 +602,10 @@ publish:omnibus-ubuntu:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: $CINC_BUILD == "omnibus-ubuntu"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
+    - if: $CINC_BUILD == "omnibus-ubuntu" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-ubuntu/*
-      when: on_success
     - when: never
 
 publish:docker-auditor:
@@ -689,13 +615,10 @@ publish:docker-auditor:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: $CINC_BUILD == "docker-auditor"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
+    - if: $CINC_BUILD == "docker-auditor" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - docker-auditor/*
-      when: on_success
     - when: never
 
 publish:vagrant-virtualbox:
@@ -705,13 +628,10 @@ publish:vagrant-virtualbox:
   rules:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
-    - if: $CINC_BUILD == "vagrant-virtualbox"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
+    - if: $CINC_BUILD == "vagrant-virtualbox" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - vagrant-virtualbox/*
-      when: on_success
     - when: never
 
 .release:
@@ -727,145 +647,64 @@ release:omnibus-amazonlinux:
   extends:
     - .amazonlinux
     - .release
-  rules:
-    - if: $CI_COMMIT_REF_NAME != "master"
-      when: never
-    - if: $CINC_BUILD == "omnibus-amazonlinux"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
-        - omnibus-amazonlinux/*
-      when: on_success
-    - when: never
+  needs:
+    - publish:omnibus-amazonlinux
 
 release:omnibus-centos:
   extends:
     - .centos
     - .release
-  rules:
-    - if: $CI_COMMIT_REF_NAME != "master"
-      when: never
-    - if: $CINC_BUILD == "omnibus-centos"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
-        - omnibus-centos/*
-      when: on_success
-    - when: never
+  needs:
+    - publish:omnibus-centos
 
 release:omnibus-centos-stream:
   extends:
     - .centos-stream
     - .release
-  rules:
-    - if: $CI_COMMIT_REF_NAME != "master"
-      when: never
-    - if: $CINC_BUILD == "omnibus-centos-stream"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
-        - omnibus-centos-stream/*
-      when: on_success
-    - when: never
+  needs:
+    - publish:omnibus-centos-stream
 
 release:omnibus-debian:
   extends:
     - .debian
     - .release
-  rules:
-    - if: $CI_COMMIT_REF_NAME != "master"
-      when: never
-    - if: $CINC_BUILD == "omnibus-debian"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
-        - omnibus-debian/*
-      when: on_success
-    - when: never
+  needs:
+    - publish:omnibus-debian
 
 release:omnibus-opensuse:
   extends:
     - .opensuse
     - .release
-  rules:
-    - if: $CI_COMMIT_REF_NAME != "master"
-      when: never
-    - if: $CINC_BUILD == "omnibus-opensuse"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
-        - omnibus-opensuse/*
-      when: on_success
-    - when: never
+  needs:
+    - publish:omnibus-opensuse
 
 release:omnibus-rhel:
   extends:
     - .rhel
     - .release
-  rules:
-    - if: $CI_COMMIT_REF_NAME != "master"
-      when: never
-    - if: $CINC_BUILD == "omnibus-rhel"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
-        - omnibus-rhel/*
-      when: on_success
-    - when: never
+  needs:
+    - publish:omnibus-rhel
 
 release:omnibus-ubuntu:
   extends:
     - .ubuntu
     - .release
-  rules:
-    - if: $CI_COMMIT_REF_NAME != "master"
-      when: never
-    - if: $CINC_BUILD == "omnibus-ubuntu"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
-        - omnibus-ubuntu/*
-      when: on_success
-    - when: never
+  needs:
+    - publish:omnibus-ubuntu
 
 release:docker-auditor:
   extends:
     - .docker-auditor
     - .release
-  rules:
-    - if: $CI_COMMIT_REF_NAME != "master"
-      when: never
-    - if: $CINC_BUILD == "docker-auditor"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
-        - docker-auditor/*
-      when: on_success
-    - when: never
+  needs:
+    - publish:docker-auditor
 
 release:vagrant-virtualbox:
   extends:
     - .vagrant-virtualbox
     - .release
-  rules:
-    - if: $CI_COMMIT_REF_NAME != "master"
-      when: never
-    - if: $CINC_BUILD == "vagrant-virtualbox"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
-    - changes:
-        - vagrant-virtualbox/*
-      when: on_success
-    - when: never
+  needs:
+    - publish:vagrant-virtualbox
 
 .clean:
   stage: clean
@@ -882,9 +721,10 @@ clean:omnibus-amazonlinux:
     - .amazonlinux
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-amazonlinux"
-    - if: $CINC_BUILD == "all"
-    - changes:
+    - if: $CINC_BUILD == "omnibus-amazonlinux" || "all"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-amazonlinux/*
       when: always
     - when: never
@@ -894,9 +734,10 @@ clean:omnibus-centos:
     - .centos
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-centos"
-    - if: $CINC_BUILD == "all"
-    - changes:
+    - if: $CINC_BUILD == "omnibus-centos" || "all"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-centos/*
       when: always
     - when: never
@@ -906,9 +747,10 @@ clean:omnibus-centos-stream:
     - .centos-stream
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-centos-stream"
-    - if: $CINC_BUILD == "all"
-    - changes:
+    - if: $CINC_BUILD == "omnibus-centos-stream" || "all"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-centos-stream/*
       when: always
     - when: never
@@ -918,9 +760,10 @@ clean:omnibus-debian:
     - .debian
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-debian"
-    - if: $CINC_BUILD == "all"
-    - changes:
+    - if: $CINC_BUILD == "omnibus-debian" || "all"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-debian/*
       when: always
     - when: never
@@ -930,9 +773,10 @@ clean:omnibus-opensuse:
     - .opensuse
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-opensuse"
-    - if: $CINC_BUILD == "all"
-    - changes:
+    - if: $CINC_BUILD == "omnibus-opensuse" || "all"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-opensuse/*
       when: always
     - when: never
@@ -942,8 +786,8 @@ clean:omnibus-rhel:
     - .rhel
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-rhel"
-    - if: $CINC_BUILD == "all"
+    - if: $CINC_BUILD == "omnibus-rhel" || "all"
+      when: always
     - changes:
         - omnibus-rhel/*
       when: always
@@ -954,9 +798,10 @@ clean:omnibus-ubuntu:
     - .ubuntu
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-ubuntu"
-    - if: $CINC_BUILD == "all"
-    - changes:
+    - if: $CINC_BUILD == "omnibus-ubuntu" || "all"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-ubuntu/*
       when: always
     - when: never
@@ -966,9 +811,10 @@ clean:docker-auditor:
     - .docker-auditor
     - .clean
   rules:
-    - if: $CINC_BUILD == "docker-auditor"
-    - if: $CINC_BUILD == "all"
-    - changes:
+    - if: $CINC_BUILD == "docker-auditor" || "all"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - docker-auditor/*
       when: always
     - when: never
@@ -978,9 +824,10 @@ clean:vagrant-virtualbox:
     - .vagrant-virtualbox
     - .clean
   rules:
-    - if: $CINC_BUILD == "vagrant-virtualbox"
-    - if: $CINC_BUILD == "all"
-    - changes:
+    - if: $CINC_BUILD == "vagrant-virtualbox" || "all"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - vagrant-virtualbox/*
       when: always
     - when: never
