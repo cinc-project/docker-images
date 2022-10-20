@@ -39,7 +39,7 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - if: $CINC_BUILD == "false"
+    - if: $CINC_BUILD != "omnibus-amazonlinux"
       when: never
 
 .centos:
@@ -55,7 +55,7 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - if: $CINC_BUILD == "false"
+    - if: $CINC_BUILD != "omnibus-centos"
       when: never
 
 .centos-stream:
@@ -71,7 +71,7 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - if: $CINC_BUILD == "false"
+    - if: $CINC_BUILD != "omnibus-centos-stream"
       when: never
 
 .debian:
@@ -87,7 +87,7 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - if: $CINC_BUILD == "false"
+    - if: $CINC_BUILD != "omnibus-debian"
       when: never
 
 .opensuse:
@@ -103,7 +103,7 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - if: $CINC_BUILD == "false"
+    - if: $CINC_BUILD != "omnibus-opensuse"
       when: never
 
 .rhel:
@@ -119,7 +119,7 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - if: $CINC_BUILD == "false"
+    - if: $CINC_BUILD != "omnibus-rhel"
       when: never
 
 .ubuntu:
@@ -135,7 +135,7 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - if: $CINC_BUILD == "false"
+    - if: $CINC_BUILD != "omnibus-ubuntu"
       when: never
 
 .docker-auditor:
@@ -151,7 +151,7 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - if: $CINC_BUILD == "false"
+    - if: $CINC_BUILD != "docker-auditor"
       when: never
 
 .vagrant-virtualbox:
@@ -167,7 +167,7 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - if: $CINC_BUILD == "false"
+    - if: $CINC_BUILD != "vagrant-virtualbox"
       when: never
 
 .build:
