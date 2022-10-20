@@ -36,7 +36,7 @@ before_script:
       - omnibus-amazonlinux/*
       when: on_success
     - if: $CINC_BUILD == "omnibus-amazonlinux"
-      when: on_success
+      when: manual
     - if: $CINC_BUILD == "all"
       when: on_success
     - if: $CINC_BUILD != "omnibus-amazonlinux"
