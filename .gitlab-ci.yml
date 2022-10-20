@@ -170,13 +170,10 @@ build:omnibus-centos-stream:aarch64:
   tags:
     - docker-aarch64
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-centos-stream/*
-      when: on_success
-    - if: $CINC_BUILD == "omnibus-centos-stream"
-      when: on_success
-    - if: $CINC_BUILD == "all"
-      when: on_success
+    - if: $CINC_BUILD == "omnibus-centos-stream" || "all"
     - when: never
 
 build:omnibus-centos-stream:ppc64le:
