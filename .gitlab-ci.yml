@@ -649,6 +649,14 @@ release:omnibus-amazonlinux:
     - .release
   needs:
     - publish:omnibus-amazonlinux
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == "omnibus-amazonlinux" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-amazonlinux/*
+    - when: never
 
 release:omnibus-centos:
   extends:
@@ -656,6 +664,14 @@ release:omnibus-centos:
     - .release
   needs:
     - publish:omnibus-centos
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == "omnibus-centos" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-centos/*
+    - when: never
 
 release:omnibus-centos-stream:
   extends:
@@ -663,6 +679,14 @@ release:omnibus-centos-stream:
     - .release
   needs:
     - publish:omnibus-centos-stream
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == "omnibus-centos-stream" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-centos-stream/*
+    - when: never
 
 release:omnibus-debian:
   extends:
@@ -670,6 +694,14 @@ release:omnibus-debian:
     - .release
   needs:
     - publish:omnibus-debian
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == "omnibus-debian" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-debian/*
+    - when: never
 
 release:omnibus-opensuse:
   extends:
@@ -677,6 +709,14 @@ release:omnibus-opensuse:
     - .release
   needs:
     - publish:omnibus-opensuse
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == "omnibus-opensuse" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-opensuse/*
+    - when: never
 
 release:omnibus-rhel:
   extends:
@@ -684,6 +724,14 @@ release:omnibus-rhel:
     - .release
   needs:
     - publish:omnibus-rhel
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == "omnibus-rhel" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-rhel/*
+    - when: never
 
 release:omnibus-ubuntu:
   extends:
@@ -691,6 +739,14 @@ release:omnibus-ubuntu:
     - .release
   needs:
     - publish:omnibus-ubuntu
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == "omnibus-ubuntu" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-ubuntu/*
+    - when: never
 
 release:docker-auditor:
   extends:
@@ -698,6 +754,14 @@ release:docker-auditor:
     - .release
   needs:
     - publish:docker-auditor
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == "omnibus-docker-auditor" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-docker-auditor/*
+    - when: never
 
 release:vagrant-virtualbox:
   extends:
@@ -705,6 +769,14 @@ release:vagrant-virtualbox:
     - .release
   needs:
     - publish:vagrant-virtualbox
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "master"
+      when: never
+    - if: $CINC_BUILD == "omnibus-vagrant-virtualbox" || "all"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-vagrant-virtualbox/*
+    - when: never
 
 .clean:
   stage: clean
