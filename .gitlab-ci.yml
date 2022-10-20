@@ -144,7 +144,7 @@ before_script:
     - if: $CINC_BUILD != "omnibus-ubuntu" || "all"
       when: never
 
-.omnibus-docker-auditor_rules:
+.docker-auditor_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -152,7 +152,7 @@ before_script:
     - if: $CINC_BUILD != "omnibus-docker-auditor" || "all"
       when: never
 
-.omnibus-vagrant-virtualbox_rules:
+.vagrant-virtualbox_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -622,7 +622,7 @@ publish:vagrant-virtualbox:
     - .publish
   rules:
     - !reference [.publish_rules, rules]
-    - !reference [.omnibus-vagrant-virtualbox_rules, rules]
+    - !reference [.vagrant-virtualbox_rules, rules]
 
 .release:
   stage: release
@@ -721,7 +721,7 @@ release:vagrant-virtualbox:
     - publish:vagrant-virtualbox
   rules:
     - !reference [.publish_rules, rules]
-    - !reference [.omnibus-vagrant-virtualbox_rules, rules]
+    - !reference [.vagrant-virtualbox_rules, rules]
 
 .clean:
   stage: clean
