@@ -93,63 +93,63 @@ before_script:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-amazonlinux/*
-    - if: $CINC_BUILD == "omnibus-amazonlinux" || "all"
+    - if: $CINC_BUILD =~ /omnibus-amazonlinux|all/
 
 .omnibus-centos_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-centos/*
-    - if: $CINC_BUILD == "omnibus-centos" || "all"
+    - if: $CINC_BUILD =~ /omnibus-centos|all/
 
 .omnibus-centos-stream_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-centos-stream/*
-    - if: $CINC_BUILD == "omnibus-centos-stream" || "all"
+    - if: $CINC_BUILD =~ /omnibus-centos-stream|all/
 
 .omnibus-debian_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-debian/*
-    - if: $CINC_BUILD == "omnibus-debian" || "all"
+    - if: $CINC_BUILD =~ /omnibus-debian|all/
 
 .omnibus-opensuse_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-opensuse/*
-    - if: $CINC_BUILD == "omnibus-opensuse" || "all"
+    - if: $CINC_BUILD =~ /omnibus-opensuse|all/
 
 .omnibus-rhel_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-rhel/*
-    - if: $CINC_BUILD == "omnibus-rhel" || "all"
+    - if: $CINC_BUILD =~ /omnibus-rhel|all/
 
 .omnibus-ubuntu_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-ubuntu/*
-    - if: $CINC_BUILD == "omnibus-ubuntu" || "all"
+    - if: $CINC_BUILD =~ /omnibus-ubuntu|all/
 
 .docker-auditor_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-docker-auditor/*
-    - if: $CINC_BUILD == "omnibus-docker-auditor" || "all"
+    - if: $CINC_BUILD =~ /omnibus-docker-auditor|all/
 
 .vagrant-virtualbox_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-vagrant-virtualbox/*
-    - if: $CINC_BUILD == "omnibus-vagrant-virtualbox" || "all"
+    - if: $CINC_BUILD =~ /omnibus-vagrant-virtualbox|all/
 
 build:omnibus-amazonlinux:x86_64:
   extends:
@@ -729,7 +729,7 @@ clean:omnibus-amazonlinux:
     - .amazonlinux
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-amazonlinux" || "all"
+    - if: $CINC_BUILD =~ /omnibus-amazonlinux|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -741,7 +741,7 @@ clean:omnibus-centos:
     - .centos
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-centos" || "all"
+    - if: $CINC_BUILD =~ /omnibus-centos"all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -753,7 +753,7 @@ clean:omnibus-centos-stream:
     - .centos-stream
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-centos-stream" || "all"
+    - if: $CINC_BUILD =~ /omnibus-centos-stream|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -765,7 +765,7 @@ clean:omnibus-debian:
     - .debian
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-debian" || "all"
+    - if: $CINC_BUILD =~ /omnibus-debian|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -777,7 +777,7 @@ clean:omnibus-opensuse:
     - .opensuse
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-opensuse" || "all"
+    - if: $CINC_BUILD =~ /omnibus-opensuse|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -789,7 +789,7 @@ clean:omnibus-rhel:
     - .rhel
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-rhel" || "all"
+    - if: $CINC_BUILD =~ /omnibus-rhel|all/
       when: always
     - changes:
         - omnibus-rhel/*
@@ -800,7 +800,7 @@ clean:omnibus-ubuntu:
     - .ubuntu
     - .clean
   rules:
-    - if: $CINC_BUILD == "omnibus-ubuntu" || "all"
+    - if: $CINC_BUILD =~ /omnibus-ubuntu|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -812,7 +812,7 @@ clean:docker-auditor:
     - .docker-auditor
     - .clean
   rules:
-    - if: $CINC_BUILD == "docker-auditor" || "all"
+    - if: $CINC_BUILD =~ /docker-auditor|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -824,7 +824,7 @@ clean:vagrant-virtualbox:
     - .vagrant-virtualbox
     - .clean
   rules:
-    - if: $CINC_BUILD == "vagrant-virtualbox" || "all"
+    - if: $CINC_BUILD =~ /vagrant-virtualbox|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
