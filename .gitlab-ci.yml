@@ -741,7 +741,7 @@ clean:omnibus-centos:
     - .centos
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-centos"all/
+    - if: $CINC_BUILD =~ /omnibus-centos/all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -791,7 +791,8 @@ clean:omnibus-rhel:
   rules:
     - if: $CINC_BUILD =~ /omnibus-rhel|all/
       when: always
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         - omnibus-rhel/*
       when: always
 
