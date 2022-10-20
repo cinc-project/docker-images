@@ -17,6 +17,7 @@
 # limitations under the License.
 source scripts/common.sh
 set -ex
+echo "CINC_BUILD: $CINC_BUILD"
 arch="$(uname -m)"
 if [ -e ${CINC_IMAGE}/Dockerfile.${arch} ] ; then
   docker_file="${CINC_IMAGE}/Dockerfile.${arch}"
