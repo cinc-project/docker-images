@@ -39,7 +39,8 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - when: never
+    - if: $CINC_BUILD == "false"
+      when: never
 
 .centos:
   variables:
@@ -54,7 +55,8 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - when: never
+    - if: $CINC_BUILD == "false"
+      when: never
 
 .centos-stream:
   variables:
@@ -69,7 +71,8 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - when: never
+    - if: $CINC_BUILD == "false"
+      when: never
 
 .debian:
   variables:
@@ -84,7 +87,8 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - when: never
+    - if: $CINC_BUILD == "false"
+      when: never
 
 .opensuse:
   variables:
@@ -99,7 +103,8 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - when: never
+    - if: $CINC_BUILD == "false"
+      when: never
 
 .rhel:
   variables:
@@ -114,7 +119,8 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - when: never
+    - if: $CINC_BUILD == "false"
+      when: never
 
 .ubuntu:
   variables:
@@ -129,7 +135,8 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - when: never
+    - if: $CINC_BUILD == "false"
+      when: never
 
 .docker-auditor:
   variables:
@@ -144,7 +151,8 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - when: never
+    - if: $CINC_BUILD == "false"
+      when: never
 
 .vagrant-virtualbox:
   variables:
@@ -159,7 +167,8 @@ before_script:
       when: on_success
     - if: $CINC_BUILD == "all"
       when: on_success
-    - when: never
+    - if: $CINC_BUILD == "false"
+      when: never
 
 .build:
   stage: build
