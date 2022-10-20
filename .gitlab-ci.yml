@@ -11,11 +11,12 @@ stages:
 
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
+  CINC_BUILD: false
 
 workflow:
   rules:
     # Run if we trigger a pipeline from the web
-    - if: $CI_PIPELINE_SOURCE == "web" && $CINC_BUILD != null
+    - if: $CI_PIPELINE_SOURCE == "web" && $CINC_BUILD != false
     # Run if this is a merge request
     - if: $CI_MERGE_REQUEST_ID
     # Run if on master branch
