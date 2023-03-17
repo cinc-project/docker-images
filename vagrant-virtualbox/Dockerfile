@@ -1,4 +1,4 @@
-FROM quay.io/centos/centos:stream8
+FROM almalinux:8
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 RUN yum -y upgrade && \
