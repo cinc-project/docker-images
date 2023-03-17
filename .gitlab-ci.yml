@@ -78,7 +78,7 @@ before_script:
 .vagrant-virtualbox:
   variables:
     CINC_IMAGE: "vagrant-virtualbox"
-    VERSIONS: "20220830"
+    VERSIONS: "20230317"
     ARCHS: "x86_64"
 
 .build:
@@ -141,15 +141,15 @@ before_script:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
-        - omnibus-docker-auditor/*
-    - if: $CINC_BUILD =~ /omnibus-docker-auditor|all/
+        - docker-auditor/*
+    - if: $CINC_BUILD =~ /docker-auditor|all/
 
 .vagrant-virtualbox_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
-        - omnibus-vagrant-virtualbox/*
-    - if: $CINC_BUILD =~ /omnibus-vagrant-virtualbox|all/
+        - vagrant-virtualbox/*
+    - if: $CINC_BUILD =~ /vagrant-virtualbox|all/
 
 build:omnibus-amazonlinux:x86_64:
   extends:
