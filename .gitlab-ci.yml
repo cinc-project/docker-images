@@ -48,8 +48,8 @@ before_script:
 .debian:
   variables:
     CINC_IMAGE: "omnibus-debian"
-    VERSIONS: "9 10 11"
-    ARCHS: "x86_64 aarch64"
+    VERSIONS: "10 11"
+    ARCHS: "x86_64 aarch64 ppc64le"
 
 .opensuse:
   variables:
@@ -67,7 +67,7 @@ before_script:
   variables:
     CINC_IMAGE: "omnibus-ubuntu"
     VERSIONS: "18.04 20.04 22.04"
-    ARCHS: "x86_64 aarch64"
+    ARCHS: "x86_64 aarch64 ppc64le"
 
 .docker-auditor:
   variables:
@@ -239,6 +239,18 @@ build:omnibus-debian:aarch64:
   rules:
     - !reference [.omnibus-debian_rules, rules]
 
+build:omnibus-debian:ppc64le:
+  extends:
+    - .debian
+    - .build
+  image: osuosl/docker-ppc64le:latest
+  services:
+    - osuosl/docker-ppc64le:dind
+  tags:
+    - docker-ppc64le
+  rules:
+    - !reference [.omnibus-debian_rules, rules]
+
 build:omnibus-opensuse:x86_64:
   extends:
     - .opensuse
@@ -280,6 +292,18 @@ build:omnibus-ubuntu:aarch64:
     - .build
   tags:
     - docker-aarch64
+  rules:
+    - !reference [.omnibus-ubuntu_rules, rules]
+
+build:omnibus-ubuntu:ppc64le:
+  extends:
+    - .ubuntu
+    - .build
+  image: osuosl/docker-ppc64le:latest
+  services:
+    - osuosl/docker-ppc64le:dind
+  tags:
+    - docker-ppc64le
   rules:
     - !reference [.omnibus-ubuntu_rules, rules]
 
@@ -434,6 +458,19 @@ test:omnibus-debian:aarch64:
   rules:
     - !reference [.omnibus-debian_rules, rules]
 
+test:omnibus-debian:ppc64le:
+  extends:
+    - .debian
+    - .test
+  services:
+    - osuosl/docker-ppc64le:dind
+  needs:
+    - build:omnibus-debian:ppc64le
+  tags:
+    - docker-ppc64le-p9
+  rules:
+    - !reference [.omnibus-debian_rules, rules]
+
 test:omnibus-opensuse:x86_64:
   extends:
     - .opensuse
@@ -484,6 +521,19 @@ test:omnibus-ubuntu:aarch64:
     - build:omnibus-ubuntu:aarch64
   tags:
     - docker-aarch64
+  rules:
+    - !reference [.omnibus-ubuntu_rules, rules]
+
+test:omnibus-ubuntu:ppc64le:
+  extends:
+    - .ubuntu
+    - .test
+  services:
+    - osuosl/docker-ppc64le:dind
+  needs:
+    - build:omnibus-ubuntu:ppc64le
+  tags:
+    - docker-ppc64le-p9
   rules:
     - !reference [.omnibus-ubuntu_rules, rules]
 
