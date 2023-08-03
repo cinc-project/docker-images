@@ -32,7 +32,6 @@ platforms[omnibus-centos-stream:8:x86_64]=1
 platforms[omnibus-centos-stream:9:aarch64]=1
 platforms[omnibus-centos-stream:9:ppc64le]=1
 platforms[omnibus-centos-stream:9:x86_64]=1
-platforms[omnibus-debian:9:x86_64]=1
 platforms[omnibus-debian:10:aarch64]=1
 platforms[omnibus-debian:10:x86_64]=1
 platforms[omnibus-debian:11:aarch64]=1
