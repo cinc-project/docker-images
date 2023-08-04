@@ -48,7 +48,7 @@ before_script:
 .debian:
   variables:
     CINC_IMAGE: "omnibus-debian"
-    VERSIONS: "9 10 11"
+    VERSIONS: "10 11 12"
     ARCHS: "x86_64 aarch64"
 
 .opensuse:
