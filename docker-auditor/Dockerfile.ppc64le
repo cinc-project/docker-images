@@ -1,7 +1,7 @@
 FROM osuosl/docker-ppc64le:latest
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
-ARG VERSION="4.38.9"
+ARG VERSION="5.22.3"
 ARG GEM_SOURCE=https://packagecloud.io/cinc-project/stable
 
 RUN apk add --update build-base libxml2-dev libffi-dev git openssh-client ruby ruby-dev ruby-etc ruby-webrick && \

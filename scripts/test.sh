@@ -22,7 +22,7 @@ for version in ${VERSIONS} ; do
   supported_platform $CINC_IMAGE $version $arch || continue
   image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
   docker pull ${image}
-  id="$(docker run -it -d --rm ${image})"
+  id="$(docker run -it -d --rm --privileged ${image})"
   cinc-auditor detect -t docker://${id}
   cinc-auditor exec test/integration/${CINC_IMAGE}_spec.rb -t docker://${id}
   docker stop ${id}
