@@ -100,14 +100,14 @@ before_script:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-centos/*
-    - if: $CINC_BUILD =~ /omnibus-centos|all/
+    - if: $CINC_BUILD =~ /^omnibus-centos$|all/
 
 .omnibus-centos-stream_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-centos-stream/*
-    - if: $CINC_BUILD =~ /omnibus-centos-stream|all/
+    - if: $CINC_BUILD =~ /^omnibus-centos-stream$|all/
 
 .omnibus-debian_rules:
   rules:
