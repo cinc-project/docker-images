@@ -189,7 +189,8 @@ build:omnibus-centos:ppc64le:
     - .build
   image: osuosl/docker-ppc64le:latest
   services:
-    - osuosl/docker-ppc64le:dind
+    - name: osuosl/docker-ppc64le:dind
+      alias: docker
   tags:
     - docker-ppc64le
   rules:
@@ -217,7 +218,8 @@ build:omnibus-centos-stream:ppc64le:
     - .build
   image: osuosl/docker-ppc64le:latest
   services:
-    - osuosl/docker-ppc64le:dind
+    - name: osuosl/docker-ppc64le:dind
+      alias: docker
   tags:
     - docker-ppc64le-p9
   rules:
@@ -370,11 +372,14 @@ test:omnibus-centos:aarch64:
     - !reference [.omnibus-centos_rules, rules]
 
 test:omnibus-centos:ppc64le:
+  variables:
+    DOCKER_HOST: tcp://docker:2376
   extends:
     - .centos
     - .test
   services:
-    - osuosl/docker-ppc64le:dind
+    - name: osuosl/docker-ppc64le:dind
+      alias: docker
   needs:
     - build:omnibus-centos:ppc64le
   tags:
@@ -403,11 +408,14 @@ test:omnibus-centos-stream:aarch64:
     - !reference [.omnibus-centos-stream_rules, rules]
 
 test:omnibus-centos-stream:ppc64le:
+  variables:
+    DOCKER_HOST: tcp://docker:2376
   extends:
     - .centos-stream
     - .test
   services:
-    - osuosl/docker-ppc64le:dind
+    - name: osuosl/docker-ppc64le:dind
+      alias: docker
   needs:
     - build:omnibus-centos-stream:ppc64le
   tags:
