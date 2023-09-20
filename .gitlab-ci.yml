@@ -263,7 +263,8 @@ build:omnibus-rhel:s390x:
     - .build
   image: osuosl/docker-s390x
   services:
-    - osuosl/docker-s390x:dind
+    - name: osuosl/docker-s390x:dind
+      alias: docker
   tags:
     - docker-s390x
   rules:
@@ -464,13 +465,16 @@ test:omnibus-opensuse:aarch64:
     - !reference [.omnibus-opensuse_rules, rules]
 
 test:omnibus-rhel:s390x:
+  variables:
+    DOCKER_HOST: tcp://docker:2376
   extends:
     - .rhel
     - .test
   needs:
     - build:omnibus-rhel:s390x
   services:
-    - osuosl/docker-s390x:dind
+    - name: osuosl/docker-s390x:dind
+      alias: docker
   tags:
     - docker-s390x
   rules:
