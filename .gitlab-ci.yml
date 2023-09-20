@@ -73,7 +73,7 @@ before_script:
   variables:
     CINC_IMAGE: "docker-auditor"
     VERSIONS: "5.22.3"
-    ARCHS: "x86_64 aarch64 ppc64le"
+    ARCHS: "x86_64 aarch64 ppc64le s390x"
 
 .vagrant-virtualbox:
   variables:
@@ -315,6 +315,19 @@ build:docker-auditor:ppc64le:
   rules:
     - !reference [.docker-auditor_rules, rules]
 
+build:docker-auditor:s390x:
+  extends:
+    - .docker-auditor
+    - .build
+  image: osuosl/docker-s390x:latest
+  services:
+    - name: osuosl/docker-s390x:dind
+      alias: docker
+  tags:
+    - docker-s390x
+  rules:
+    - !reference [.docker-auditor_rules, rules]
+
 build:vagrant-virtualbox:x86_64:
   extends:
     - .vagrant-virtualbox
@@ -533,6 +546,22 @@ test:docker-auditor:ppc64le:
     - build:docker-auditor:ppc64le
   tags:
     - docker-ppc64le
+  rules:
+    - !reference [.docker-auditor_rules, rules]
+
+test:docker-auditor:s390x:
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+  services:
+    - name: osuosl/docker-s390x:dind
+      alias: docker
+  extends:
+    - .docker-auditor
+    - .test
+  needs:
+    - build:docker-auditor:s390x
+  tags:
+    - docker-s390x
   rules:
     - !reference [.docker-auditor_rules, rules]
 

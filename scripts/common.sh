@@ -19,6 +19,7 @@ declare -A platforms
 
 platforms[docker-auditor:5.22.3:aarch64]=1
 platforms[docker-auditor:5.22.3:ppc64le]=1
+platforms[docker-auditor:5.22.3:s390x]=1
 platforms[docker-auditor:5.22.3:x86_64]=1
 platforms[omnibus-amazonlinux:2:aarch64]=1
 platforms[omnibus-amazonlinux:2:x86_64]=1
