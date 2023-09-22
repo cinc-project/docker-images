@@ -63,6 +63,12 @@ before_script:
     VERSIONS: "7 8"
     ARCHS: "s390x"
 
+.rockylinux:
+  variables:
+    CINC_IMAGE: "omnibus-rockylinux"
+    VERSIONS: "8 9"
+    ARCHS: "x86_64 aarch64"
+
 .ubuntu:
   variables:
     CINC_IMAGE: "omnibus-ubuntu"
@@ -129,6 +135,13 @@ before_script:
       changes:
         - omnibus-rhel/*
     - if: $CINC_BUILD =~ /omnibus-rhel|all/
+
+.omnibus-rockylinux_rules:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-rockylinux/*
+    - if: $CINC_BUILD =~ /omnibus-rockylinux|all/
 
 .omnibus-ubuntu_rules:
   rules:
@@ -269,6 +282,22 @@ build:omnibus-rhel:s390x:
     - docker-s390x
   rules:
     - !reference [.omnibus-rhel_rules, rules]
+
+build:omnibus-rockylinux:x86_64:
+  extends:
+    - .rockylinux
+    - .build
+  rules:
+    - !reference [.omnibus-rockylinux_rules, rules]
+
+build:omnibus-rockylinux:aarch64:
+  extends:
+    - .rockylinux
+    - .build
+  tags:
+    - docker-aarch64
+  rules:
+    - !reference [.omnibus-rockylinux_rules, rules]
 
 build:omnibus-ubuntu:x86_64:
   extends:
@@ -493,6 +522,26 @@ test:omnibus-rhel:s390x:
   rules:
     - !reference [.omnibus-rhel_rules, rules]
 
+test:omnibus-rockylinux:x86_64:
+  extends:
+    - .rockylinux
+    - .test
+  needs:
+    - build:omnibus-rockylinux:x86_64
+  rules:
+    - !reference [.omnibus-rockylinux_rules, rules]
+
+test:omnibus-rockylinux:aarch64:
+  extends:
+    - .rockylinux
+    - .test
+  needs:
+    - build:omnibus-rockylinux:aarch64
+  tags:
+    - docker-aarch64
+  rules:
+    - !reference [.omnibus-rockylinux_rules, rules]
+
 test:omnibus-ubuntu:x86_64:
   extends:
     - .ubuntu
@@ -636,6 +685,14 @@ publish:omnibus-rhel:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-rhel_rules, rules]
 
+publish:omnibus-rockylinux:
+  extends:
+    - .rockylinux
+    - .publish
+  rules:
+    - !reference [.publish_rules, rules]
+    - !reference [.omnibus-rockylinux_rules, rules]
+
 publish:omnibus-ubuntu:
   extends:
     - .ubuntu
@@ -728,6 +785,16 @@ release:omnibus-rhel:
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-rhel_rules, rules]
+
+release:omnibus-rockylinux:
+  extends:
+    - .rockylinux
+    - .release
+  needs:
+    - publish:omnibus-rockylinux
+  rules:
+    - !reference [.publish_rules, rules]
+    - !reference [.omnibus-rockylinux_rules, rules]
 
 release:omnibus-ubuntu:
   extends:
@@ -839,6 +906,18 @@ clean:omnibus-rhel:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-rhel/*
+      when: always
+
+clean:omnibus-rockylinux:
+  extends:
+    - .rockylinux
+    - .clean
+  rules:
+    - if: $CINC_BUILD =~ /omnibus-rockylinux|all/
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-rockylinux/*
       when: always
 
 clean:omnibus-ubuntu:
