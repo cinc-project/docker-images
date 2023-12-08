@@ -6,7 +6,7 @@ RUN mkdir -p /var/cinc/cache /var/cinc/cookbooks
 COPY Berksfile /var/cinc/Berksfile
 
 RUN yum -y upgrade && \
-    yum -y install curl iproute hostname libffi-devel gcc make && \
+    yum -y install curl iproute hostname libffi-devel gcc gcc-c++ make && \
     curl -L https://omnitruck.cinc.sh/install.sh | bash && \
     /opt/cinc/embedded/bin/gem install -N berkshelf && \
     /opt/cinc/embedded/bin/berks vendor -b /var/cinc/Berksfile /var/cinc/cookbooks && \

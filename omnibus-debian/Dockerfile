@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get upgrade --no-install-recommends -y && \
     apt-get -y -m install --no-install-recommends curl ca-certificates iproute2 \
-      libffi-dev libc6-dev gcc make && \
+      libffi-dev libc6-dev gcc g++ make && \
     curl -L https://omnitruck.cinc.sh/install.sh | bash && \
     if [ ! -e /usr/bin/mkdir ] ; then ln -s /bin/mkdir /usr/bin/mkdir; fi && \
     /opt/cinc/embedded/bin/gem install -N berkshelf && \

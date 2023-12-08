@@ -7,7 +7,7 @@ COPY Berksfile /var/cinc/Berksfile
 
 RUN dnf -y upgrade && \
     dnf -y --skip-broken install iproute curl libxcrypt-compat hostname \
-      libffi-devel gcc make && \
+      libffi-devel gcc gcc-c++ make && \
     curl -L https://omnitruck.cinc.sh/install.sh | bash && \
     /opt/cinc/embedded/bin/gem install -N berkshelf && \
     /opt/cinc/embedded/bin/berks vendor -b /var/cinc/Berksfile /var/cinc/cookbooks && \
