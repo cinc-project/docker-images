@@ -27,6 +27,12 @@ before_script:
   - apk add bash
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
+.almalinux:
+  variables:
+    CINC_IMAGE: "omnibus-almalinux"
+    VERSIONS: "8 9"
+    ARCHS: "x86_64 aarch64 ppc64le s390x"
+
 .amazonlinux:
   variables:
     CINC_IMAGE: "omnibus-amazonlinux"
@@ -56,12 +62,6 @@ before_script:
     CINC_IMAGE: "omnibus-opensuse"
     VERSIONS: "15.2"
     ARCHS: "x86_64 aarch64"
-
-.rhel:
-  variables:
-    CINC_IMAGE: "omnibus-rhel"
-    VERSIONS: "7 8"
-    ARCHS: "s390x"
 
 .rockylinux:
   variables:
@@ -94,61 +94,61 @@ before_script:
   script:
     - bash scripts/build.sh
 
+.omnibus-almalinux_rules:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-almalinux/*
+    - if: $CINC_BUILD =~ /omnibus-almalinux|omnibus|all/
+
 .omnibus-amazonlinux_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-amazonlinux/*
-    - if: $CINC_BUILD =~ /omnibus-amazonlinux|all/
+    - if: $CINC_BUILD =~ /omnibus-amazonlinux|omnibus|all/
 
 .omnibus-centos_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-centos/*
-    - if: $CINC_BUILD =~ /^omnibus-centos$|all/
+    - if: $CINC_BUILD =~ /^omnibus-centos$|omnibus|all/
 
 .omnibus-centos-stream_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-centos-stream/*
-    - if: $CINC_BUILD =~ /^omnibus-centos-stream$|all/
+    - if: $CINC_BUILD =~ /^omnibus-centos-stream$|omnibus|all/
 
 .omnibus-debian_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-debian/*
-    - if: $CINC_BUILD =~ /omnibus-debian|all/
+    - if: $CINC_BUILD =~ /omnibus-debian|omnibus|all/
 
 .omnibus-opensuse_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-opensuse/*
-    - if: $CINC_BUILD =~ /omnibus-opensuse|all/
-
-.omnibus-rhel_rules:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-rhel/*
-    - if: $CINC_BUILD =~ /omnibus-rhel|all/
+    - if: $CINC_BUILD =~ /omnibus-opensuse|omnibus|all/
 
 .omnibus-rockylinux_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-rockylinux/*
-    - if: $CINC_BUILD =~ /omnibus-rockylinux|all/
+    - if: $CINC_BUILD =~ /omnibus-rockylinux|omnibus|all/
 
 .omnibus-ubuntu_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-ubuntu/*
-    - if: $CINC_BUILD =~ /omnibus-ubuntu|all/
+    - if: $CINC_BUILD =~ /omnibus-ubuntu|omnibus|all/
 
 .docker-auditor_rules:
   rules:
@@ -163,6 +163,48 @@ before_script:
       changes:
         - vagrant-virtualbox/*
     - if: $CINC_BUILD =~ /vagrant-virtualbox|all/
+
+build:omnibus-almalinux:x86_64:
+  extends:
+    - .almalinux
+    - .build
+  rules:
+    - !reference [.omnibus-almalinux_rules, rules]
+
+build:omnibus-almalinux:aarch64:
+  extends:
+    - .almalinux
+    - .build
+  tags:
+    - docker-aarch64
+  rules:
+    - !reference [.omnibus-almalinux_rules, rules]
+
+build:omnibus-almalinux:ppc64le:
+  extends:
+    - .almalinux
+    - .build
+  image: osuosl/docker-ppc64le:latest
+  services:
+    - name: osuosl/docker-ppc64le:dind
+      alias: docker
+  tags:
+    - docker-ppc64le-p9
+  rules:
+    - !reference [.omnibus-almalinux_rules, rules]
+
+build:omnibus-almalinux:s390x:
+  extends:
+    - .almalinux
+    - .build
+  image: osuosl/docker-s390x
+  services:
+    - name: osuosl/docker-s390x:dind
+      alias: docker
+  tags:
+    - docker-s390x
+  rules:
+    - !reference [.omnibus-almalinux_rules, rules]
 
 build:omnibus-amazonlinux:x86_64:
   extends:
@@ -270,19 +312,6 @@ build:omnibus-opensuse:aarch64:
   rules:
     - !reference [.omnibus-opensuse_rules, rules]
 
-build:omnibus-rhel:s390x:
-  extends:
-    - .rhel
-    - .build
-  image: osuosl/docker-s390x
-  services:
-    - name: osuosl/docker-s390x:dind
-      alias: docker
-  tags:
-    - docker-s390x
-  rules:
-    - !reference [.omnibus-rhel_rules, rules]
-
 build:omnibus-rockylinux:x86_64:
   extends:
     - .rockylinux
@@ -373,6 +402,58 @@ build:vagrant-virtualbox:x86_64:
     - docker-x86_64
   script:
     - bash scripts/test.sh
+
+test:omnibus-almalinux:x86_64:
+  extends:
+    - .almalinux
+    - .test
+  needs:
+    - build:omnibus-almalinux:x86_64
+  rules:
+    - !reference [.omnibus-almalinux_rules, rules]
+
+test:omnibus-almalinux:aarch64:
+  extends:
+    - .almalinux
+    - .test
+  needs:
+    - build:omnibus-almalinux:aarch64
+  tags:
+    - docker-aarch64
+  rules:
+    - !reference [.omnibus-almalinux_rules, rules]
+
+test:omnibus-almalinux:ppc64le:
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+  extends:
+    - .almalinux
+    - .test
+  services:
+    - name: osuosl/docker-ppc64le:dind
+      alias: docker
+  needs:
+    - build:omnibus-almalinux:ppc64le
+  tags:
+    - docker-ppc64le-p9
+  rules:
+    - !reference [.omnibus-almalinux_rules, rules]
+
+test:omnibus-almalinux:s390x:
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+  extends:
+    - .almalinux
+    - .test
+  needs:
+    - build:omnibus-almalinux:s390x
+  services:
+    - name: osuosl/docker-s390x:dind
+      alias: docker
+  tags:
+    - docker-s390x
+  rules:
+    - !reference [.omnibus-almalinux_rules, rules]
 
 test:omnibus-amazonlinux:x86_64:
   extends:
@@ -506,22 +587,6 @@ test:omnibus-opensuse:aarch64:
   rules:
     - !reference [.omnibus-opensuse_rules, rules]
 
-test:omnibus-rhel:s390x:
-  variables:
-    DOCKER_HOST: tcp://docker:2376
-  extends:
-    - .rhel
-    - .test
-  needs:
-    - build:omnibus-rhel:s390x
-  services:
-    - name: osuosl/docker-s390x:dind
-      alias: docker
-  tags:
-    - docker-s390x
-  rules:
-    - !reference [.omnibus-rhel_rules, rules]
-
 test:omnibus-rockylinux:x86_64:
   extends:
     - .rockylinux
@@ -637,6 +702,14 @@ test:vagrant-virtualbox:x86_64:
     - if: $CI_COMMIT_REF_NAME != "master"
       when: never
 
+publish:omnibus-almalinux:
+  extends:
+    - .almalinux
+    - .publish
+  rules:
+    - !reference [.publish_rules, rules]
+    - !reference [.omnibus-almalinux_rules, rules]
+
 publish:omnibus-amazonlinux:
   extends:
     - .amazonlinux
@@ -676,14 +749,6 @@ publish:omnibus-opensuse:
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-opensuse_rules, rules]
-
-publish:omnibus-rhel:
-  extends:
-    - .rhel
-    - .publish
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-rhel_rules, rules]
 
 publish:omnibus-rockylinux:
   extends:
@@ -725,6 +790,16 @@ publish:vagrant-virtualbox:
     - apk add bc bash
   script:
     - bash scripts/release.sh
+
+release:omnibus-almalinux:
+  extends:
+    - .almalinux
+    - .release
+  needs:
+    - publish:omnibus-almalinux
+  rules:
+    - !reference [.publish_rules, rules]
+    - !reference [.omnibus-almalinux_rules, rules]
 
 release:omnibus-amazonlinux:
   extends:
@@ -776,16 +851,6 @@ release:omnibus-opensuse:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-opensuse_rules, rules]
 
-release:omnibus-rhel:
-  extends:
-    - .rhel
-    - .release
-  needs:
-    - publish:omnibus-rhel
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-rhel_rules, rules]
-
 release:omnibus-rockylinux:
   extends:
     - .rockylinux
@@ -836,12 +901,24 @@ release:vagrant-virtualbox:
   script:
     - bash scripts/clean.sh
 
+clean:omnibus-almalinux:
+  extends:
+    - .almalinux
+    - .clean
+  rules:
+    - if: $CINC_BUILD =~ /omnibus-almalinux|omnibus|all/
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-almalinux/*
+      when: always
+
 clean:omnibus-amazonlinux:
   extends:
     - .amazonlinux
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-amazonlinux|all/
+    - if: $CINC_BUILD =~ /omnibus-amazonlinux|omnibus|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -853,7 +930,7 @@ clean:omnibus-centos:
     - .centos
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-centos|all/
+    - if: $CINC_BUILD =~ /omnibus-centos|omnibus|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -865,7 +942,7 @@ clean:omnibus-centos-stream:
     - .centos-stream
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-centos-stream|all/
+    - if: $CINC_BUILD =~ /omnibus-centos-stream|omnibus|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -877,7 +954,7 @@ clean:omnibus-debian:
     - .debian
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-debian|all/
+    - if: $CINC_BUILD =~ /omnibus-debian|omnibus|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -889,23 +966,11 @@ clean:omnibus-opensuse:
     - .opensuse
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-opensuse|all/
+    - if: $CINC_BUILD =~ /omnibus-opensuse|omnibus|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-opensuse/*
-      when: always
-
-clean:omnibus-rhel:
-  extends:
-    - .rhel
-    - .clean
-  rules:
-    - if: $CINC_BUILD =~ /omnibus-rhel|all/
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-rhel/*
       when: always
 
 clean:omnibus-rockylinux:
@@ -913,7 +978,7 @@ clean:omnibus-rockylinux:
     - .rockylinux
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-rockylinux|all/
+    - if: $CINC_BUILD =~ /omnibus-rockylinux|omnibus|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -925,7 +990,7 @@ clean:omnibus-ubuntu:
     - .ubuntu
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-ubuntu|all/
+    - if: $CINC_BUILD =~ /omnibus-ubuntu|omnibus|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
