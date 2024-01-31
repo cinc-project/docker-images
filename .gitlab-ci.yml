@@ -36,7 +36,7 @@ before_script:
 .amazonlinux:
   variables:
     CINC_IMAGE: "omnibus-amazonlinux"
-    VERSIONS: "2 2022"
+    VERSIONS: "2 2022 2023"
     ARCHS: "x86_64 aarch64"
 
 .centos:
