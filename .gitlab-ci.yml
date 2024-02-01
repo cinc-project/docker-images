@@ -906,7 +906,7 @@ clean:omnibus-almalinux:
     - .almalinux
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-almalinux|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-almalinux|^omnibus$|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -918,7 +918,7 @@ clean:omnibus-amazonlinux:
     - .amazonlinux
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-amazonlinux|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-amazonlinux|^omnibus$|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -930,7 +930,7 @@ clean:omnibus-centos:
     - .centos
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-centos|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-centos|^omnibus$|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -942,7 +942,7 @@ clean:omnibus-centos-stream:
     - .centos-stream
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-centos-stream|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-centos-stream|^omnibus$|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -954,7 +954,7 @@ clean:omnibus-debian:
     - .debian
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-debian|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-debian|^omnibus$|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -966,7 +966,7 @@ clean:omnibus-opensuse:
     - .opensuse
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-opensuse|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-opensuse|^omnibus$|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -978,7 +978,7 @@ clean:omnibus-rockylinux:
     - .rockylinux
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-rockylinux|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-rockylinux|^omnibus$|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -990,7 +990,7 @@ clean:omnibus-ubuntu:
     - .ubuntu
     - .clean
   rules:
-    - if: $CINC_BUILD =~ /omnibus-ubuntu|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-ubuntu|^omnibus$|all/
       when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
