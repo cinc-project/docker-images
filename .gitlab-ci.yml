@@ -99,56 +99,56 @@ before_script:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-almalinux/*
-    - if: $CINC_BUILD =~ /omnibus-almalinux|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-almalinux|^omnibus$|all/
 
 .omnibus-amazonlinux_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-amazonlinux/*
-    - if: $CINC_BUILD =~ /omnibus-amazonlinux|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-amazonlinux|^omnibus$|all/
 
 .omnibus-centos_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-centos/*
-    - if: $CINC_BUILD =~ /^omnibus-centos$|omnibus|all/
+    - if: $CINC_BUILD =~ /^omnibus-centos$|^omnibus$|all/
 
 .omnibus-centos-stream_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-centos-stream/*
-    - if: $CINC_BUILD =~ /^omnibus-centos-stream$|omnibus|all/
+    - if: $CINC_BUILD =~ /^omnibus-centos-stream$|^omnibus$|all/
 
 .omnibus-debian_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-debian/*
-    - if: $CINC_BUILD =~ /omnibus-debian|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-debian|^omnibus$|all/
 
 .omnibus-opensuse_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-opensuse/*
-    - if: $CINC_BUILD =~ /omnibus-opensuse|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-opensuse|^omnibus$|all/
 
 .omnibus-rockylinux_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-rockylinux/*
-    - if: $CINC_BUILD =~ /omnibus-rockylinux|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-rockylinux|^omnibus$|all/
 
 .omnibus-ubuntu_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-ubuntu/*
-    - if: $CINC_BUILD =~ /omnibus-ubuntu|omnibus|all/
+    - if: $CINC_BUILD =~ /omnibus-ubuntu|^omnibus$|all/
 
 .docker-auditor_rules:
   rules:
