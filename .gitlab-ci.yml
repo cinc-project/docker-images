@@ -218,7 +218,7 @@ build:omnibus-amazonlinux:aarch64:
     - .amazonlinux
     - .build
   tags:
-    - docker-aarch64
+    - docker-aarch64-v8.2-a
   rules:
     - !reference [.omnibus-amazonlinux_rules, rules]
 
@@ -471,7 +471,7 @@ test:omnibus-amazonlinux:aarch64:
   needs:
     - build:omnibus-amazonlinux:aarch64
   tags:
-    - docker-aarch64
+    - docker-aarch64-v8.2-a
   rules:
     - !reference [.omnibus-amazonlinux_rules, rules]
 
