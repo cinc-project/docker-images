@@ -61,6 +61,8 @@ platforms[omnibus-ubuntu:20.04:aarch64]=1
 platforms[omnibus-ubuntu:20.04:x86_64]=1
 platforms[omnibus-ubuntu:22.04:aarch64]=1
 platforms[omnibus-ubuntu:22.04:x86_64]=1
+platforms[omnibus-ubuntu:24.04:aarch64]=1
+platforms[omnibus-ubuntu:24.04:x86_64]=1
 platforms[vagrant-virtualbox:20230317:x86_64]=1
 
 supported_platform() {
