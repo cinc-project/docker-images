@@ -39,22 +39,16 @@ before_script:
     VERSIONS: "2 2022 2023"
     ARCHS: "x86_64 aarch64"
 
-.centos:
-  variables:
-    CINC_IMAGE: "omnibus-centos"
-    VERSIONS: "7"
-    ARCHS: "x86_64 aarch64 ppc64le"
-
 .centos-stream:
   variables:
     CINC_IMAGE: "omnibus-centos-stream"
-    VERSIONS: "8 9"
+    VERSIONS: "9"
     ARCHS: "x86_64 aarch64 ppc64le"
 
 .debian:
   variables:
     CINC_IMAGE: "omnibus-debian"
-    VERSIONS: "10 11 12"
+    VERSIONS: "11 12"
     ARCHS: "x86_64 aarch64"
 
 .opensuse:
@@ -72,7 +66,7 @@ before_script:
 .ubuntu:
   variables:
     CINC_IMAGE: "omnibus-ubuntu"
-    VERSIONS: "18.04 20.04 22.04 24.04"
+    VERSIONS: "20.04 22.04 24.04"
     ARCHS: "x86_64 aarch64"
 
 .docker-auditor:
@@ -107,13 +101,6 @@ before_script:
       changes:
         - omnibus-amazonlinux/*
     - if: $CINC_BUILD =~ /omnibus-amazonlinux|^omnibus$|all/
-
-.omnibus-centos_rules:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-centos/*
-    - if: $CINC_BUILD =~ /^omnibus-centos$|^omnibus$|all/
 
 .omnibus-centos-stream_rules:
   rules:
@@ -221,35 +208,6 @@ build:omnibus-amazonlinux:aarch64:
     - docker-aarch64-v8.2-a
   rules:
     - !reference [.omnibus-amazonlinux_rules, rules]
-
-build:omnibus-centos:x86_64:
-  extends:
-    - .centos
-    - .build
-  rules:
-    - !reference [.omnibus-centos_rules, rules]
-
-build:omnibus-centos:aarch64:
-  extends:
-    - .centos
-    - .build
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-centos_rules, rules]
-
-build:omnibus-centos:ppc64le:
-  extends:
-    - .centos
-    - .build
-  image: osuosl/docker-ppc64le:latest
-  services:
-    - name: osuosl/docker-ppc64le:dind
-      alias: docker
-  tags:
-    - docker-ppc64le
-  rules:
-    - !reference [.omnibus-centos_rules, rules]
 
 build:omnibus-centos-stream:x86_64:
   extends:
@@ -475,42 +433,6 @@ test:omnibus-amazonlinux:aarch64:
   rules:
     - !reference [.omnibus-amazonlinux_rules, rules]
 
-test:omnibus-centos:x86_64:
-  extends:
-    - .centos
-    - .test
-  needs:
-    - build:omnibus-centos:x86_64
-  rules:
-    - !reference [.omnibus-centos_rules, rules]
-
-test:omnibus-centos:aarch64:
-  extends:
-    - .centos
-    - .test
-  needs:
-    - build:omnibus-centos:aarch64
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-centos_rules, rules]
-
-test:omnibus-centos:ppc64le:
-  variables:
-    DOCKER_HOST: tcp://docker:2376
-  extends:
-    - .centos
-    - .test
-  services:
-    - name: osuosl/docker-ppc64le:dind
-      alias: docker
-  needs:
-    - build:omnibus-centos:ppc64le
-  tags:
-    - docker-ppc64le
-  rules:
-    - !reference [.omnibus-centos_rules, rules]
-
 test:omnibus-centos-stream:x86_64:
   extends:
     - .centos-stream
@@ -718,14 +640,6 @@ publish:omnibus-amazonlinux:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-amazonlinux_rules, rules]
 
-publish:omnibus-centos:
-  extends:
-    - .centos
-    - .publish
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-centos_rules, rules]
-
 publish:omnibus-centos-stream:
   extends:
     - .centos-stream
@@ -810,16 +724,6 @@ release:omnibus-amazonlinux:
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-amazonlinux_rules, rules]
-
-release:omnibus-centos:
-  extends:
-    - .centos
-    - .release
-  needs:
-    - publish:omnibus-centos
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-centos_rules, rules]
 
 release:omnibus-centos-stream:
   extends:
@@ -923,18 +827,6 @@ clean:omnibus-amazonlinux:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - omnibus-amazonlinux/*
-      when: always
-
-clean:omnibus-centos:
-  extends:
-    - .centos
-    - .clean
-  rules:
-    - if: $CINC_BUILD =~ /omnibus-centos|^omnibus$|all/
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-centos/*
       when: always
 
 clean:omnibus-centos-stream:
