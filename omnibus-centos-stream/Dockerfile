@@ -1,4 +1,4 @@
-ARG VERSION="8"
+ARG VERSION="9"
 FROM quay.io/centos/centos:stream${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
