@@ -30,7 +30,7 @@ before_script:
 .almalinux:
   variables:
     CINC_IMAGE: "omnibus-almalinux"
-    VERSIONS: "8 9"
+    VERSIONS: "8 9 10-kitten"
     ARCHS: "x86_64 aarch64 ppc64le s390x"
 
 .amazonlinux:
@@ -155,6 +155,8 @@ build:omnibus-almalinux:x86_64:
   extends:
     - .almalinux
     - .build
+  tags:
+    - docker-x86_64-v3
   rules:
     - !reference [.omnibus-almalinux_rules, rules]
 
@@ -365,6 +367,8 @@ test:omnibus-almalinux:x86_64:
   extends:
     - .almalinux
     - .test
+  tags:
+    - docker-x86_64-v3
   needs:
     - build:omnibus-almalinux:x86_64
   rules:
