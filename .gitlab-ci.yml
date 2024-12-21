@@ -5,14 +5,14 @@ services:
 
 stages:
   - build
-  - test
   - publish
-  - release
-  - clean
 
 variables:
-  DOCKER_TLS_CERTDIR: "/certs"
   CINC_BUILD: "false"
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_VERIFY: 1
+  DOCKER_CERT_PATH: "/certs/client"
 
 workflow:
   rules:
@@ -20,73 +20,11 @@ workflow:
     - if: $CI_PIPELINE_SOURCE == "web" && $CINC_BUILD != "false"
     # Run if this is a merge request
     - if: $CI_MERGE_REQUEST_ID
-    # Run if on master branch
-    - if: $CI_COMMIT_REF_NAME == "master"
 
 before_script:
-  - apk add bash
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-
-.almalinux:
-  variables:
-    CINC_IMAGE: "omnibus-almalinux"
-    VERSIONS: "8 9 10-kitten"
-    ARCHS: "x86_64 aarch64 ppc64le s390x"
-
-.amazonlinux:
-  variables:
-    CINC_IMAGE: "omnibus-amazonlinux"
-    VERSIONS: "2023"
-    ARCHS: "x86_64 aarch64"
-
-.centos-stream:
-  variables:
-    CINC_IMAGE: "omnibus-centos-stream"
-    VERSIONS: "9"
-    ARCHS: "x86_64 aarch64 ppc64le"
-
-.debian:
-  variables:
-    CINC_IMAGE: "omnibus-debian"
-    VERSIONS: "11 12"
-    ARCHS: "x86_64 aarch64"
-
-.opensuse:
-  variables:
-    CINC_IMAGE: "omnibus-opensuse"
-    VERSIONS: "15.2"
-    ARCHS: "x86_64 aarch64"
-
-.rockylinux:
-  variables:
-    CINC_IMAGE: "omnibus-rockylinux"
-    VERSIONS: "8 9"
-    ARCHS: "x86_64 aarch64"
-
-.ubuntu:
-  variables:
-    CINC_IMAGE: "omnibus-ubuntu"
-    VERSIONS: "20.04 22.04 24.04"
-    ARCHS: "x86_64 aarch64"
-
-.docker-auditor:
-  variables:
-    CINC_IMAGE: "docker-auditor"
-    VERSIONS: "5.22.3"
-    ARCHS: "x86_64 aarch64 ppc64le s390x"
-
-.vagrant-virtualbox:
-  variables:
-    CINC_IMAGE: "vagrant-virtualbox"
-    VERSIONS: "20230317"
-    ARCHS: "x86_64"
-
-.build:
-  stage: build
-  tags:
-    - docker-x86_64
-  script:
-    - bash scripts/build.sh
+  - docker context create docker-images
+  - docker context use docker-images
+  - docker buildx create --use docker-images
 
 .omnibus-almalinux_rules:
   rules:
@@ -101,13 +39,6 @@ before_script:
       changes:
         - omnibus-amazonlinux/*
     - if: $CINC_BUILD =~ /omnibus-amazonlinux|^omnibus$|all/
-
-.omnibus-centos-stream_rules:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-centos-stream/*
-    - if: $CINC_BUILD =~ /^omnibus-centos-stream$|^omnibus$|all/
 
 .omnibus-debian_rules:
   rules:
@@ -151,477 +82,91 @@ before_script:
         - vagrant-virtualbox/*
     - if: $CINC_BUILD =~ /vagrant-virtualbox|all/
 
-build:omnibus-almalinux:x86_64:
-  extends:
-    - .almalinux
-    - .build
-  tags:
-    - docker-x86_64-v3
-  rules:
-    - !reference [.omnibus-almalinux_rules, rules]
-
-build:omnibus-almalinux:aarch64:
-  extends:
-    - .almalinux
-    - .build
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-almalinux_rules, rules]
-
-build:omnibus-almalinux:ppc64le:
-  extends:
-    - .almalinux
-    - .build
-  image: osuosl/docker-ppc64le:latest
-  services:
-    - name: osuosl/docker-ppc64le:dind
-      alias: docker
-  tags:
-    - docker-ppc64le-p9
-  rules:
-    - !reference [.omnibus-almalinux_rules, rules]
-
-build:omnibus-almalinux:s390x:
-  extends:
-    - .almalinux
-    - .build
-  image: osuosl/docker-s390x
-  services:
-    - name: osuosl/docker-s390x:dind
-      alias: docker
-  tags:
-    - docker-s390x
-  rules:
-    - !reference [.omnibus-almalinux_rules, rules]
-
-build:omnibus-amazonlinux:x86_64:
-  extends:
-    - .amazonlinux
-    - .build
-  rules:
-    - !reference [.omnibus-amazonlinux_rules, rules]
-
-build:omnibus-amazonlinux:aarch64:
-  extends:
-    - .amazonlinux
-    - .build
-  tags:
-    - docker-aarch64-v8.2-a
-  rules:
-    - !reference [.omnibus-amazonlinux_rules, rules]
-
-build:omnibus-centos-stream:x86_64:
-  extends:
-    - .centos-stream
-    - .build
-  rules:
-    - !reference [.omnibus-centos-stream_rules, rules]
-
-build:omnibus-centos-stream:aarch64:
-  extends:
-    - .centos-stream
-    - .build
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-centos-stream_rules, rules]
-
-build:omnibus-centos-stream:ppc64le:
-  extends:
-    - .centos-stream
-    - .build
-  image: osuosl/docker-ppc64le:latest
-  services:
-    - name: osuosl/docker-ppc64le:dind
-      alias: docker
-  tags:
-    - docker-ppc64le-p9
-  rules:
-    - !reference [.omnibus-centos-stream_rules, rules]
-
-build:omnibus-debian:x86_64:
-  extends:
-    - .debian
-    - .build
-  rules:
-    - !reference [.omnibus-debian_rules, rules]
-
-build:omnibus-debian:aarch64:
-  extends:
-    - .debian
-    - .build
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-debian_rules, rules]
-
-build:omnibus-opensuse:x86_64:
-  extends:
-    - .opensuse
-    - .build
-  rules:
-    - !reference [.omnibus-opensuse_rules, rules]
-
-build:omnibus-opensuse:aarch64:
-  extends:
-    - .opensuse
-    - .build
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-opensuse_rules, rules]
-
-build:omnibus-rockylinux:x86_64:
-  extends:
-    - .rockylinux
-    - .build
-  rules:
-    - !reference [.omnibus-rockylinux_rules, rules]
-
-build:omnibus-rockylinux:aarch64:
-  extends:
-    - .rockylinux
-    - .build
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-rockylinux_rules, rules]
-
-build:omnibus-ubuntu:x86_64:
-  extends:
-    - .ubuntu
-    - .build
-  rules:
-    - !reference [.omnibus-ubuntu_rules, rules]
-
-build:omnibus-ubuntu:aarch64:
-  extends:
-    - .ubuntu
-    - .build
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-ubuntu_rules, rules]
-
-build:docker-auditor:x86_64:
-  extends:
-    - .docker-auditor
-    - .build
-  rules:
-    - !reference [.docker-auditor_rules, rules]
-
-build:docker-auditor:aarch64:
-  extends:
-    - .docker-auditor
-    - .build
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.docker-auditor_rules, rules]
-
-build:docker-auditor:ppc64le:
-  extends:
-    - .docker-auditor
-    - .build
-  image: osuosl/docker-ppc64le:latest
-  services:
-    - name: osuosl/docker-ppc64le:dind
-      alias: docker
-  tags:
-    - docker-ppc64le
-  rules:
-    - !reference [.docker-auditor_rules, rules]
-
-build:docker-auditor:s390x:
-  extends:
-    - .docker-auditor
-    - .build
-  image: osuosl/docker-s390x:latest
-  services:
-    - name: osuosl/docker-s390x:dind
-      alias: docker
-  tags:
-    - docker-s390x
-  rules:
-    - !reference [.docker-auditor_rules, rules]
-
-build:vagrant-virtualbox:x86_64:
-  extends:
-    - .vagrant-virtualbox
-    - .build
-  tags:
-    - docker-virtualbox
-  rules:
-    - !reference [.vagrant-virtualbox_rules, rules]
-
-.test:
-  stage: test
-  image: cincproject/docker-auditor
+.build:
+  stage: build
   tags:
     - docker-x86_64
-  script:
-    - bash scripts/test.sh
 
-test:omnibus-almalinux:x86_64:
+build:omnibus-almalinux:
   extends:
-    - .almalinux
-    - .test
+    - .build
   tags:
     - docker-x86_64-v3
-  needs:
-    - build:omnibus-almalinux:x86_64
   rules:
     - !reference [.omnibus-almalinux_rules, rules]
+  script:
+    - cd omnibus-almalinux
+    - docker buildx bake --set="*.output=type=cacheonly"
 
-test:omnibus-almalinux:aarch64:
+build:omnibus-amazonlinux:
   extends:
-    - .almalinux
-    - .test
-  needs:
-    - build:omnibus-almalinux:aarch64
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-almalinux_rules, rules]
-
-test:omnibus-almalinux:ppc64le:
-  variables:
-    DOCKER_HOST: tcp://docker:2376
-  extends:
-    - .almalinux
-    - .test
-  services:
-    - name: osuosl/docker-ppc64le:dind
-      alias: docker
-  needs:
-    - build:omnibus-almalinux:ppc64le
-  tags:
-    - docker-ppc64le-p9
-  rules:
-    - !reference [.omnibus-almalinux_rules, rules]
-
-test:omnibus-almalinux:s390x:
-  variables:
-    DOCKER_HOST: tcp://docker:2376
-  extends:
-    - .almalinux
-    - .test
-  needs:
-    - build:omnibus-almalinux:s390x
-  services:
-    - name: osuosl/docker-s390x:dind
-      alias: docker
-  tags:
-    - docker-s390x
-  rules:
-    - !reference [.omnibus-almalinux_rules, rules]
-
-test:omnibus-amazonlinux:x86_64:
-  extends:
-    - .amazonlinux
-    - .test
-  needs:
-    - build:omnibus-amazonlinux:x86_64
+    - .build
   rules:
     - !reference [.omnibus-amazonlinux_rules, rules]
+  script:
+    - cd omnibus-amazonlinux
+    - docker buildx bake --set="*.output=type=cacheonly"
 
-test:omnibus-amazonlinux:aarch64:
+build:omnibus-debian:
   extends:
-    - .amazonlinux
-    - .test
-  needs:
-    - build:omnibus-amazonlinux:aarch64
-  tags:
-    - docker-aarch64-v8.2-a
-  rules:
-    - !reference [.omnibus-amazonlinux_rules, rules]
-
-test:omnibus-centos-stream:x86_64:
-  extends:
-    - .centos-stream
-    - .test
-  needs:
-    - build:omnibus-centos-stream:x86_64
-  rules:
-    - !reference [.omnibus-centos-stream_rules, rules]
-
-test:omnibus-centos-stream:aarch64:
-  extends:
-    - .centos-stream
-    - .test
-  needs:
-    - build:omnibus-centos-stream:aarch64
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-centos-stream_rules, rules]
-
-test:omnibus-centos-stream:ppc64le:
-  variables:
-    DOCKER_HOST: tcp://docker:2376
-  extends:
-    - .centos-stream
-    - .test
-  services:
-    - name: osuosl/docker-ppc64le:dind
-      alias: docker
-  needs:
-    - build:omnibus-centos-stream:ppc64le
-  tags:
-    - docker-ppc64le-p9
-  rules:
-    - !reference [.omnibus-centos-stream_rules, rules]
-
-test:omnibus-debian:x86_64:
-  extends:
-    - .debian
-    - .test
-  needs:
-    - build:omnibus-debian:x86_64
+    - .build
   rules:
     - !reference [.omnibus-debian_rules, rules]
+  script:
+    - cd omnibus-debian
+    - docker buildx bake --set="*.output=type=cacheonly"
 
-test:omnibus-debian:aarch64:
+build:omnibus-opensuse:
   extends:
-    - .debian
-    - .test
-  needs:
-    - build:omnibus-debian:aarch64
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-debian_rules, rules]
-
-test:omnibus-opensuse:x86_64:
-  extends:
-    - .opensuse
-    - .test
-  needs:
-    - build:omnibus-opensuse:x86_64
+    - .build
   rules:
     - !reference [.omnibus-opensuse_rules, rules]
+  script:
+    - cd omnibus-opensuse
+    - docker buildx bake --set="*.output=type=cacheonly"
 
-test:omnibus-opensuse:aarch64:
+build:omnibus-rockylinux:
   extends:
-    - .opensuse
-    - .test
-  needs:
-    - build:omnibus-opensuse:aarch64
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-opensuse_rules, rules]
-
-test:omnibus-rockylinux:x86_64:
-  extends:
-    - .rockylinux
-    - .test
-  needs:
-    - build:omnibus-rockylinux:x86_64
+    - .build
   rules:
     - !reference [.omnibus-rockylinux_rules, rules]
+  script:
+    - cd omnibus-rockylinux
+    - docker buildx bake --set="*.output=type=cacheonly"
 
-test:omnibus-rockylinux:aarch64:
+build:omnibus-ubuntu:
   extends:
-    - .rockylinux
-    - .test
-  needs:
-    - build:omnibus-rockylinux:aarch64
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-rockylinux_rules, rules]
-
-test:omnibus-ubuntu:x86_64:
-  extends:
-    - .ubuntu
-    - .test
-  needs:
-    - build:omnibus-ubuntu:x86_64
+    - .build
   rules:
     - !reference [.omnibus-ubuntu_rules, rules]
+  script:
+    - cd omnibus-ubuntu
+    - docker buildx bake --set="*.output=type=cacheonly"
 
-test:omnibus-ubuntu:aarch64:
+build:docker-auditor:
   extends:
-    - .ubuntu
-    - .test
-  needs:
-    - build:omnibus-ubuntu:aarch64
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.omnibus-ubuntu_rules, rules]
-
-test:docker-auditor:x86_64:
-  extends:
-    - .docker-auditor
-    - .test
-  needs:
-    - build:docker-auditor:x86_64
+    - .build
   rules:
     - !reference [.docker-auditor_rules, rules]
+  script:
+    - cd docker-auditor
+    - docker buildx bake --set="*.output=type=cacheonly"
 
-test:docker-auditor:aarch64:
+build:vagrant-virtualbox:
   extends:
-    - .docker-auditor
-    - .test
-  needs:
-    - build:docker-auditor:aarch64
-  tags:
-    - docker-aarch64
-  rules:
-    - !reference [.docker-auditor_rules, rules]
-
-test:docker-auditor:ppc64le:
-  variables:
-    DOCKER_HOST: tcp://docker:2376
-  services:
-    - name: osuosl/docker-ppc64le:dind
-      alias: docker
-  extends:
-    - .docker-auditor
-    - .test
-  needs:
-    - build:docker-auditor:ppc64le
-  tags:
-    - docker-ppc64le
-  rules:
-    - !reference [.docker-auditor_rules, rules]
-
-test:docker-auditor:s390x:
-  variables:
-    DOCKER_HOST: tcp://docker:2376
-  services:
-    - name: osuosl/docker-s390x:dind
-      alias: docker
-  extends:
-    - .docker-auditor
-    - .test
-  needs:
-    - build:docker-auditor:s390x
-  tags:
-    - docker-s390x
-  rules:
-    - !reference [.docker-auditor_rules, rules]
-
-test:vagrant-virtualbox:x86_64:
-  extends:
-    - .vagrant-virtualbox
-    - .test
-  needs:
-    - build:vagrant-virtualbox:x86_64
+    - .build
   tags:
     - docker-virtualbox
   rules:
     - !reference [.vagrant-virtualbox_rules, rules]
+  script:
+    - cd vagrant-virtualbox
+    - docker buildx bake --set="*.output=type=cacheonly"
 
 .publish:
   stage: publish
   tags:
     - docker-x86_64
-  script:
-    - bash scripts/publish.sh
 
 .publish_rules:
   rules:
@@ -630,289 +175,90 @@ test:vagrant-virtualbox:x86_64:
 
 publish:omnibus-almalinux:
   extends:
-    - .almalinux
     - .publish
+  tags:
+    - docker-x86_64-v3
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-almalinux_rules, rules]
+  script:
+    - ./scripts/docker-login.sh
+    - cd omnibus-almalinux
+    - docker buildx bake --push
 
 publish:omnibus-amazonlinux:
   extends:
-    - .amazonlinux
     - .publish
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-amazonlinux_rules, rules]
-
-publish:omnibus-centos-stream:
-  extends:
-    - .centos-stream
-    - .publish
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-centos-stream_rules, rules]
+  script:
+    - ./scripts/docker-login.sh
+    - cd omnibus-amazonlinux
+    - docker buildx bake --push
 
 publish:omnibus-debian:
   extends:
-    - .debian
     - .publish
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-debian_rules, rules]
+  script:
+    - ./scripts/docker-login.sh
+    - cd omnibus-debian
+    - docker buildx bake --push
 
 publish:omnibus-opensuse:
   extends:
-    - .opensuse
     - .publish
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-opensuse_rules, rules]
+  script:
+    - ./scripts/docker-login.sh
+    - cd omnibus-opensuse
+    - docker buildx bake --push
 
 publish:omnibus-rockylinux:
   extends:
-    - .rockylinux
     - .publish
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-rockylinux_rules, rules]
+  script:
+    - ./scripts/docker-login.sh
+    - cd omnibus-rockylinux
+    - docker buildx bake --push
 
 publish:omnibus-ubuntu:
   extends:
-    - .ubuntu
     - .publish
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-ubuntu_rules, rules]
+  script:
+    - ./scripts/docker-login.sh
+    - cd omnibus-ubuntu
+    - docker buildx bake --push
 
 publish:docker-auditor:
   extends:
-    - .docker-auditor
     - .publish
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.docker-auditor_rules, rules]
+  script:
+    - ./scripts/docker-login.sh
+    - cd docker-auditor
+    - docker buildx bake --push
 
 publish:vagrant-virtualbox:
   extends:
-    - .vagrant-virtualbox
     - .publish
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.vagrant-virtualbox_rules, rules]
-
-.release:
-  stage: release
-  tags:
-    - docker-x86_64
-  before_script:
-    - apk add bc bash
   script:
-    - bash scripts/release.sh
-
-release:omnibus-almalinux:
-  extends:
-    - .almalinux
-    - .release
-  needs:
-    - publish:omnibus-almalinux
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-almalinux_rules, rules]
-
-release:omnibus-amazonlinux:
-  extends:
-    - .amazonlinux
-    - .release
-  needs:
-    - publish:omnibus-amazonlinux
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-amazonlinux_rules, rules]
-
-release:omnibus-centos-stream:
-  extends:
-    - .centos-stream
-    - .release
-  needs:
-    - publish:omnibus-centos-stream
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-centos-stream_rules, rules]
-
-release:omnibus-debian:
-  extends:
-    - .debian
-    - .release
-  needs:
-    - publish:omnibus-debian
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-debian_rules, rules]
-
-release:omnibus-opensuse:
-  extends:
-    - .opensuse
-    - .release
-  needs:
-    - publish:omnibus-opensuse
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-opensuse_rules, rules]
-
-release:omnibus-rockylinux:
-  extends:
-    - .rockylinux
-    - .release
-  needs:
-    - publish:omnibus-rockylinux
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-rockylinux_rules, rules]
-
-release:omnibus-ubuntu:
-  extends:
-    - .ubuntu
-    - .release
-  needs:
-    - publish:omnibus-ubuntu
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-ubuntu_rules, rules]
-
-release:docker-auditor:
-  extends:
-    - .docker-auditor
-    - .release
-  needs:
-    - publish:docker-auditor
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.docker-auditor_rules, rules]
-
-release:vagrant-virtualbox:
-  extends:
-    - .vagrant-virtualbox
-    - .release
-  needs:
-    - publish:vagrant-virtualbox
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.vagrant-virtualbox_rules, rules]
-
-.clean:
-  stage: clean
-  dependencies: []
-  tags:
-    - docker-x86_64
-  before_script:
-    - apk add bash curl jq
-  script:
-    - bash scripts/clean.sh
-
-clean:omnibus-almalinux:
-  extends:
-    - .almalinux
-    - .clean
-  rules:
-    - if: $CINC_BUILD =~ /omnibus-almalinux|^omnibus$|all/
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-almalinux/*
-      when: always
-
-clean:omnibus-amazonlinux:
-  extends:
-    - .amazonlinux
-    - .clean
-  rules:
-    - if: $CINC_BUILD =~ /omnibus-amazonlinux|^omnibus$|all/
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-amazonlinux/*
-      when: always
-
-clean:omnibus-centos-stream:
-  extends:
-    - .centos-stream
-    - .clean
-  rules:
-    - if: $CINC_BUILD =~ /omnibus-centos-stream|^omnibus$|all/
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-centos-stream/*
-      when: always
-
-clean:omnibus-debian:
-  extends:
-    - .debian
-    - .clean
-  rules:
-    - if: $CINC_BUILD =~ /omnibus-debian|^omnibus$|all/
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-debian/*
-      when: always
-
-clean:omnibus-opensuse:
-  extends:
-    - .opensuse
-    - .clean
-  rules:
-    - if: $CINC_BUILD =~ /omnibus-opensuse|^omnibus$|all/
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-opensuse/*
-      when: always
-
-clean:omnibus-rockylinux:
-  extends:
-    - .rockylinux
-    - .clean
-  rules:
-    - if: $CINC_BUILD =~ /omnibus-rockylinux|^omnibus$|all/
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-rockylinux/*
-      when: always
-
-clean:omnibus-ubuntu:
-  extends:
-    - .ubuntu
-    - .clean
-  rules:
-    - if: $CINC_BUILD =~ /omnibus-ubuntu|^omnibus$|all/
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-ubuntu/*
-      when: always
-
-clean:docker-auditor:
-  extends:
-    - .docker-auditor
-    - .clean
-  rules:
-    - if: $CINC_BUILD =~ /docker-auditor|all/
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - docker-auditor/*
-      when: always
-
-clean:vagrant-virtualbox:
-  extends:
-    - .vagrant-virtualbox
-    - .clean
-  rules:
-    - if: $CINC_BUILD =~ /vagrant-virtualbox|all/
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - vagrant-virtualbox/*
-      when: always
+    - ./scripts/docker-login.sh
+    - cd vagrant-virtualbox
+    - docker buildx bake --push
