@@ -7,7 +7,7 @@ target "omnibus-amazonlinux" {
   dockerfile = "Dockerfile"
   platforms = [
     "linux/amd64",
-    "linux/arm64"
+    "linux/arm64/v8"
   ]
   tags = [
     "cincproject/omnibus-amazonlinux:2023",

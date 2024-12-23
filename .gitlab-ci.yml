@@ -13,6 +13,7 @@ variables:
   DOCKER_TLS_CERTDIR: "/certs"
   DOCKER_TLS_VERIFY: 1
   DOCKER_CERT_PATH: "/certs/client"
+  BUILDER_NAME: "${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}-${CI_PIPELINE_ID}-${CI_JOB_NAME_SLUG}"
 
 workflow:
   rules:
@@ -21,10 +22,50 @@ workflow:
     # Run if this is a merge request
     - if: $CI_MERGE_REQUEST_ID
 
-before_script:
-  - docker context create docker-images
-  - docker context use docker-images
-  - docker buildx create --use docker-images
+.build_setup: &build_setup
+  - eval $(ssh-agent -s)
+  - echo "${BUILDX_SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add -q - > /dev/null
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - echo "${BUILDX_SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+  - docker context create amd64
+  - docker context use amd64
+  - docker buildx create --name $BUILDER_NAME --use amd64 --platform linux/amd64 --config buildkitd.toml
+
+.build_teardown: &build_teardown
+  - docker buildx ls --no-trunc
+  - docker buildx stop $BUILDER_NAME
+  - docker buildx rm -f $BUILDER_NAME
+
+.build:
+  stage: build
+  tags:
+    - docker-x86_64
+
+.build_arm64: &build_arm64
+  - docker context create arm64 --docker "host=ssh://${BUILDX_ARM64}"
+  - docker buildx create --name $BUILDER_NAME --append arm64 --platform linux/arm64 --config buildkitd.toml
+
+.build_arm64_82a: &build_arm64_82a
+  - docker context create arm64-82a --docker "host=ssh://${BUILDX_ARM64_v8_2A}"
+  - docker buildx create --name $BUILDER_NAME --append arm64-82a --platform linux/arm64/v8 --config buildkitd.toml
+
+.build_ppc64le: &build_ppc64le
+  - docker context create ppc64le --docker "host=ssh://${BUILDX_PPC64LE}"
+  - docker buildx create --name $BUILDER_NAME --append ppc64le --platform linux/ppc64le --config buildkitd.toml
+
+.build_ppc64le_p9: &build_ppc64le_p9
+  - docker context create ppc64le --docker "host=ssh://${BUILDX_PPC64LE_P9}"
+  - docker buildx create --name $BUILDER_NAME --append ppc64le --platform linux/ppc64le --config buildkitd.toml
+
+.build_riscv64: &build_riscv64
+  - docker context create riscv64 --docker "host=ssh://${BUILDX_RISCV64}"
+  - docker buildx create --name $BUILDER_NAME --append riscv64 --platform linux/riscv64 --config buildkitd.toml
+
+.build_s390x: &build_s390x
+  - docker context create s390x --docker "host=ssh://${BUILDX_S390X}"
+  - docker buildx create --name $BUILDER_NAME --append s390x --platform linux/s390x --config buildkitd.toml
 
 .omnibus-almalinux_rules:
   rules:
@@ -82,11 +123,6 @@ before_script:
         - vagrant-virtualbox/*
     - if: $CINC_BUILD =~ /vagrant-virtualbox|all/
 
-.build:
-  stage: build
-  tags:
-    - docker-x86_64
-
 build:omnibus-almalinux:
   extends:
     - .build
@@ -94,63 +130,95 @@ build:omnibus-almalinux:
     - docker-x86_64-v3
   rules:
     - !reference [.omnibus-almalinux_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
+    - *build_ppc64le_p9
+    - *build_s390x
   script:
     - cd omnibus-almalinux
     - docker buildx bake --set="*.output=type=cacheonly"
+    - *build_teardown
 
 build:omnibus-amazonlinux:
   extends:
     - .build
   rules:
     - !reference [.omnibus-amazonlinux_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64_82a
   script:
     - cd omnibus-amazonlinux
     - docker buildx bake --set="*.output=type=cacheonly"
+    - *build_teardown
 
 build:omnibus-debian:
   extends:
     - .build
   rules:
     - !reference [.omnibus-debian_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
   script:
     - cd omnibus-debian
     - docker buildx bake --set="*.output=type=cacheonly"
+    - *build_teardown
 
 build:omnibus-opensuse:
   extends:
     - .build
   rules:
     - !reference [.omnibus-opensuse_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
   script:
     - cd omnibus-opensuse
     - docker buildx bake --set="*.output=type=cacheonly"
+    - *build_teardown
 
 build:omnibus-rockylinux:
   extends:
     - .build
   rules:
     - !reference [.omnibus-rockylinux_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
   script:
     - cd omnibus-rockylinux
     - docker buildx bake --set="*.output=type=cacheonly"
+    - *build_teardown
 
 build:omnibus-ubuntu:
   extends:
     - .build
   rules:
     - !reference [.omnibus-ubuntu_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
   script:
     - cd omnibus-ubuntu
     - docker buildx bake --set="*.output=type=cacheonly"
+    - *build_teardown
 
 build:docker-auditor:
   extends:
     - .build
   rules:
     - !reference [.docker-auditor_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
+    - *build_ppc64le_p9
+    - *build_s390x
   script:
     - cd docker-auditor
     - docker buildx bake --set="*.output=type=cacheonly"
+    - *build_teardown
 
 build:vagrant-virtualbox:
   extends:
@@ -159,9 +227,12 @@ build:vagrant-virtualbox:
     - docker-virtualbox
   rules:
     - !reference [.vagrant-virtualbox_rules, rules]
+  before_script:
+    - *build_setup
   script:
     - cd vagrant-virtualbox
     - docker buildx bake --set="*.output=type=cacheonly"
+    - *build_teardown
 
 .publish:
   stage: publish
@@ -181,10 +252,16 @@ publish:omnibus-almalinux:
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-almalinux_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
+    - *build_ppc64le_p9
+    - *build_s390x
   script:
     - ./scripts/docker-login.sh
     - cd omnibus-almalinux
     - docker buildx bake --push
+    - *build_teardown
 
 publish:omnibus-amazonlinux:
   extends:
@@ -192,10 +269,14 @@ publish:omnibus-amazonlinux:
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-amazonlinux_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
   script:
     - ./scripts/docker-login.sh
     - cd omnibus-amazonlinux
     - docker buildx bake --push
+    - *build_teardown
 
 publish:omnibus-debian:
   extends:
@@ -203,10 +284,14 @@ publish:omnibus-debian:
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-debian_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
   script:
     - ./scripts/docker-login.sh
     - cd omnibus-debian
     - docker buildx bake --push
+    - *build_teardown
 
 publish:omnibus-opensuse:
   extends:
@@ -214,10 +299,14 @@ publish:omnibus-opensuse:
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-opensuse_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
   script:
     - ./scripts/docker-login.sh
     - cd omnibus-opensuse
     - docker buildx bake --push
+    - *build_teardown
 
 publish:omnibus-rockylinux:
   extends:
@@ -225,10 +314,14 @@ publish:omnibus-rockylinux:
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-rockylinux_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
   script:
     - ./scripts/docker-login.sh
     - cd omnibus-rockylinux
     - docker buildx bake --push
+    - *build_teardown
 
 publish:omnibus-ubuntu:
   extends:
@@ -236,10 +329,14 @@ publish:omnibus-ubuntu:
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-ubuntu_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
   script:
     - ./scripts/docker-login.sh
     - cd omnibus-ubuntu
     - docker buildx bake --push
+    - *build_teardown
 
 publish:docker-auditor:
   extends:
@@ -247,10 +344,16 @@ publish:docker-auditor:
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.docker-auditor_rules, rules]
+  before_script:
+    - *build_setup
+    - *build_arm64
+    - *build_ppc64le_p9
+    - *build_s390x
   script:
     - ./scripts/docker-login.sh
     - cd docker-auditor
     - docker buildx bake --push
+    - *build_teardown
 
 publish:vagrant-virtualbox:
   extends:
@@ -258,7 +361,10 @@ publish:vagrant-virtualbox:
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.vagrant-virtualbox_rules, rules]
+  before_script:
+    - *build_setup
   script:
     - ./scripts/docker-login.sh
     - cd vagrant-virtualbox
     - docker buildx bake --push
+    - *build_teardown
