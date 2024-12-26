@@ -1,4 +1,4 @@
-FROM almalinux:8
+FROM almalinux:9
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 # Set USER and LOGNAME so that vagrant works properly
@@ -9,5 +9,5 @@ RUN yum -y upgrade && \
     yum -y install yum-utils && \
     yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo && \
     yum-config-manager --add-repo https://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo && \
-    yum -y install vagrant VirtualBox-7.0 procps-ng kmod openssh-clients && \
+    yum -y install vagrant VirtualBox-7.1 procps-ng kmod openssh-clients && \
     yum clean all

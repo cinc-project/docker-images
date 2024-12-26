@@ -15,15 +15,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-source scripts/common.sh
-set -ex
-arch="$(uname -m)"
-for version in ${VERSIONS} ; do
-  supported_platform $CINC_IMAGE $version $arch || continue
-  image="${CI_REGISTRY_IMAGE}/${CINC_IMAGE}:${version}-${arch}-${CI_COMMIT_SHORT_SHA}"
-  docker pull ${image}
-  id="$(docker run -it -d --rm --privileged ${image})"
-  cinc-auditor detect -t docker://${id}
-  cinc-auditor exec test/integration/${CINC_IMAGE}_spec.rb -t docker://${id}
-  docker stop ${id}
-done
+mkdir -p ~/.docker
+cat << EOF > /tmp/docker-token
+$DOCKER_TOKEN
+EOF
+cat /tmp/docker-token | docker login --username $DOCKER_USERNAME --password-stdin
+rm -rf /tmp/docker-token
