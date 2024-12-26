@@ -123,12 +123,18 @@ workflow:
         - vagrant-virtualbox/*
     - if: $CINC_BUILD =~ /vagrant-virtualbox|all/
 
+.build_rules:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "master"
+      when: never
+
 build:omnibus-almalinux:
   extends:
     - .build
   tags:
     - docker-x86_64-v3
   rules:
+    - !reference [.build_rules, rules]
     - !reference [.omnibus-almalinux_rules, rules]
   before_script:
     - *build_setup
@@ -144,6 +150,7 @@ build:omnibus-amazonlinux:
   extends:
     - .build
   rules:
+    - !reference [.build_rules, rules]
     - !reference [.omnibus-amazonlinux_rules, rules]
   before_script:
     - *build_setup
@@ -157,6 +164,7 @@ build:omnibus-debian:
   extends:
     - .build
   rules:
+    - !reference [.build_rules, rules]
     - !reference [.omnibus-debian_rules, rules]
   before_script:
     - *build_setup
@@ -170,6 +178,7 @@ build:omnibus-opensuse:
   extends:
     - .build
   rules:
+    - !reference [.build_rules, rules]
     - !reference [.omnibus-opensuse_rules, rules]
   before_script:
     - *build_setup
@@ -183,6 +192,7 @@ build:omnibus-rockylinux:
   extends:
     - .build
   rules:
+    - !reference [.build_rules, rules]
     - !reference [.omnibus-rockylinux_rules, rules]
   before_script:
     - *build_setup
@@ -196,6 +206,7 @@ build:omnibus-ubuntu:
   extends:
     - .build
   rules:
+    - !reference [.build_rules, rules]
     - !reference [.omnibus-ubuntu_rules, rules]
   before_script:
     - *build_setup
@@ -209,6 +220,7 @@ build:docker-auditor:
   extends:
     - .build
   rules:
+    - !reference [.build_rules, rules]
     - !reference [.docker-auditor_rules, rules]
   before_script:
     - *build_setup
@@ -226,6 +238,7 @@ build:vagrant-virtualbox:
   tags:
     - docker-virtualbox
   rules:
+    - !reference [.build_rules, rules]
     - !reference [.vagrant-virtualbox_rules, rules]
   before_script:
     - *build_setup
