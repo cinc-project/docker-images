@@ -33,6 +33,11 @@ target "omnibus-ubuntu-22_04" {
 
 target "omnibus-ubuntu-24_04" {
   inherits = ["omnibus-ubuntu-20_04"]
+  platforms = [
+    "linux/amd64",
+    "linux/arm64",
+    "linux/riscv64"
+  ]
   args = {
     VERSION = "24.04"
   }
