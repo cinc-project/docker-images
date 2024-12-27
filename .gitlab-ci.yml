@@ -63,6 +63,10 @@ workflow:
   - docker context create riscv64 --docker "host=ssh://${BUILDX_RISCV64}"
   - docker buildx create --name $BUILDER_NAME --append riscv64 --platform linux/riscv64 --config buildkitd.toml
 
+.build_riscv64: &build_riscv64_2
+  - docker context create riscv64 --docker "host=ssh://${BUILDX_RISCV64_2}"
+  - docker buildx create --name $BUILDER_NAME --append riscv64 --platform linux/riscv64 --config buildkitd.toml
+
 .build_s390x: &build_s390x
   - docker context create s390x --docker "host=ssh://${BUILDX_S390X}"
   - docker buildx create --name $BUILDER_NAME --append s390x --platform linux/s390x --config buildkitd.toml
@@ -169,6 +173,7 @@ build:omnibus-debian:
   before_script:
     - *build_setup
     - *build_arm64
+    - *build_riscv64
   script:
     - cd omnibus-debian
     - docker buildx bake --set="*.output=type=cacheonly"
@@ -211,6 +216,7 @@ build:omnibus-ubuntu:
   before_script:
     - *build_setup
     - *build_arm64
+    - *build_riscv64_2
   script:
     - cd omnibus-ubuntu
     - docker buildx bake --set="*.output=type=cacheonly"
@@ -300,6 +306,7 @@ publish:omnibus-debian:
   before_script:
     - *build_setup
     - *build_arm64
+    - *build_riscv64
   script:
     - ./scripts/docker-login.sh
     - cd omnibus-debian
@@ -345,6 +352,7 @@ publish:omnibus-ubuntu:
   before_script:
     - *build_setup
     - *build_arm64
+    - *build_riscv64_2
   script:
     - ./scripts/docker-login.sh
     - cd omnibus-ubuntu
