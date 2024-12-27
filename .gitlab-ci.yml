@@ -284,7 +284,7 @@ publish:omnibus-amazonlinux:
     - !reference [.omnibus-amazonlinux_rules, rules]
   before_script:
     - *build_setup
-    - *build_arm64
+    - *build_arm64_82a
   script:
     - ./scripts/docker-login.sh
     - cd omnibus-amazonlinux
