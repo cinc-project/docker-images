@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Author:: Lance Albertson <lance@osuosl.org>
 # Copyright:: Copyright 2020, Cinc Project
