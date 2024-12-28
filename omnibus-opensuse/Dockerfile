@@ -1,5 +1,4 @@
-# Need 15.2 to support SLES 15 SP2
-ARG VERSION="15.2"
+ARG VERSION="15.6"
 FROM opensuse/leap:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
