@@ -1,0 +1,5 @@
+source "https://rubygems.org"
+
+gem "cinc-auditor-core-bin", source: "https://rubygems.cinc.sh"
+gem "cinc-auditor-bin", source: "https://rubygems.cinc.sh"
+gem "inspec", source: "https://rubygems.cinc.sh"

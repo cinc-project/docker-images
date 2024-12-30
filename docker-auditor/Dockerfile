@@ -9,11 +9,11 @@ FROM base-${TARGETPLATFORM##*/} AS final
 
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
-ARG GEM_SOURCE=https://rubygems.cinc.sh
+COPY Gemfile /Gemfile
 
-RUN apk add --update build-base libxml2-dev libffi-dev git openssh-client ruby ruby-dev ruby-etc ruby-webrick && \
-    gem install --no-document --source ${GEM_SOURCE} inspec && \
-    gem install --no-document --source ${GEM_SOURCE} cinc-auditor-bin && \
+RUN apk add --update build-base libxml2-dev libffi-dev git openssh-client ruby ruby-dev \
+      ruby-etc ruby-webrick ruby-bundler && \
+    bundle install --system && \
     # For some reason this dep is missing so add it manually
     gem install --no-document bigdecimal && \
     apk del build-base ruby-dev
