@@ -43,5 +43,6 @@ target "omnibus-ubuntu-24_04" {
   }
   tags = [
     "cincproject/omnibus-ubuntu:24.04",
+    "cincproject/omnibus-ubuntu:latest",
   ]
 }

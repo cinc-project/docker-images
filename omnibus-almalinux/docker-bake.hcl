@@ -30,6 +30,7 @@ target "omnibus-almalinux-9" {
   }
   tags = [
     "cincproject/omnibus-almalinux:9",
+    "cincproject/omnibus-almalinux:latest",
   ]
 }
 
