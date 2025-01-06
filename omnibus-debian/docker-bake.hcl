@@ -28,6 +28,7 @@ target "omnibus-debian-12" {
   }
   tags = [
     "cincproject/omnibus-debian:12",
+    "cincproject/omnibus-debian:latest",
   ]
 }
 

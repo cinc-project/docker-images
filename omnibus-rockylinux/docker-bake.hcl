@@ -27,5 +27,6 @@ target "omnibus-rockylinux-9" {
   }
   tags = [
     "cincproject/omnibus-rockylinux:9",
+    "cincproject/omnibus-rockylinux:latest",
   ]
 }

@@ -11,6 +11,7 @@ target "omnibus-amazonlinux" {
   ]
   tags = [
     "cincproject/omnibus-amazonlinux:2023",
+    "cincproject/omnibus-amazonlinux:latest",
   ]
   args = {
     VERSION = "2023"
