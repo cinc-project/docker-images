@@ -13,10 +13,10 @@ target "omnibus-opensuse" {
   ]
   tags = [
     "cincproject/omnibus-opensuse:15",
-    "cincproject/omnibus-opensuse:15.6",
+    "cincproject/omnibus-opensuse:15.3",
     "cincproject/omnibus-opensuse:latest",
   ]
   args = {
-    VERSION = "15.6"
+    VERSION = "15.3"
   }
 }
