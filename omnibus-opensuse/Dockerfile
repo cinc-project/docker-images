@@ -1,4 +1,4 @@
-ARG VERSION="15.6"
+ARG VERSION="15.3"
 FROM opensuse/leap:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
