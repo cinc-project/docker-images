@@ -2,7 +2,7 @@ group "default" {
   targets = [
     "omnibus-almalinux-8",
     "omnibus-almalinux-9",
-    "omnibus-almalinux-10-kitten"
+    "omnibus-almalinux-10"
   ]
 }
 
@@ -33,7 +33,7 @@ target "omnibus-almalinux-9" {
   ]
 }
 
-target "omnibus-almalinux-10-kitten" {
+target "omnibus-almalinux-10" {
   inherits = ["omnibus-almalinux-8"]
   args = {
     VERSION = "10"
