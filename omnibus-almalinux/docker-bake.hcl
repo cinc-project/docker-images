@@ -30,16 +30,16 @@ target "omnibus-almalinux-9" {
   }
   tags = [
     "cincproject/omnibus-almalinux:9",
-    "cincproject/omnibus-almalinux:latest",
   ]
 }
 
 target "omnibus-almalinux-10-kitten" {
   inherits = ["omnibus-almalinux-8"]
   args = {
-    VERSION = "10-kitten"
+    VERSION = "10"
   }
   tags = [
-    "cincproject/omnibus-almalinux:10-kitten",
+    "cincproject/omnibus-almalinux:10",
+    "cincproject/omnibus-almalinux:latest",
   ]
 }
