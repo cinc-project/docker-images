@@ -120,12 +120,19 @@ workflow:
         - docker-auditor/*
     - if: $CINC_BUILD =~ /docker-auditor|all/
 
+.vagrant_rules:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - vagrant/*
+    - if: $CINC_BUILD =~ /^vagrant$|all/
+
 .vagrant-virtualbox_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - vagrant-virtualbox/*
-    - if: $CINC_BUILD =~ /vagrant-virtualbox|all/
+    - if: $CINC_BUILD =~ /^vagrant-virtualbox|all/
 
 .build_rules:
   rules:
@@ -235,6 +242,21 @@ build:docker-auditor:
     - *build_s390x
   script:
     - cd docker-auditor
+    - docker buildx bake --set="*.output=type=cacheonly"
+    - *build_teardown
+
+build:vagrant:
+  extends:
+    - .build
+  tags:
+    - docker-x88_64
+  rules:
+    - !reference [.build_rules, rules]
+    - !reference [.vagrant_rules, rules]
+  before_script:
+    - *build_setup
+  script:
+    - cd vagrant
     - docker buildx bake --set="*.output=type=cacheonly"
     - *build_teardown
 
@@ -373,6 +395,20 @@ publish:docker-auditor:
   script:
     - ./scripts/docker-login.sh
     - cd docker-auditor
+    - docker buildx bake --push
+    - *build_teardown
+
+publish:vagrant:
+  extends:
+    - .publish
+  rules:
+    - !reference [.publish_rules, rules]
+    - !reference [.vagrant_rules, rules]
+  before_script:
+    - *build_setup
+  script:
+    - ./scripts/docker-login.sh
+    - cd vagrant
     - docker buildx bake --push
     - *build_teardown
 
