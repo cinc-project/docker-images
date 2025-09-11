@@ -356,6 +356,8 @@ publish:omnibus-opensuse:
 publish:omnibus-rockylinux:
   extends:
     - .publish
+  tags:
+    - docker-x86_64-v3
   rules:
     - !reference [.publish_rules, rules]
     - !reference [.omnibus-rockylinux_rules, rules]
