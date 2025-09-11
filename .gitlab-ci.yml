@@ -203,12 +203,15 @@ build:omnibus-opensuse:
 build:omnibus-rockylinux:
   extends:
     - .build
+  tags:
+    - docker-x86_64-v3
   rules:
     - !reference [.build_rules, rules]
     - !reference [.omnibus-rockylinux_rules, rules]
   before_script:
     - *build_setup
     - *build_arm64
+    - *build_ppc64le_p9
   script:
     - cd omnibus-rockylinux
     - docker buildx bake --set="*.output=type=cacheonly"
