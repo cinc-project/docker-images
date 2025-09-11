@@ -364,6 +364,7 @@ publish:omnibus-rockylinux:
   before_script:
     - *build_setup
     - *build_arm64
+    - *build_ppc64le_p9
   script:
     - ./scripts/docker-login.sh
     - cd omnibus-rockylinux
