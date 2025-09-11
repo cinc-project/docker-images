@@ -1,5 +1,5 @@
 ARG VERSION="8"
-FROM rockylinux:${VERSION}
+FROM rockylinux/rockylinux:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 RUN mkdir -p /var/cinc/cache /var/cinc/cookbooks
