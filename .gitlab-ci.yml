@@ -134,6 +134,13 @@ workflow:
         - vagrant-virtualbox/*
     - if: $CINC_BUILD =~ /^vagrant-virtualbox|all/
 
+.ci-test_rules:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - ci-test/*
+    - if: $CINC_BUILD =~ /ci-test|all/
+
 .build_rules:
   rules:
     - if: $CI_COMMIT_REF_NAME == "master"
@@ -275,6 +282,19 @@ build:vagrant-virtualbox:
     - *build_setup
   script:
     - cd vagrant-virtualbox
+    - docker buildx bake --set="*.output=type=cacheonly"
+    - *build_teardown
+
+build:ci-test:
+  extends:
+    - .build
+  rules:
+    - !reference [.build_rules, rules]
+    - !reference [.ci-test_rules, rules]
+  before_script:
+    - *build_setup
+  script:
+    - cd ci-test
     - docker buildx bake --set="*.output=type=cacheonly"
     - *build_teardown
 
@@ -429,5 +449,19 @@ publish:vagrant-virtualbox:
   script:
     - ./scripts/docker-login.sh
     - cd vagrant-virtualbox
+    - docker buildx bake --push
+    - *build_teardown
+
+publish:ci-test:
+  extends:
+    - .publish
+  rules:
+    - !reference [.publish_rules, rules]
+    - !reference [.ci-test_rules, rules]
+  before_script:
+    - *build_setup
+  script:
+    - ./scripts/docker-login.sh
+    - cd ci-test
     - docker buildx bake --push
     - *build_teardown
