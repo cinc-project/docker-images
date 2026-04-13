@@ -4,7 +4,7 @@ LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV ERLANG_VERSION=26.2.5.14
-ENV ELVIS_VERSION=3.2.5
+ENV ELVIS_VERSION=4.2.3
 ENV RUBY_VERSION=3.1
 ENV LANG=en_US.UTF-8
 
@@ -36,9 +36,12 @@ ENV PATH="/opt/erlang/${ERLANG_VERSION}/bin:${PATH}"
 RUN curl -O https://s3.amazonaws.com/rebar3/rebar3 && \
     chmod +x rebar3 && mv rebar3 /usr/local/bin/
 
-# Install elvis (Erlang style checker)
-RUN curl -L -o /usr/local/bin/elvis https://github.com/inaka/elvis/releases/download/${ELVIS_VERSION}/elvis && \
-    chmod +x /usr/local/bin/elvis
+# Install elvis (Erlang style checker) - build from source as escript
+RUN git clone --depth 1 --branch ${ELVIS_VERSION} https://github.com/inaka/elvis.git /tmp/elvis && \
+    cd /tmp/elvis && rebar3 escriptize && \
+    cp _build/default/bin/elvis /usr/local/bin/elvis && \
+    chmod +x /usr/local/bin/elvis && \
+    rm -rf /tmp/elvis
 
 # Install Lua libraries
 RUN luarocks install lpeg && \
