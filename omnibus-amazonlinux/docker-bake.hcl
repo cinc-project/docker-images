@@ -4,6 +4,9 @@ group "default" {
 
 target "omnibus-amazonlinux" {
   context = "."
+  contexts = {
+    shared = "../shared/omnibus"
+  }
   dockerfile = "Dockerfile"
   platforms = [
     "linux/amd64",
