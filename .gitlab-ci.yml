@@ -47,32 +47,25 @@ workflow:
     - docker-x86_64
 
 .build_arm64: &build_arm64
-  - docker context create arm64 --docker "host=ssh://${BUILDX_ARM64}"
-  - docker buildx create --name $BUILDER_NAME --append arm64 --platform linux/arm64 --config buildkitd.toml
+  - ./scripts/append-builder.sh arm64 "${BUILDX_ARM64}" linux/arm64 arm64
 
 .build_arm64_82a: &build_arm64_82a
-  - docker context create arm64-82a --docker "host=ssh://${BUILDX_ARM64_v8_2A}"
-  - docker buildx create --name $BUILDER_NAME --append arm64-82a --platform linux/arm64/v8 --config buildkitd.toml
+  - ./scripts/append-builder.sh arm64-82a "${BUILDX_ARM64_v8_2A}" linux/arm64/v8 arm64
 
 .build_ppc64le: &build_ppc64le
-  - docker context create ppc64le --docker "host=ssh://${BUILDX_PPC64LE}"
-  - docker buildx create --name $BUILDER_NAME --append ppc64le --platform linux/ppc64le --config buildkitd.toml
+  - ./scripts/append-builder.sh ppc64le "${BUILDX_PPC64LE}" linux/ppc64le ppc64le
 
 .build_ppc64le_p9: &build_ppc64le_p9
-  - docker context create ppc64le --docker "host=ssh://${BUILDX_PPC64LE_P9}"
-  - docker buildx create --name $BUILDER_NAME --append ppc64le --platform linux/ppc64le --config buildkitd.toml
+  - ./scripts/append-builder.sh ppc64le "${BUILDX_PPC64LE_P9}" linux/ppc64le ppc64le
 
 .build_riscv64: &build_riscv64
-  - docker context create riscv64 --docker "host=ssh://${BUILDX_RISCV64}"
-  - docker buildx create --name $BUILDER_NAME --append riscv64 --platform linux/riscv64 --config buildkitd.toml
+  - ./scripts/append-builder.sh riscv64 "${BUILDX_RISCV64}" linux/riscv64 riscv64
 
 .build_riscv64: &build_riscv64_2
-  - docker context create riscv64 --docker "host=ssh://${BUILDX_RISCV64_2}"
-  - docker buildx create --name $BUILDER_NAME --append riscv64 --platform linux/riscv64 --config buildkitd.toml
+  - ./scripts/append-builder.sh riscv64 "${BUILDX_RISCV64_2}" linux/riscv64 riscv64
 
 .build_s390x: &build_s390x
-  - docker context create s390x --docker "host=ssh://${BUILDX_S390X}"
-  - docker buildx create --name $BUILDER_NAME --append s390x --platform linux/s390x --config buildkitd.toml
+  - ./scripts/append-builder.sh s390x "${BUILDX_S390X}" linux/s390x s390x
 
 .omnibus-almalinux_rules:
   rules:
