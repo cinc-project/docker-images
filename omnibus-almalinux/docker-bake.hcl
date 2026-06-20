@@ -8,6 +8,9 @@ group "default" {
 
 target "omnibus-almalinux-8" {
   context = "."
+  contexts = {
+    shared = "../shared/omnibus"
+  }
   dockerfile = "Dockerfile"
   platforms = [
     "linux/amd64",
