@@ -17,7 +17,6 @@ target "omnibus-debian-12" {
   ]
   tags = [
     "cincproject/omnibus-debian:12",
-    "cincproject/omnibus-debian:latest",
   ]
   args = {
     VERSION = "12"
@@ -33,6 +32,7 @@ target "omnibus-debian-13" {
   ]
   tags = [
     "cincproject/omnibus-debian:13",
+    "cincproject/omnibus-debian:latest",
   ]
   args = {
     VERSION = "trixie"
