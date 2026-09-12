@@ -1,0 +1,64 @@
+# Reference config.toml for the Windows container build host. Two runners are
+# required, not one:
+#
+#   * a `shell` (PowerShell) runner that builds and pushes this image. Docker-
+#     in-Docker is unsupported on Windows, so the builder image cannot be built
+#     inside a Windows container.
+#   * a `docker-windows` runner that runs the product builds in containers.
+#
+# Tags are what product pipelines and docker-images/.gitlab-ci.yml select on:
+#   windows-docker-builder  -> the shell runner
+#   windows-docker          -> the docker-windows runner
+#
+# Register each with `gitlab-runner register` and then align the result with
+# this file. Tokens and the S3 cache credentials are deliberately absent.
+
+concurrent = 4
+check_interval = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "cinc-win-image-builder"
+  url = "https://gitlab.com/"
+  token = "REDACTED"
+  executor = "shell"
+  shell = "powershell"
+  # limit = 1: image builds are heavy and there is no point running two.
+  limit = 1
+
+[[runners]]
+  name = "cinc-win-omnibus"
+  url = "https://gitlab.com/"
+  token = "REDACTED"
+  executor = "docker-windows"
+  # builds_dir, cache_dir and volumes must live on c: (or be a bare drive
+  # letter): f:\cache is invalid, f: is valid. Default is under c:\.
+  [runners.cache]
+    Type = "s3"
+    Shared = true
+    [runners.cache.s3]
+      ServerAddress = "s3.osuosl.org"
+      BucketName = "cinc-gitlab"
+      AccessKey = "REDACTED"
+      SecretKey = "REDACTED"
+  [runners.docker]
+    image = "cincproject/omnibus-windows:ltsc2022"
+    # Images are 8 to 12 GB. Product pipelines pin immutable dated tags, so a
+    # local copy is always the right one; fall back to pulling when absent.
+    # Use "never" for local-only test images.
+    pull_policy = ["if-not-present", "always"]
+    allowed_pull_policies = ["if-not-present", "always", "never"]
+    # Process isolation is the whole point (unlimited containers on Server
+    # Standard; Hyper-V isolation caps at two). It is the default on Server;
+    # stated here so nobody flips it.
+    isolation = "process"
+    # Per-job limits so four concurrent omnibus builds share 16 vCPU / 32 GB
+    # without one starving the rest. Tune after concurrency.ps1 results.
+    cpus = "4"
+    memory = "7g"
+    # Any volume directory listed here must already exist on the host or the
+    # container fails to start. None are needed: the omnibus git cache lives in
+    # the project dir and ships through GitLab's cache: to S3.
+    volumes = []

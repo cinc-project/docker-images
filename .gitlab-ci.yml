@@ -467,3 +467,66 @@ publish:ci-test:
     - cd ci-test
     - docker buildx bake --push
     - *build_teardown
+
+# =============================================================================
+# Windows builder image
+#
+# Windows containers cannot be built inside a container (no Docker-in-Docker on
+# Windows), so unlike every job above these run on the container host's own
+# PowerShell shell runner (tag windows-docker-builder), never on docker:dind.
+# A shell executor ignores image: and services:; services is cleared anyway so
+# the intent is visible. Not part of the `omnibus` CINC_BUILD group on purpose:
+# it needs a specific host, so it is selected explicitly or by `all`.
+#
+#   CINC_BUILD=omnibus-windows   (web pipeline)  -> build (non-master) / publish (master)
+# =============================================================================
+
+.omnibus-windows_rules:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - omnibus-windows/**/*
+    - if: $CINC_BUILD =~ /omnibus-windows|all/
+
+# The top-level variables point the docker CLI at the dind service's TLS
+# certs; on the shell runner they must be cleared or every docker command
+# fails with "open \certs\client\ca.pem".
+.omnibus-windows_variables:
+  variables:
+    DOCKER_TLS_VERIFY: ""
+    DOCKER_CERT_PATH: ""
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: ""
+
+build:omnibus-windows:
+  stage: build
+  extends: .omnibus-windows_variables
+  services: []
+  tags:
+    - windows-docker-builder
+  rules:
+    - !reference [.build_rules, rules]
+    - !reference [.omnibus-windows_rules, rules]
+  script:
+    - cd omnibus-windows
+    # Throwaway tag, removed afterwards: the product runner on this host pulls
+    # with if-not-present, so reusing the real tags would shadow the published
+    # image for every product job on the host.
+    - .\build.ps1 -Scratch
+
+publish:omnibus-windows:
+  stage: publish
+  extends: .omnibus-windows_variables
+  services: []
+  tags:
+    - windows-docker-builder
+  rules:
+    - !reference [.publish_rules, rules]
+    - !reference [.omnibus-windows_rules, rules]
+  script:
+    - cd omnibus-windows
+    # Full rebuild so the dated tag never carries pacman layers cached from an
+    # earlier build; logs in with DOCKER_USERNAME / DOCKER_TOKEN (fails early
+    # if unset, logs out afterwards), pushes :ltsc2022, :latest and the dated
+    # tag, and prints the BUILDER_IMAGE_TAG for product pipelines.
+    - .\build.ps1 -Push -NoCache
