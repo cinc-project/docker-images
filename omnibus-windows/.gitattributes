@@ -1,0 +1,5 @@
+# The image runs these under MSYS2 bash; a CRLF checkout on a Windows build
+# host would break them, whatever that host's git autocrlf setting is.
+*.sh text eol=lf
+*.asc text eol=lf
+*.ps1 text

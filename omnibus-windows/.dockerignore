@@ -1,0 +1,8 @@
+# Only the Dockerfile's COPY sources belong in the build context.
+README.md
+runner-config.example.toml
+build.ps1
+.dockerignore
+.gitattributes
+test/
+*.log
