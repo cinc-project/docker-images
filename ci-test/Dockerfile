@@ -2,8 +2,11 @@ ARG VERSION="13"
 FROM debian:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
+# The Erlang/OTP release to build; docker-bake.hcl sets it per target.
+ARG ERLANG_VERSION=26.2.5.14
+
 ENV DEBIAN_FRONTEND=noninteractive
-ENV ERLANG_VERSION=26.2.5.14
+ENV ERLANG_VERSION=${ERLANG_VERSION}
 ENV ELVIS_VERSION=4.2.3
 ENV RUBY_VERSION=3.1
 ENV LANG=en_US.UTF-8
@@ -37,8 +40,12 @@ RUN curl -O https://s3.amazonaws.com/rebar3/rebar3 && \
     chmod +x rebar3 && mv rebar3 /usr/local/bin/
 
 # Install elvis (Erlang style checker) - build from source as escript
+# elvis 4.x and its plugins build with warnings_as_errors; OTP 29 deprecates
+# old-style catch and two pattern forms they still use.
 RUN git clone --depth 1 --branch ${ELVIS_VERSION} https://github.com/inaka/elvis.git /tmp/elvis && \
-    cd /tmp/elvis && rebar3 escriptize && \
+    cd /tmp/elvis && \
+    ERL_COMPILER_OPTIONS="[nowarn_deprecated_catch,nowarn_export_var_subexpr,nowarn_match_alias_pats]" \
+      rebar3 escriptize && \
     cp _build/default/bin/elvis /usr/local/bin/elvis && \
     chmod +x /usr/local/bin/elvis && \
     rm -rf /tmp/elvis
