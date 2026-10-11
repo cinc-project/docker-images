@@ -91,14 +91,6 @@ workflow:
         - shared/omnibus/**/*
     - if: $CINC_BUILD =~ /omnibus-debian|^omnibus$|all/
 
-.omnibus-opensuse_rules:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - omnibus-opensuse/*
-        - shared/omnibus/**/*
-    - if: $CINC_BUILD =~ /omnibus-opensuse|^omnibus$|all/
-
 .omnibus-sles_rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -200,20 +192,6 @@ build:omnibus-debian:
     - *build_riscv64
   script:
     - cd omnibus-debian
-    - docker buildx bake --set="*.output=type=cacheonly"
-    - *build_teardown
-
-build:omnibus-opensuse:
-  extends:
-    - .build
-  rules:
-    - !reference [.build_rules, rules]
-    - !reference [.omnibus-opensuse_rules, rules]
-  before_script:
-    - *build_setup
-    - *build_arm64
-  script:
-    - cd omnibus-opensuse
     - docker buildx bake --set="*.output=type=cacheonly"
     - *build_teardown
 
@@ -379,21 +357,6 @@ publish:omnibus-debian:
   script:
     - ./scripts/docker-login.sh
     - cd omnibus-debian
-    - docker buildx bake --push
-    - *build_teardown
-
-publish:omnibus-opensuse:
-  extends:
-    - .publish
-  rules:
-    - !reference [.publish_rules, rules]
-    - !reference [.omnibus-opensuse_rules, rules]
-  before_script:
-    - *build_setup
-    - *build_arm64
-  script:
-    - ./scripts/docker-login.sh
-    - cd omnibus-opensuse
     - docker buildx bake --push
     - *build_teardown
 
