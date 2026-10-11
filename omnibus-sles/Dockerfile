@@ -1,5 +1,5 @@
 ARG VERSION="16.0"
-FROM opensuse/leap:${VERSION}
+FROM registry.suse.com/bci/bci-base:${VERSION}
 LABEL MAINTAINER="Cinc Project <maintainers@cinc.sh>"
 
 RUN mkdir -p /var/cinc/cache /var/cinc/cookbooks
@@ -7,7 +7,7 @@ COPY --from=shared Berksfile /var/cinc/Berksfile
 COPY --from=shared cinc-omnibus-docker /var/cinc/cinc-omnibus-docker
 
 RUN zypper up -y --skip-interactive && \
-    zypper install -y curl hostname libffi-devel gcc gcc-c++ make && \
+    zypper install -y curl gawk hostname libffi-devel gcc gcc-c++ make && \
     curl -L https://omnitruck.cinc.sh/install.sh | bash && \
     /opt/cinc/embedded/bin/gem install -N berkshelf && \
     /opt/cinc/embedded/bin/berks vendor -b /var/cinc/Berksfile /var/cinc/cookbooks && \
