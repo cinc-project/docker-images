@@ -33,6 +33,6 @@ target "ci-test-13-otp29" {
   ]
   args = {
     VERSION = "trixie"
-    ERLANG_VERSION = "29.1.1"
+    ERLANG_VERSION = "29.1.2"
   }
 }
