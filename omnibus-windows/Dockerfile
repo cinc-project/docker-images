@@ -30,14 +30,14 @@ SHELL ["powershell", "-NoProfile", "-Command", "$ErrorActionPreference = 'Stop';
 # the Renovate mapping). Integrity: the MSYS2 archive's GPG signature and
 # omnitruck's own sha256 check in install.ps1.
 ARG CHOCO_VERSION=2.7.4
-ARG GIT_VERSION=2.55.0.5
-ARG SEVENZIP_VERSION=26.3.0
+ARG GIT_VERSION=2.56.0.2
+ARG SEVENZIP_VERSION=26.4.0
 ARG WIX_VERSION=3.14.1.20250415
 # msys2/msys2-installer release tag; archive names drop the dashes.
-ARG MSYS2_DATE=2026-06-11
+ARG MSYS2_DATE=2026-09-27
 # MSYS2 signing key (files/msys2-signing-key.asc, from the cinc-omnibus cookbook).
 ARG MSYS2_KEY_FINGERPRINT=0EBF782C5D53F7E5FB02A66746BD761F7A49B0EC
-ARG TOOLCHAIN_VERSION=26.0.3
+ARG TOOLCHAIN_VERSION=26.1.2
 
 # Build environment as the cinc-omnibus cookbook's loader sets it, plus
 # MSYS2_PATH_TYPE=inherit and CHERE_INVOKING so login shells (the test

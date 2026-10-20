@@ -36,12 +36,12 @@ real product build.
 |---|---|---|
 | Base | `mcr.microsoft.com/dotnet/framework/runtime:3.5-windowsservercore-<BASE>`, BASE defaults to ltsc2022 | MCR |
 | Chocolatey | 2.7.4 | community.chocolatey.org |
-| Git for Windows | 2.55.0.5 (`/GitOnlyOnPath /NoAutoCrlf ...`) | choco `git` |
-| 7-Zip | 26.3.0 | choco `7zip` |
+| Git for Windows | 2.56.0.2 (`/GitOnlyOnPath /NoAutoCrlf ...`) | choco `git` |
+| 7-Zip | 26.4.0 | choco `7zip` |
 | WiX Toolset | 3.14.1.20250415 | choco `wixtoolset` |
-| MSYS2 base | 2026-06-11 (msys2-installer release tag), GPG-verified at build | repo.msys2.org/distrib |
+| MSYS2 base | 2026-09-27 (msys2-installer release tag), GPG-verified at build | repo.msys2.org/distrib |
 | MSYS2 packages | cookbook default set: `base-devel`, `mingw-w64-ucrt-x86_64-toolchain`, libffi/ncurses/openssl/zlib, git, gnupg, openssh, rsync, wget, bzip2, ca-certificates | pacman, whatever the mirror ships on build day |
-| omnibus-toolchain | 26.0.3, sha256 checked by install.ps1 against omnitruck metadata | omnitruck.cinc.sh |
+| omnibus-toolchain | 26.1.2, sha256 checked by install.ps1 against omnitruck metadata | omnitruck.cinc.sh |
 
 Every pin is a `--build-arg` (see the `ARG`s at the top of the Dockerfile),
 and each is a single version field with no hash beside it, so a bot can bump
